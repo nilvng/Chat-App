@@ -67,7 +67,6 @@ class ConversationCell : UITableViewCell {
         }
         lastMessageLabel.text = lastMsg.content
         timestampLabel.text = dateFormatter.string(from: lastMsg.timestamp)
-        print(dateFormatter.string(from: lastMsg.timestamp))
         }
     // MARK: Design Cell
     

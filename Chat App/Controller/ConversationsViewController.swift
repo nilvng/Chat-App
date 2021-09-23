@@ -10,22 +10,41 @@ import UIKit
 class ConversationsViewController: UIViewController {
     
     var conversationList : [Conversation] = Conversation.stubList
-    
+    var currentSearchText : String = ""
+
     var tableView : UITableView = {
         let table = UITableView()
         table.separatorStyle = .singleLine
         table.rowHeight = 80
         return table
     }()
+    
+    var addButton : UIButton = {
+        let searchButton = UIButton()
+        searchButton.setImage(UIImage.navigation_button_plus, for: .normal)
+        searchButton.setImage(UIImage.navigation_button_plus_selected, for: .selected)
+
+        return searchButton
+    }()
+    
+    private lazy var searchController: UISearchController = {
+        let sc = UISearchController(searchResultsController: nil)
+        sc.searchResultsUpdater = self
+        sc.delegate = self
+        sc.obscuresBackgroundDuringPresentation = false
+        sc.searchBar.placeholder = "Search a Friend"
+        sc.searchBar.searchTextField.backgroundColor = .white
+        sc.searchBar.backgroundColor = .clear
+        sc.searchBar.autocapitalizationType = .allCharacters
+        return sc
+    }()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        setupNavigationBar()
         
-        navigationItem.title = "Let's Chat"
-        navigationController?.navigationBar.barTintColor = .white
-        //navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-
         view.addSubview(tableView)
         
         tableView.dataSource = self
@@ -34,7 +53,27 @@ class ConversationsViewController: UIViewController {
         tableView.register(ConversationCell.self, forCellReuseIdentifier: ConversationCell.identifier)
     }
 
+    private func setupNavigationBar(){
+        navigationItem.title = "Chats"
 
+        if #available(iOS 11.0, *) {
+
+            self.navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = false
+
+        } else {
+            // Fallback on earlier versions
+            navigationItem.titleView = searchController.searchBar
+            navigationItem.titleView?.layoutSubviews()
+        }//
+        navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: addButton)]
+        addButton.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
+    }
+    
+    @objc func addButtonPressed(){
+        print("Add Contact...")
+
+    }
 }
 
 extension ConversationsViewController : UITableViewDelegate{
@@ -63,4 +102,12 @@ extension ConversationsViewController : UITableViewDataSource {
     
     
 }
+// MARK: - UISearchResult Updating and UISearchControllerDelegate  Extension
+  extension ConversationsViewController: UISearchResultsUpdating, UISearchControllerDelegate {
+    func updateSearchResults(for searchController: UISearchController) {
+        print("Searching with: " + (searchController.searchBar.text ?? ""))
+        let searchText = (searchController.searchBar.text ?? "")
+        self.currentSearchText = searchText
+    }
+ }
 

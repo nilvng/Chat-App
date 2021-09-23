@@ -46,9 +46,8 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
 
     var submitButton : UIButton = {
         let button = UIButton()
-        UIImageView(image: btn_)
-        button.setImage(UIImage(named: "btn_send_forboy"), for: .normal)
-        button.setImage(UIImage(named: "btn_send_forboy_disable"), for: .disabled)
+        button.setImage(.btn_send_forboy, for: .normal)
+        button.setImage(.btn_send_forboy_disabled, for: .disabled)
 
         button.layer.cornerRadius = 30
 

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C846508926FBF4D2009C5782 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846508826FBF4D2009C5782 /* SearchBar.swift */; };
+		C846508D26FBF9C5009C5782 /* UIImage+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */; };
+		C846509126FC00C0009C5782 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846509026FC00C0009C5782 /* SearchViewController.swift */; };
 		C858DC4D26F9D6FF00821E67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C858DC4C26F9D6FF00821E67 /* AppDelegate.swift */; };
 		C858DC4F26F9D6FF00821E67 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C858DC4E26F9D6FF00821E67 /* SceneDelegate.swift */; };
 		C858DC5126F9D6FF00821E67 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C858DC5026F9D6FF00821E67 /* ConversationsViewController.swift */; };
@@ -24,6 +26,8 @@
 
 /* Begin PBXFileReference section */
 		C846508826FBF4D2009C5782 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Chat.swift"; sourceTree = "<group>"; };
+		C846509026FC00C0009C5782 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		C858DC4926F9D6FF00821E67 /* Chat App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chat App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C858DC4C26F9D6FF00821E67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C858DC4E26F9D6FF00821E67 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +55,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C846508B26FBF9AD009C5782 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		C858DC4026F9D6FF00821E67 = {
 			isa = PBXGroup;
 			children = (
@@ -70,6 +82,7 @@
 		C858DC4B26F9D6FF00821E67 /* Chat App */ = {
 			isa = PBXGroup;
 			children = (
+				C846508B26FBF9AD009C5782 /* Helpers */,
 				C858DC4C26F9D6FF00821E67 /* AppDelegate.swift */,
 				C858DC4E26F9D6FF00821E67 /* SceneDelegate.swift */,
 				C858DC5226F9D6FF00821E67 /* Main.storyboard */,
@@ -97,6 +110,7 @@
 			children = (
 				C858DC5026F9D6FF00821E67 /* ConversationsViewController.swift */,
 				C896E70F26F9F97100882298 /* MessagesViewController.swift */,
+				C846509026FC00C0009C5782 /* SearchViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -182,11 +196,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C846508D26FBF9C5009C5782 /* UIImage+Chat.swift in Sources */,
 				C858DC5126F9D6FF00821E67 /* ConversationsViewController.swift in Sources */,
 				C858DC6226F9D75E00821E67 /* Message.swift in Sources */,
 				C858DC4D26F9D6FF00821E67 /* AppDelegate.swift in Sources */,
 				C858DC6626F9D7E600821E67 /* Conversation.swift in Sources */,
 				C858DC4F26F9D6FF00821E67 /* SceneDelegate.swift in Sources */,
+				C846509126FC00C0009C5782 /* SearchViewController.swift in Sources */,
 				C858DC6D26F9DA8300821E67 /* ConversationListView.swift in Sources */,
 				C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */,
 				C846508926FBF4D2009C5782 /* SearchBar.swift in Sources */,
