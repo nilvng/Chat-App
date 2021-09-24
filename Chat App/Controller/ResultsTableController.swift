@@ -73,12 +73,12 @@ class ResultsTableController: UITableViewController {
     func updateSearchResults(for searchController: UISearchController) {
         print("Searching with: " + (searchController.searchBar.text ?? ""))
         let searchText = (searchController.searchBar.text ?? "")
-        self.currentSearchText = searchText
         
         filterItemForSearchKey(searchText)
     
     }
     func filterItemForSearchKey(_ key: String){
+        self.currentSearchText = key
         self.filteredItems = self.items.filter { (item: Conversation) -> Bool in
             return item.title.lowercased().contains(key.lowercased())
         }
