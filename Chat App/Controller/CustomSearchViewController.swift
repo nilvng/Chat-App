@@ -58,6 +58,11 @@ class CustomSearchController : UITableViewController {
             converation = items[indexPath.row]
         }
         cell.imageView?.image = converation.thumbnail
+        cell.imageView?.frame = CGRect(x: 0,y: 0 ,width: 65, height: 65)
+        cell.imageView?.contentMode = .scaleAspectFill
+        cell.imageView?.layer.cornerRadius = 30
+        cell.imageView?.clipsToBounds = true
+
         cell.textLabel?.text = converation.title
         return cell
     }

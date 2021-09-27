@@ -22,11 +22,13 @@ class ConversationListController: UIViewController {
     var addButton : UIButton = {
         let button = UIButton()
         button.setImage(UIImage.navigation_button_plus, for: .normal)
+        button.sizeToFit()
         button.setImage(UIImage.navigation_button_plus_selected, for: .selected)
-
+        button.backgroundColor = .blue
         return button
     }()
     
+    lazy var blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     
     var searchButton : UIButton = {
         let searchButton = UIButton()
@@ -80,6 +82,9 @@ class ConversationListController: UIViewController {
         tableView.frame = view.bounds
         tableView.register(ConversationCell.self, forCellReuseIdentifier: ConversationCell.identifier)
         
+        setupAddButton()
+
+        
     }
 
     private func setupNavigationBar(){
@@ -96,15 +101,41 @@ class ConversationListController: UIViewController {
             navigationItem.titleView = searchController.searchBar
             navigationItem.titleView?.layoutSubviews()
         }//
-        navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: addButton), UIBarButtonItem(customView: searchButton)]
-        addButton.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
+        navigationItem.rightBarButtonItems = [ UIBarButtonItem(customView: searchButton)]
+        
         searchButton.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
+
+    }
+    
+    func setupAddButton(){
+        blurEffectView.tintColor = .clear
+        blurEffectView.contentView.addSubview(addButton)
+        view.addSubview(blurEffectView)
+
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        blurEffectView.translatesAutoresizingMaskIntoConstraints = false
+        let margins = view.layoutMarginsGuide
+        NSLayoutConstraint.activate([
+            // blurEffect constraints
+            blurEffectView.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -10),
+            blurEffectView.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -30),
+            blurEffectView.heightAnchor.constraint(equalToConstant: 90),
+            blurEffectView.widthAnchor.constraint(equalToConstant: 90),
+//            // addButton constraints
+            addButton.topAnchor.constraint(equalTo: blurEffectView.contentView.topAnchor, constant: 10),
+            addButton.leadingAnchor.constraint(equalTo: blurEffectView.contentView.leadingAnchor, constant: 10),
+            addButton.bottomAnchor.constraint(equalTo: blurEffectView.contentView.bottomAnchor, constant: -10),
+            addButton.trailingAnchor.constraint(equalTo: blurEffectView.contentView.trailingAnchor, constant: -10),
+        ])
+        
+        addButton.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
 
     }
     
     @objc func addButtonPressed(){
         print("Add Contact...")
-
+        let searchVC = CustomSearchController()
+        navigationController?.pushViewController(searchVC, animated: true)
     }
     
     @objc func searchButtonPressed(){
