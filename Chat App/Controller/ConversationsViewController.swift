@@ -82,6 +82,7 @@ extension ConversationsViewController : UITableViewDelegate{
         // navigate to conversation detail view
         let messagesViewController = MessagesViewController()
         messagesViewController.messageList = conversationList[indexPath.row].messages
+        messagesViewController.conversation = conversationList[indexPath.row]
         navigationController?.pushViewController(messagesViewController, animated: true)
     }
 }

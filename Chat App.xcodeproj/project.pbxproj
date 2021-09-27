@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8305BBC27017AEF0070C771 /* UIColor+Chat.swift */; };
 		C846508926FBF4D2009C5782 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846508826FBF4D2009C5782 /* SearchBar.swift */; };
 		C846508D26FBF9C5009C5782 /* UIImage+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */; };
 		C846509126FC00C0009C5782 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846509026FC00C0009C5782 /* SearchViewController.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C8305BBC27017AEF0070C771 /* UIColor+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Chat.swift"; sourceTree = "<group>"; };
 		C846508826FBF4D2009C5782 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Chat.swift"; sourceTree = "<group>"; };
 		C846509026FC00C0009C5782 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */,
+				C8305BBC27017AEF0070C771 /* UIColor+Chat.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 				C858DC6D26F9DA8300821E67 /* ConversationListView.swift in Sources */,
 				C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */,
 				C846508926FBF4D2009C5782 /* SearchBar.swift in Sources */,
+				C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */,
 				C896E70D26F9E07A00882298 /* ConversationCell.swift in Sources */,
 				C896E71326F9FADF00882298 /* MessageCell.swift in Sources */,
 			);

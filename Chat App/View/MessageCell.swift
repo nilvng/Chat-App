@@ -10,6 +10,8 @@ import UIKit
 class MessageCell: UITableViewCell {
 
     static let identifier = "MessageCell"
+    var inboundConstraint : NSLayoutConstraint?
+    var outboundConstraint : NSLayoutConstraint?
     
     let messageBody : UILabel = {
         let label = UILabel()
@@ -39,25 +41,33 @@ class MessageCell: UITableViewCell {
         // align bubble based on whether the sender is the user themselves
         if model.sender == Friend.me {
             // sent message will align to the right and it's green bubble
-            messageBody.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32).isActive = true
-            bubleBackground.backgroundColor = UIColor(named: "babyBlue")
-            
+            inboundConstraint?.isActive = false
+            outboundConstraint?.isActive = true
+            bubleBackground.backgroundColor = UIColor.babyBlue
         } else {
             // received message will align to the left and it's white bubble
-            messageBody.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32).isActive = true
-            bubleBackground.backgroundColor = UIColor(named: "trueLightGray")
+            outboundConstraint?.isActive = false
+            inboundConstraint?.isActive = true
+            bubleBackground.backgroundColor = UIColor.trueLightGray
+            
         }
     }
     
     func setupMessageBody(){
         messageBody.translatesAutoresizingMaskIntoConstraints = false
         let marginGuide = contentView
+        
+        self.outboundConstraint =  messageBody.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32)
+        self.inboundConstraint = messageBody.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32)
 
         let constraints : [NSLayoutConstraint] = [
             messageBody.topAnchor.constraint(equalTo: marginGuide.topAnchor, constant: 32),
             messageBody.bottomAnchor.constraint(equalTo: marginGuide.bottomAnchor, constant: -16),
             messageBody.widthAnchor.constraint(lessThanOrEqualToConstant: 200),
+            inboundConstraint!,
+            outboundConstraint!
         ]
+        
         NSLayoutConstraint.activate(constraints)
         messageBody.setContentHuggingPriority(.defaultLow, for: .horizontal)
 

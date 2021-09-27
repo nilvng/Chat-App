@@ -28,7 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         navController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         navController.navigationBar.tintColor = .white
 
-        navController.navigationBar.barTintColor = UIColor(named: "ZaloBlue")
+        navController.navigationBar.barTintColor = UIColor.zaloBlue
         let attributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25), NSAttributedString.Key.foregroundColor: UIColor.white]
         UINavigationBar.appearance().titleTextAttributes = attributes
         
