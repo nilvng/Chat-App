@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8305BBC27017AEF0070C771 /* UIColor+Chat.swift */; };
+		C8305BC7270404B40070C771 /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8305BC6270404B30070C771 /* ChatController.swift */; };
+		C8305BCA270457A30070C771 /* ChatboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8305BC9270457A30070C771 /* ChatboxView.swift */; };
 		C846508926FBF4D2009C5782 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846508826FBF4D2009C5782 /* SearchBar.swift */; };
 		C846508D26FBF9C5009C5782 /* UIImage+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */; };
 		C846509126FC00C0009C5782 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846509026FC00C0009C5782 /* SearchViewController.swift */; };
@@ -27,6 +29,8 @@
 
 /* Begin PBXFileReference section */
 		C8305BBC27017AEF0070C771 /* UIColor+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Chat.swift"; sourceTree = "<group>"; };
+		C8305BC6270404B30070C771 /* ChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatController.swift; sourceTree = "<group>"; };
+		C8305BC9270457A30070C771 /* ChatboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatboxView.swift; sourceTree = "<group>"; };
 		C846508826FBF4D2009C5782 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Chat.swift"; sourceTree = "<group>"; };
 		C846509026FC00C0009C5782 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -114,6 +118,7 @@
 				C858DC5026F9D6FF00821E67 /* ConversationsViewController.swift */,
 				C896E70F26F9F97100882298 /* MessagesViewController.swift */,
 				C846509026FC00C0009C5782 /* SearchViewController.swift */,
+				C8305BC6270404B30070C771 /* ChatController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -124,6 +129,7 @@
 				C858DC6C26F9DA8300821E67 /* ConversationListView.swift */,
 				C896E70C26F9E07A00882298 /* ConversationCell.swift */,
 				C896E71226F9FADF00882298 /* MessageCell.swift */,
+				C8305BC9270457A30070C771 /* ChatboxView.swift */,
 				C846508826FBF4D2009C5782 /* SearchBar.swift */,
 			);
 			path = View;
@@ -203,11 +209,13 @@
 				C858DC5126F9D6FF00821E67 /* ConversationsViewController.swift in Sources */,
 				C858DC6226F9D75E00821E67 /* Message.swift in Sources */,
 				C858DC4D26F9D6FF00821E67 /* AppDelegate.swift in Sources */,
+				C8305BCA270457A30070C771 /* ChatboxView.swift in Sources */,
 				C858DC6626F9D7E600821E67 /* Conversation.swift in Sources */,
 				C858DC4F26F9D6FF00821E67 /* SceneDelegate.swift in Sources */,
 				C846509126FC00C0009C5782 /* SearchViewController.swift in Sources */,
 				C858DC6D26F9DA8300821E67 /* ConversationListView.swift in Sources */,
 				C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */,
+				C8305BC7270404B40070C771 /* ChatController.swift in Sources */,
 				C846508926FBF4D2009C5782 /* SearchBar.swift in Sources */,
 				C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */,
 				C896E70D26F9E07A00882298 /* ConversationCell.swift in Sources */,

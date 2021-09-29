@@ -17,6 +17,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     var tableView : UITableView = {
         let table = UITableView()
         table.separatorStyle = .none
+        table.backgroundColor = .yellow
 //        table.keyboardDismissMode = .interactive // used for input accessory view
         table.allowsSelection = false
         return table
@@ -24,11 +25,11 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     lazy var inputStackViewContainer : UIStackView = {
         let view = UIStackView()
-        view.backgroundColor = .white
+        view.backgroundColor = .red
         view.axis = .horizontal
-        view.alignment = .fill
+        view.alignment = .center
         view.spacing = 7
-        view.distribution = .fillProportionally
+        view.distribution = .fill
         view.isLayoutMarginsRelativeArrangement = true
         view.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 3, trailing: 2)
         view.addArrangedSubview(inputField)
@@ -38,21 +39,22 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     var inputContainerBottomConstraint : NSLayoutConstraint?
     
+    var inputHeight : CGFloat = 55
+    
     var inputField : UITextField = {
-        let view = UITextField()
-        view.backgroundColor = UIColor(named: "trueLightGray")
-        view.layer.cornerRadius = 10
-        return view
+        let field = UITextField()
+        field.backgroundColor = UIColor(named: "trueLightGray")
+        field.borderStyle = .roundedRect
+        
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.heightAnchor.constraint(equalToConstant: 45).isActive = true // TODO: hardcoded!!!
+        return field
     }()
 
     var submitButton : UIButton = {
         let button = UIButton()
         button.setImage(.btn_send_forboy, for: .normal)
         button.setImage(.btn_send_forboy_disabled, for: .disabled)
-        button.layer.cornerRadius = 30
-
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
         return button
     }()
@@ -71,15 +73,13 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         
         navigationItem.title = conversation?.title
         
-        view.addSubview(tableView)
-        view.addSubview(inputStackViewContainer)
-        
+        configureTableView()
+
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.isUserInteractionEnabled = true
-        view.addGestureRecognizer(tapGesture)
+        tableView.addGestureRecognizer(tapGesture)
         
         configureInputFieldContainer()
-        configureTableView()
 
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification), name: UIResponder.keyboardDidShowNotification, object: nil)
         
@@ -100,45 +100,54 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
 //
     
     func configureTableView(){
+        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(MessageCell.self, forCellReuseIdentifier: MessageCell.identifier)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 80.0
-        
+        tableView.backgroundColor = .yellow
+
+        view.addSubview(tableView)
+
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: inputStackViewContainer.topAnchor),
-        ])
+        
+        let margin = view.safeAreaLayoutGuide
+        
+        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: margin.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: margin.bottomAnchor).isActive = true
+    
+        tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
+
+        tableView.contentInset = UIEdgeInsets(top: 55, left: 0, bottom: 0, right: 0)
+
     }
     
     func configureInputFieldContainer(){
         // styling inputContainer
+        view.addSubview(inputStackViewContainer)
+
         inputStackViewContainer.translatesAutoresizingMaskIntoConstraints = false
+        let margin = view.safeAreaLayoutGuide
         inputContainerBottomConstraint = inputStackViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         NSLayoutConstraint.activate([
-            inputStackViewContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            inputStackViewContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            inputStackViewContainer.heightAnchor.constraint(equalToConstant: 65),
-            inputContainerBottomConstraint!
-        ])
+            inputStackViewContainer.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
+            inputStackViewContainer.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
+            inputContainerBottomConstraint!,
+            ])
         
         // declare actions
         inputField.delegate  = self
         submitButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
+
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         NotificationCenter.default.removeObserver(self)
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        scrollToLastMessage()
-        
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
 
     @objc func handleKeyboardNotification(notification: NSNotification){
@@ -154,16 +163,18 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         
         let animateDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
         UIView.animate(withDuration: animateDuration, delay: 0, options: .curveEaseOut, animations: {
+            self.tableView.contentInset.top = moveUp ? scalingValue + 23 : self.inputHeight // TODO: hardcoded!!!
             self.view.layoutIfNeeded()
         }, completion: { (completed) in
-//            self.scrollToLastMessage()
+            self.scrollToLastMessage()
         })
     }
     
-    func scrollToLastMessage(){
-        let lastindex = IndexPath(row: messageList.count - 1, section: 0)
-        tableView.scrollToRow(at: lastindex, at: .bottom, animated: true)
-
+    func scrollToLastMessage(animated: Bool = true){
+        DispatchQueue.main.async {
+            let lastindex = IndexPath(row: 0, section: 0)
+            self.tableView.scrollToRow(at: lastindex, at: .bottom, animated: animated)
+        }
     }
 
     @objc func sendMessage(){
@@ -211,7 +222,10 @@ extension MessagesViewController : UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: MessageCell.identifier, for: indexPath) as! MessageCell
         
+        cell.transform = CGAffineTransform(scaleX: 1, y: -1)
+
         cell.configure(model: messageList[indexPath.row])
+
         return cell
         
     }

@@ -77,6 +77,7 @@ class ConversationsViewController: UIViewController {
 }
 
 extension ConversationsViewController : UITableViewDelegate{
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         // navigate to conversation detail view
@@ -84,6 +85,9 @@ extension ConversationsViewController : UITableViewDelegate{
         messagesViewController.messageList = conversationList[indexPath.row].messages
         messagesViewController.conversation = conversationList[indexPath.row]
         navigationController?.pushViewController(messagesViewController, animated: true)
+
+//        let test = ChatController()
+//        navigationController?.pushViewController(test, animated: true)
     }
 }
 
