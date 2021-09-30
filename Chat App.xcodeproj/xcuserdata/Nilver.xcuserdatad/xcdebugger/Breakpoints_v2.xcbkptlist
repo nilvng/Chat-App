@@ -3,8 +3,6 @@
    uuid = "9E840F39-2237-4C71-A71F-1F5FEA5A7799"
    type = "1"
    version = "2.0">
-<<<<<<< HEAD
-=======
    <Breakpoints>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
@@ -32,10 +30,10 @@
             filePath = "Chat App/Controller/MessagesViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
-            landmarkName = "inputAccessoryView"
-            landmarkType = "24">
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -71,5 +69,4 @@
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
->>>>>>> search-compose
 </Bucket>

@@ -32,7 +32,8 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         view.spacing = 7
         view.distribution = .fillProportionally
         view.isLayoutMarginsRelativeArrangement = true
-        view.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 3, trailing: 2)
+        view.backgroundColor = .white
+        view.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 2, leading: 3, bottom: 5, trailing:3)
         view.addArrangedSubview(inputField)
         view.addArrangedSubview(submitButton)
         return view
@@ -44,7 +45,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     var inputField : UITextView = {
         let tview = UITextView()
-        tview.backgroundColor = UIColor(named: "trueLightGray")
+//        tview.backgroundColor = UIColor(named: "trueLightGray")
         tview.isScrollEnabled = false
         tview.contentInsetAdjustmentBehavior = .automatic
         tview.font = UIFont(name: "Arial", size: 16)
@@ -57,6 +58,13 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         button.setImage(.btn_send_forboy_disabled, for: .disabled)
         return button
     }()
+    
+    var separatorLine : UIView = {
+        let line = UIView()
+        line.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+        return line
+    }()
+
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -108,15 +116,28 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     func configureInputFieldContainer(){
         // styling inputContainer
+        inputStackViewContainer.addSubview(separatorLine)
         view.addSubview(inputStackViewContainer)
+        
 
         inputStackViewContainer.translatesAutoresizingMaskIntoConstraints = false
+        
+        separatorLine.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+
+        ])
+
         let margin = view.safeAreaLayoutGuide
         inputContainerBottomConstraint = inputStackViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         NSLayoutConstraint.activate([
             inputStackViewContainer.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             inputStackViewContainer.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             inputContainerBottomConstraint!,
+            separatorLine.bottomAnchor.constraint(equalTo: inputField.topAnchor, constant: -5),
+                separatorLine.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                separatorLine.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            separatorLine.heightAnchor.constraint(equalToConstant: 0.7)
             ])
         
         // declare actions

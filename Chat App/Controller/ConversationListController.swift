@@ -14,8 +14,8 @@ class ConversationListController: UIViewController {
 
     var tableView : UITableView = {
         let table = UITableView()
-        table.separatorStyle = .singleLine
-        table.rowHeight = 80
+        table.separatorStyle = .none
+        table.rowHeight = 100
         return table
     }()
     

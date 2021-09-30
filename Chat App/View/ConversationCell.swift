@@ -48,6 +48,13 @@ class ConversationCell : UITableViewCell {
         return formatter
     }()
     
+    var separatorLine : UIView = {
+        let line = UIView()
+        line.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+        return line
+    }()
+
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -55,6 +62,7 @@ class ConversationCell : UITableViewCell {
         contentView.addSubview(lastMessageLabel)
         contentView.addSubview(timestampLabel)
         contentView.addSubview(thumbnail)
+        contentView.addSubview(separatorLine)
 
     }
     
@@ -71,13 +79,14 @@ class ConversationCell : UITableViewCell {
     // MARK: Design Cell
     
     private var verticalPadding : CGFloat = 7
-    private var horizontalPadding : CGFloat = 7
+    private var horizontalPadding : CGFloat = 10
 
     override func layoutSubviews() {
         setupThumbnail()
         setupTitleLabel()
         setupLastMessageLabel()
         setupTimestampLabel()
+        setupSeparatorLine()
     }
     
     
@@ -101,8 +110,8 @@ class ConversationCell : UITableViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
                 
         let constraints : [NSLayoutConstraint] = [
-            titleLabel.centerYAnchor.constraint(equalTo: thumbnail.centerYAnchor,constant: -11),
-            titleLabel.leadingAnchor.constraint(equalTo: thumbnail.trailingAnchor, constant: 7)
+            titleLabel.centerYAnchor.constraint(equalTo: thumbnail.centerYAnchor,constant: -14),
+            titleLabel.leadingAnchor.constraint(equalTo: thumbnail.trailingAnchor, constant: 14)
         ]
         NSLayoutConstraint.activate(constraints)
     }
@@ -134,6 +143,17 @@ class ConversationCell : UITableViewCell {
         NSLayoutConstraint.activate(constraints)
     }
 
+    func setupSeparatorLine(){
+        
+        separatorLine.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+        separatorLine.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            separatorLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            separatorLine.trailingAnchor.constraint(equalTo: timestampLabel.trailingAnchor),
+            separatorLine.heightAnchor.constraint(equalToConstant: 0.5)
+        ])
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
