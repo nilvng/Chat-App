@@ -9,7 +9,11 @@ import UIKit
 
 class MessagesViewController: UIViewController, UITableViewDelegate {
     
-    var conversation : Conversation?
+    var conversation : Conversation? {
+        didSet{
+           navigationItem.title = conversation?.title
+        }
+    }
     
     var messageList : [Message] = []
     var inputContent : String = ""
@@ -17,19 +21,16 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     var tableView : UITableView = {
         let table = UITableView()
         table.separatorStyle = .none
-        table.backgroundColor = .yellow
-//        table.keyboardDismissMode = .interactive // used for input accessory view
         table.allowsSelection = false
         return table
     }()
     
     lazy var inputStackViewContainer : UIStackView = {
         let view = UIStackView()
-        view.backgroundColor = .red
         view.axis = .horizontal
-        view.alignment = .center
+        view.alignment = .bottom
         view.spacing = 7
-        view.distribution = .fill
+        view.distribution = .fillProportionally
         view.isLayoutMarginsRelativeArrangement = true
         view.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 3, trailing: 2)
         view.addArrangedSubview(inputField)
@@ -41,21 +42,19 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     var inputHeight : CGFloat = 55
     
-    var inputField : UITextField = {
-        let field = UITextField()
-        field.backgroundColor = UIColor(named: "trueLightGray")
-        field.borderStyle = .roundedRect
-        
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.heightAnchor.constraint(equalToConstant: 45).isActive = true // TODO: hardcoded!!!
-        return field
+    var inputField : UITextView = {
+        let tview = UITextView()
+        tview.backgroundColor = UIColor(named: "trueLightGray")
+        tview.isScrollEnabled = false
+        tview.contentInsetAdjustmentBehavior = .automatic
+        tview.font = UIFont(name: "Arial", size: 16)
+        return tview
     }()
 
     var submitButton : UIButton = {
         let button = UIButton()
         button.setImage(.btn_send_forboy, for: .normal)
         button.setImage(.btn_send_forboy_disabled, for: .disabled)
-        
         return button
     }()
     
@@ -70,9 +69,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationItem.title = conversation?.title
-        
+             
         configureTableView()
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -85,26 +82,12 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-//
-//    override var inputAccessoryView: UIView? {
-//        get{
-//            inputStackViewContainer.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60)
-//            inputStackViewContainer.backgroundColor = .white
-//            return inputStackViewContainer
-//        }
-//    }
-//
-//    override var canBecomeFirstResponder: Bool{
-//        true
-//    }
-//
     
     func configureTableView(){
         
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(MessageCell.self, forCellReuseIdentifier: MessageCell.identifier)
-        tableView.backgroundColor = .yellow
 
         view.addSubview(tableView)
 
@@ -191,10 +174,16 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     }
 }
 
-extension MessagesViewController : UITextFieldDelegate{
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let originalText = textField.text {
-            let title = (originalText as NSString).replacingCharacters(in: range, with: string)
+extension MessagesViewController : UITextViewDelegate{
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if let originalText = textView.text {
+            
+            if text == "\n" {
+                sendMessage()
+                return false
+            }
+            
+            let title = (originalText as NSString).replacingCharacters(in: range, with: text)
             
             //  remove leading and trailing whitespace
             let cleanValue = title.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -205,8 +194,9 @@ extension MessagesViewController : UITextFieldDelegate{
             }
         }
         return true
+
     }
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         sendMessage()
         return true
@@ -224,7 +214,8 @@ extension MessagesViewController : UITableViewDataSource {
         
         cell.transform = CGAffineTransform(scaleX: 1, y: -1)
 
-        cell.configure(model: messageList[indexPath.row])
+        let reverseIndex = messageList.count - indexPath.row - 1
+        cell.configure(model: messageList[reverseIndex])
 
         return cell
         

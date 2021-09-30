@@ -22,14 +22,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: winScene)
         window?.makeKeyAndVisible()
         
-        let homeController = ConversationsViewController()
+        let homeController = ConversationListController()
         let navController = UINavigationController(rootViewController: homeController)
         
         navController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         navController.navigationBar.tintColor = .white
-
         navController.navigationBar.barTintColor = UIColor.zaloBlue
         let attributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25), NSAttributedString.Key.foregroundColor: UIColor.white]
+        
         UINavigationBar.appearance().titleTextAttributes = attributes
         
         window?.rootViewController = navController

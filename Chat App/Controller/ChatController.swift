@@ -10,7 +10,7 @@ import UIKit
 class ChatController: UIViewController {
     
     
-    var msgList : [Int] = [1,2,3,4,5,6,7,8,9,10,11,12]
+    var msgList : [Int] = [1,2,3,4]
     
     private let tableView : UITableView = {
         let tableview = UITableView()
