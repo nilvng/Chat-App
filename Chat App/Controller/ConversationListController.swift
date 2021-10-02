@@ -75,14 +75,7 @@ class ConversationListController: UIViewController {
         super.viewDidLoad()
 
         setupNavigationBar()
-        
-        view.addSubview(tableView)
-        
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.frame = view.bounds
-        tableView.register(ConversationCell.self, forCellReuseIdentifier: ConversationCell.identifier)
-        
+        setupTableView()
         setupAddButton()
 
         
@@ -108,6 +101,24 @@ class ConversationListController: UIViewController {
 
     }
     
+    func setupTableView(){
+        view.addSubview(tableView)
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(ConversationCell.self, forCellReuseIdentifier: ConversationCell.identifier)
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margin = view.safeAreaLayoutGuide
+        
+        tableView.leftAnchor.constraint(equalTo: margin.leftAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: margin.rightAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: margin.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    
+    }
+    
     func setupAddButton(){
         blurEffectView.tintColor = .clear
         blurEffectView.contentView.addSubview(addButton)
@@ -119,7 +130,7 @@ class ConversationListController: UIViewController {
         NSLayoutConstraint.activate([
             // blurEffect constraints
             blurEffectView.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -10),
-            blurEffectView.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -30),
+            blurEffectView.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -20),
             blurEffectView.heightAnchor.constraint(equalToConstant: 90),
             blurEffectView.widthAnchor.constraint(equalToConstant: 90),
 //            // addButton constraints

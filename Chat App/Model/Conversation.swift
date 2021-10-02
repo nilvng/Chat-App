@@ -8,6 +8,7 @@
 import UIKit
 
 struct Conversation {
+    var id = UUID().uuidString
     var title : String
     var thumbnail : UIImage?
     var messages : [Message] = []
@@ -17,12 +18,12 @@ extension Conversation {
     static let stubList : [Conversation] = [
         .init(title: "John Fish", thumbnail: UIImage(named: "stub1"), messages: [Message.stub1]),
         .init(title: "Daniel Bourke", thumbnail: UIImage(named: "stub2"),
-              messages: [ Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4,]),
-        .init(title: "Maya Angelou", thumbnail: UIImage(named: "default"), messages: [Message(sender: Friend.me, content: "let them know how much you care", timestamp: Date())]),
+              messages: [ Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub2,]),
+        .init(title: "Maya Angelou", thumbnail: UIImage(named: "default"), messages: [.stub5]),
         .init(title: "John Fish", thumbnail: UIImage(named: "stub1"), messages: [Message.stub1]),
         .init(title: "Daniel Bourke", thumbnail: UIImage(named: "stub2"),
               messages: [ Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4,]),
-        .init(title: "Maya Angelou", thumbnail: UIImage(named: "default"), messages: [Message(sender: Friend.me, content: "let them know how much you care", timestamp: Date())]),
+        .init(title: "Maya Angelou", thumbnail: UIImage(named: "default"), messages: [.stub5]),
 
     ]
 }

@@ -42,12 +42,6 @@ class ConversationCell : UITableViewCell {
         return image
     }()
     
-    let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yy"
-        return formatter
-    }()
-    
     var separatorLine : UIView = {
         let line = UIView()
         line.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
@@ -67,15 +61,34 @@ class ConversationCell : UITableViewCell {
     }
     
     func configure (model : Conversation){
+        
         titleLabel.text = model.title
         thumbnail.image = model.thumbnail
         // don't have any messages in this conversation -> shouldn't become a cell
         guard let lastMsg = model.messages.last else {
             return
         }
+        print(lastMsg)
         lastMessageLabel.text = lastMsg.content
-        timestampLabel.text = dateFormatter.string(from: lastMsg.timestamp)
+        timestampLabel.text = formatTimestampString(date: lastMsg.timestamp)
         }
+    
+    func formatTimestampString(date: Date) -> String {
+        let formatter = DateFormatter()
+        let interval = Date() - date
+        
+        print(interval)
+        
+        if let yearDiff = interval.year, yearDiff > 0 {
+            formatter.dateFormat = "dd/MM/yy"
+        } else if let monthDiff = interval.month, monthDiff > 0 {
+            formatter.dateFormat = "dd MMM"
+        } else {
+            formatter.timeStyle = .short
+        }
+        
+        return formatter.string(from: date)
+    }
     // MARK: Design Cell
     
     private var verticalPadding : CGFloat = 7

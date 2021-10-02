@@ -19,10 +19,16 @@ struct Message {
 }
 
 extension Message {
-    static let stub1 : Message = Message(sender: Friend.me, content: "Today is Tuesday", timestamp: Date())
-    static let stub2 : Message = .init(sender: Friend.stubDan, content: "Tomorrow is Wednesday", timestamp: Date())
-    static let stub3 : Message = .init(sender: Friend.stubDan, content: "How is goin?", timestamp: Date())
-    static let stub4 : Message = .init(sender:Friend.me, content: "Just dance. How about you?", timestamp: Date())
+    static let stub1 : Message = Message(sender: Friend.me, content: "Today is Tuesday",
+                                         timestamp: "2020-09-30 01:10:01".toDate()!)
+    static let stub2 : Message = .init(sender: Friend.stubDan, content: "Tomorrow is Wednesday",
+                                       timestamp: "2021-08-23 08:10:01".toDate()!)
+    static let stub3 : Message = .init(sender: Friend.stubDan, content: "How is goin?",
+                                       timestamp: "2021-09-29 12:10:01".toDate()!)
+    static let stub4 : Message = .init(sender:Friend.me, content: "Just dance. How about you?",
+                                       timestamp: "2021-09-30 15:10:01".toDate()!)
+    static let stub5 : Message = Message(sender: Friend.me, content: "let them know how much you care",
+                                         timestamp: "2021-09-30 14:10:01".toDate()!)
 }
 
 struct Friend {
@@ -39,3 +45,11 @@ extension Friend : Equatable {
             lhs.lastName == rhs.lastName
     }
 }
+
+
+func stringToDate(_ st: String) -> Date? {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    return formatter.date(from: st)
+}
+
