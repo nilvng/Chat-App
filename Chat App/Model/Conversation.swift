@@ -23,7 +23,7 @@ extension Conversation {
         .init(title: "John Fish", thumbnail: UIImage(named: "stub1"), messages: [Message.stub1]),
         .init(title: "Daniel Bourke", thumbnail: UIImage(named: "stub2"),
               messages: [ Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4,]),
-        .init(title: "Maya Angelou", thumbnail: UIImage(named: "default"), messages: [.stub5]),
+        .init(title: "Maya Angelou", messages: [.stub5]),
 
     ]
 }

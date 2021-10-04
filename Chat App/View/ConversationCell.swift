@@ -34,11 +34,8 @@ class ConversationCell : UITableViewCell {
         return label
 
     }()
-    private let thumbnail : UIImageView = {
-        let image = UIImageView()
-        image.contentMode = .scaleAspectFill
-        image.layer.cornerRadius = 30
-        image.clipsToBounds = true
+    private let thumbnail : TextCircleAvatarView = {
+        let image = TextCircleAvatarView(frame: CGRect(x: 0, y: 0, width: 72, height: 72))
         return image
     }()
     
@@ -62,13 +59,20 @@ class ConversationCell : UITableViewCell {
     
     func configure (model : Conversation){
         
+
         titleLabel.text = model.title
-        thumbnail.image = model.thumbnail
+        
+        // check if contact has image, or else create an image of their first letter name
+        if let avatar = model.thumbnail{
+            thumbnail.image = avatar
+        } else {
+            thumbnail.createTextLayer(name: model.title)
+        }
+        
         // don't have any messages in this conversation -> shouldn't become a cell
         guard let lastMsg = model.messages.last else {
             return
         }
-        print(lastMsg)
         lastMessageLabel.text = lastMsg.content
         timestampLabel.text = formatTimestampString(date: lastMsg.timestamp)
         }
@@ -76,9 +80,7 @@ class ConversationCell : UITableViewCell {
     func formatTimestampString(date: Date) -> String {
         let formatter = DateFormatter()
         let interval = Date() - date
-        
-        print(interval)
-        
+                
         if let yearDiff = interval.year, yearDiff > 0 {
             formatter.dateFormat = "dd/MM/yy"
         } else if let monthDiff = interval.month, monthDiff > 0 {
@@ -107,8 +109,8 @@ class ConversationCell : UITableViewCell {
     func setupThumbnail() {
         thumbnail.translatesAutoresizingMaskIntoConstraints = false
         
-        let width : CGFloat = 65
-        let height : CGFloat = 65
+        let width : CGFloat = 72
+        let height : CGFloat = 72
         
         let constraints : [NSLayoutConstraint] = [
             thumbnail.centerYAnchor.constraint(equalTo: centerYAnchor),

@@ -36,6 +36,7 @@ class MessageCell: UITableViewCell {
         setupBubbleBackground()
     }
     
+    
     func configure(model: Message){
         messageBody.text = model.content
         // align bubble based on whether the sender is the user themselves

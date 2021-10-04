@@ -199,17 +199,22 @@ extension MessagesViewController : UITextViewDelegate{
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if let originalText = textView.text {
             
+            // Send message
             if text == "\n" {
+//                if  let msg = textView.text ,msg != ""{
+//                    sendMessage()
+//                }
                 sendMessage()
                 return false
             }
             
+            // Usual edit message
             let title = (originalText as NSString).replacingCharacters(in: range, with: text)
             
-            //  remove leading and trailing whitespace
+            ///  remove leading and trailing whitespace
             let cleanValue = title.trimmingCharacters(in: .whitespacesAndNewlines)
             
-            // only update when it truly changes
+            /// only update when it truly changes
             if cleanValue != originalText{
                 inputContent = cleanValue
             }
@@ -218,10 +223,6 @@ extension MessagesViewController : UITextViewDelegate{
 
     }
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        sendMessage()
-        return true
-    }
 }
 
 extension MessagesViewController : UITableViewDataSource {
