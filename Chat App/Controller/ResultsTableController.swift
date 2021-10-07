@@ -58,7 +58,16 @@ class ResultsTableController: UITableViewController {
         // show chat view
         tableView.deselectRow(at: indexPath, animated: true)
         let msgVC = MessagesViewController()
-        msgVC.messageList = filteredItems[indexPath.row].messages
+        
+        var selected = filteredItems[indexPath.row]
+
+        msgVC.configure(conversation: selected){ messages in
+            
+            selected.messages = messages
+            
+            print("update conversation list!!!\n \(messages)")
+        }
+        
         present(msgVC, animated: true, completion: nil)
     }
 

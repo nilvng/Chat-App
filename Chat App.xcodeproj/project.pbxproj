@@ -30,6 +30,7 @@
 		C8D879C12706B096007BE93D /* BubbleChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879C02706B096007BE93D /* BubbleChatView.swift */; };
 		C8D879C42706B0BD007BE93D /* CircleAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879C32706B0BD007BE93D /* CircleAvatarView.swift */; };
 		C8D879CB27098D40007BE93D /* TextCircleAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879CA27098D40007BE93D /* TextCircleAvatarView.swift */; };
+		C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879CE270B00D0007BE93D /* SearchContactCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		C8D879C02706B096007BE93D /* BubbleChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleChatView.swift; sourceTree = "<group>"; };
 		C8D879C32706B0BD007BE93D /* CircleAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleAvatarView.swift; sourceTree = "<group>"; };
 		C8D879CA27098D40007BE93D /* TextCircleAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCircleAvatarView.swift; sourceTree = "<group>"; };
+		C8D879CE270B00D0007BE93D /* SearchContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 				C858DC6C26F9DA8300821E67 /* ConversationListView.swift */,
 				C896E70C26F9E07A00882298 /* ConversationCell.swift */,
 				C896E71226F9FADF00882298 /* MessageCell.swift */,
+				C8D879CE270B00D0007BE93D /* SearchContactCell.swift */,
 				C8305BC9270457A30070C771 /* ChatboxView.swift */,
 				C846508826FBF4D2009C5782 /* SearchBar.swift */,
 				C8D879C02706B096007BE93D /* BubbleChatView.swift */,
@@ -235,6 +238,7 @@
 				C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */,
 				C8D879C42706B0BD007BE93D /* CircleAvatarView.swift in Sources */,
 				C8305BC7270404B40070C771 /* ChatController.swift in Sources */,
+				C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */,
 				C846508926FBF4D2009C5782 /* SearchBar.swift in Sources */,
 				C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */,
 				C896E70D26F9E07A00882298 /* ConversationCell.swift in Sources */,

@@ -9,13 +9,16 @@ import UIKit
 
 class MessagesViewController: UIViewController, UITableViewDelegate {
     
+    typealias MessageChangedAction = ([Message]) -> Void
+    
+    var actionDelegate : MessageChangedAction?
+    
     var conversation : Conversation? {
         didSet{
            navigationItem.title = conversation?.title
         }
     }
     
-    var messageList : [Message] = []
     var inputContent : String = ""
     
     var tableView : UITableView = {
@@ -68,30 +71,36 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     init() {
         super.init(nibName: nil, bundle: nil)
- 
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(conversation: Conversation, action : MessageChangedAction? = nil){
+        self.conversation = conversation
+        self.actionDelegate = action
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
              
-        configureTableView()
+        setupTableView()
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.isUserInteractionEnabled = true
         tableView.addGestureRecognizer(tapGesture)
         
-        configureInputFieldContainer()
+        setupInputContainer()
 
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification), name: UIResponder.keyboardDidShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+
     
-    func configureTableView(){
+    func setupTableView(){
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -114,7 +123,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
 
     }
     
-    func configureInputFieldContainer(){
+    func setupInputContainer(){
         // styling inputContainer
         inputStackViewContainer.addSubview(separatorLine)
         view.addSubview(inputStackViewContainer)
@@ -124,12 +133,10 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         
         separatorLine.translatesAutoresizingMaskIntoConstraints = false
         
-        NSLayoutConstraint.activate([
-
-        ])
+        inputContainerBottomConstraint = inputStackViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
 
         let margin = view.safeAreaLayoutGuide
-        inputContainerBottomConstraint = inputStackViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+
         NSLayoutConstraint.activate([
             inputStackViewContainer.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             inputStackViewContainer.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
@@ -148,7 +155,10 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        
         NotificationCenter.default.removeObserver(self)
+        
+        actionDelegate?(conversation!.messages)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -183,7 +193,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
 
     @objc func sendMessage(){
         print("sending message..")
-        messageList.append(Message.newMessage(content: self.inputContent))
+        conversation?.messages.append(Message.newMessage(content: self.inputContent))
         inputField.text = ""
         tableView.reloadData()
         scrollToLastMessage()
@@ -201,10 +211,9 @@ extension MessagesViewController : UITextViewDelegate{
             
             // Send message
             if text == "\n" {
-//                if  let msg = textView.text ,msg != ""{
-//                    sendMessage()
-//                }
-                sendMessage()
+                if  let msg = textView.text ,msg != ""{
+                    sendMessage()
+                }
                 return false
             }
             
@@ -227,7 +236,7 @@ extension MessagesViewController : UITextViewDelegate{
 
 extension MessagesViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.messageList.count
+        self.conversation!.messages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -236,8 +245,9 @@ extension MessagesViewController : UITableViewDataSource {
         
         cell.transform = CGAffineTransform(scaleX: 1, y: -1)
 
-        let reverseIndex = messageList.count - indexPath.row - 1
-        cell.configure(model: messageList[reverseIndex])
+        
+        let reverseIndex = conversation!.messages.count - indexPath.row - 1
+        cell.configure(model: conversation!.messages[reverseIndex])
 
         return cell
         

@@ -9,6 +9,7 @@ import UIKit
 
 extension UIColor {
     static let zaloBlue = UIColor(named: "ZaloBlue")
+    static let complementZaloBlue = UIColor(named: "ComplementZaloBlue")
     static let trueLightGray = UIColor(named: "trueLightGray")
     static let babyBlue = UIColor(named: "babyBlue")
 

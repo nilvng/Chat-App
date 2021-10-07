@@ -12,10 +12,9 @@ class CustomSearchController : UITableViewController {
     
     lazy var searchField : UITextField = {
         let field = UITextField(frame: CGRect(x: 0, y: 0, width: 320, height: 70))
-        field.layer.cornerRadius = 15
         field.backgroundColor = .white
         field.tintColor = .black
-
+        field.borderStyle = .roundedRect
         field.placeholder = "Search"
         return field
     }()
@@ -28,10 +27,11 @@ class CustomSearchController : UITableViewController {
         self.navigationItem.titleView = searchField
         searchField.delegate = self
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "resultCell")
+        tableView.register(SearchContactCell.self, forCellReuseIdentifier: SearchContactCell.identifier)
         
         filteredItems = items
 
+        tableView.separatorStyle  = .none
     }
     
     let items : [Conversation] = Conversation.stubList
@@ -50,35 +50,38 @@ class CustomSearchController : UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultCell", for: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
         let converation: Conversation
         if isFiltering {
             converation = filteredItems[indexPath.row]
         } else {
             converation = items[indexPath.row]
         }
-        cell.imageView?.image = converation.thumbnail
-        cell.imageView?.frame = CGRect(x: 0,y: 0 ,width: 65, height: 65)
-        cell.imageView?.contentMode = .scaleAspectFill
-        cell.imageView?.layer.cornerRadius = 30
-        cell.imageView?.clipsToBounds = true
+        cell.configure(model: converation)
 
-        cell.textLabel?.text = converation.title
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        return 75
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // show chat view
         tableView.deselectRow(at: indexPath, animated: true)
         let msgVC = MessagesViewController()
-        msgVC.messageList = filteredItems[indexPath.row].messages
+        
+        var selected = filteredItems[indexPath.row]
+
+        msgVC.configure(conversation: selected){ messages in
+            
+            selected.messages = messages
+            
+            print("update conversation list!!!\n \(messages)")
+        }
+
         navigationController?.pushViewController(msgVC, animated: true)
     }
-
 
 }
 
@@ -89,7 +92,6 @@ extension CustomSearchController: UITextFieldDelegate {
         guard let text = textField.text, text != "" else {
             return
         }
-        print("search \(text)")
         let trimText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         
         filterItemForSearchKey(trimText)

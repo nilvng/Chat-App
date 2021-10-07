@@ -93,7 +93,7 @@ class ConversationCell : UITableViewCell {
     }
     // MARK: Design Cell
     
-    private var verticalPadding : CGFloat = 7
+    private var verticalPadding : CGFloat = 5
     private var horizontalPadding : CGFloat = 10
 
     override func layoutSubviews() {

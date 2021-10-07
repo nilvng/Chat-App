@@ -15,7 +15,7 @@ class ConversationListController: UIViewController {
     var tableView : UITableView = {
         let table = UITableView()
         table.separatorStyle = .none
-        table.rowHeight = 100
+        table.rowHeight = 86
         return table
     }()
     
@@ -24,7 +24,7 @@ class ConversationListController: UIViewController {
         button.setImage(UIImage.navigation_button_plus, for: .normal)
         button.sizeToFit()
         button.setImage(UIImage.navigation_button_plus_selected, for: .selected)
-        button.backgroundColor = .blue
+        button.backgroundColor = UIColor.complementZaloBlue
         button.layer.cornerRadius = 33
         return button
     }()
@@ -45,30 +45,23 @@ class ConversationListController: UIViewController {
         let sc = UISearchController(searchResultsController:resultController)
         sc.searchResultsUpdater = resultController
         sc.delegate = self
-        sc.searchBar.placeholder = "Search a Friend"
-        sc.searchBar.autocapitalizationType = .allCharacters
+        sc.searchBar.searchTextField.delegate = self
         
-        let scb = sc.searchBar
-        scb.searchBarStyle = .minimal
-        scb.isTranslucent = false
-        scb.tintColor = UIColor.white
-        scb.barTintColor = UIColor.white
+        sc.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search a Friend", attributes: [NSAttributedString.Key.foregroundColor : UIColor.trueLightGray!])
 
-        if let textfield = scb.value(forKey: "searchField") as? UITextField {
-            //textfield.textColor = // Set text color
-            if let backgroundview = textfield.subviews.first {
-
-                // Background color
-                backgroundview.backgroundColor = UIColor.white
-
-                // Rounded corner
-                backgroundview.layer.cornerRadius = 10;
-                backgroundview.clipsToBounds = true;
-
-            }
-        }
         return sc
     }()
+    
+    func changePlaceholderColor(_ color : UIColor){
+//        guard let sbTextFieldLabel : AnyClass = NSClassFromString("UISearchBarTextFieldLabel"),
+//              let field = searchController.searchBar.searchTextField else{
+//            return
+//        }
+//
+//        for subview in field.subviews where subview.isKind(of: sbTextFieldLabel){
+//            (subview as! UILabel).textColor = color
+//        }
+    }
 
 
     override func viewDidLoad() {
@@ -95,9 +88,10 @@ class ConversationListController: UIViewController {
             navigationItem.titleView = searchController.searchBar
             navigationItem.titleView?.layoutSubviews()
         }//
-        navigationItem.rightBarButtonItems = [ UIBarButtonItem(customView: searchButton)]
         
-        searchButton.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
+//        navigationItem.rightBarButtonItems = [ UIBarButtonItem(customView: searchButton)]
+//
+//        searchButton.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
 
     }
     
@@ -155,9 +149,17 @@ class ConversationListController: UIViewController {
         let searchVC = CustomSearchController()
         navigationController?.pushViewController(searchVC, animated: true)
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-  
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print("view did appear...")
+ 
+        navigationController?.navigationBar.barStyle = .black
+
+        searchController.searchBar.searchTextField.tintColor = .white
+        searchController.searchBar.searchTextField.backgroundColor = UIColor.zaloBlue
+        searchController.searchBar.setLeftIcon(UIImage.navigation_search_selected!.withTintColor(.white))
+        
     }
 
 }
@@ -167,8 +169,22 @@ extension ConversationListController : UITableViewDelegate{
         tableView.deselectRow(at: indexPath, animated: true)
         // navigate to conversation detail view
         let messagesViewController = MessagesViewController()
-        messagesViewController.conversation = conversationList[indexPath.row]
-        messagesViewController.messageList = conversationList[indexPath.row].messages
+        
+        var selected = conversationList[indexPath.row]
+        
+        messagesViewController.configure(conversation: selected){ messages in
+            
+            selected.messages = messages
+            
+            self.conversationList.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .none)
+
+            
+            self.conversationList.insert(selected, at: 0)
+            self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
+
+        }
+
         navigationController?.pushViewController(messagesViewController, animated: true)
 
     }
@@ -191,7 +207,23 @@ extension ConversationListController : UITableViewDataSource {
     
 }
 // MARK: - UISearchResult Updating and UISearchControllerDelegate  Extension
-  extension ConversationListController: UISearchResultsUpdating, UISearchControllerDelegate {
+  extension ConversationListController: UISearchResultsUpdating, UISearchControllerDelegate, UISearchTextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        print("text field editing..")
+        searchController.searchBar.searchTextField.textColor = .black
+        searchController.searchBar.searchTextField.tintColor = .black
+        searchController.searchBar.searchTextField.backgroundColor = .white
+        searchController.searchBar.setLeftIcon(UIImage.navigation_search_selected!.withTintColor(UIColor.darkGray))
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        searchController.searchBar.searchTextField.tintColor = .white
+        searchController.searchBar.searchTextField.backgroundColor = UIColor.zaloBlue
+        searchController.searchBar.setLeftIcon(UIImage.navigation_search_selected!.withTintColor(.white))
+
+    }
+    
     func updateSearchResults(for searchController: UISearchController) {
         print("Searching with: " + (searchController.searchBar.text ?? ""))
         let searchText = (searchController.searchBar.text ?? "")
@@ -199,3 +231,13 @@ extension ConversationListController : UITableViewDataSource {
     }
  }
 
+extension UISearchBar {
+    func setLeftIcon(_ image : UIImage){
+        let imageView = UIImageView()
+        imageView.image = image
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        searchTextField.leftView = imageView
+    }
+}
