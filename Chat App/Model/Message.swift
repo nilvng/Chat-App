@@ -31,6 +31,14 @@ extension Message {
                                          timestamp: "2021-09-30 14:10:01".toDate()!)
 }
 
+extension Message : Equatable {
+    static func == (lhs: Message, rhs: Message) -> Bool{
+        return lhs.sender == rhs.sender &&
+            lhs.content == rhs.content &&
+            lhs.timestamp == rhs.timestamp
+    }
+}
+
 struct Friend {
     var firstName : String
     var lastName : String

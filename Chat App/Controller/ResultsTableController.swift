@@ -20,8 +20,12 @@ class ResultsTableController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "resultCell")
+        
+        tableView.register(SearchContactCell.self, forCellReuseIdentifier: SearchContactCell.identifier)
+        tableView.separatorStyle  = .none
+        tableView.rowHeight = 84
         self.filteredItems = items
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -33,20 +37,15 @@ class ResultsTableController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultCell", for: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
         let converation: Conversation
         if isFiltering {
             converation = filteredItems[indexPath.row]
         } else {
             converation = items[indexPath.row]
         }
-        cell.imageView?.frame = CGRect(x: 0,y: 0 ,width: 65, height: 65)
-        cell.imageView?.image = converation.thumbnail
-        cell.imageView?.contentMode = .scaleAspectFill
-        cell.imageView?.layer.cornerRadius = 30
-        cell.imageView?.clipsToBounds = true
+        cell.configure(model: converation)
 
-        cell.textLabel?.text = converation.title
         return cell
     }
     

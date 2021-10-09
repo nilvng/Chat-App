@@ -31,6 +31,7 @@
 		C8D879C42706B0BD007BE93D /* CircleAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879C32706B0BD007BE93D /* CircleAvatarView.swift */; };
 		C8D879CB27098D40007BE93D /* TextCircleAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879CA27098D40007BE93D /* TextCircleAvatarView.swift */; };
 		C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879CE270B00D0007BE93D /* SearchContactCell.swift */; };
+		C8D879F5270F3F02007BE93D /* ComposeMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879F4270F3F02007BE93D /* ComposeMessageController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		C8D879C32706B0BD007BE93D /* CircleAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleAvatarView.swift; sourceTree = "<group>"; };
 		C8D879CA27098D40007BE93D /* TextCircleAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCircleAvatarView.swift; sourceTree = "<group>"; };
 		C8D879CE270B00D0007BE93D /* SearchContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactCell.swift; sourceTree = "<group>"; };
+		C8D879F4270F3F02007BE93D /* ComposeMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeMessageController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +135,7 @@
 				C896E70F26F9F97100882298 /* MessagesViewController.swift */,
 				C846509026FC00C0009C5782 /* CustomSearchViewController.swift */,
 				C8305BC6270404B30070C771 /* ChatController.swift */,
+				C8D879F4270F3F02007BE93D /* ComposeMessageController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 				C8305BCA270457A30070C771 /* ChatboxView.swift in Sources */,
 				C8D879C12706B096007BE93D /* BubbleChatView.swift in Sources */,
 				C858DC6626F9D7E600821E67 /* Conversation.swift in Sources */,
+				C8D879F5270F3F02007BE93D /* ComposeMessageController.swift in Sources */,
 				C858DC4F26F9D6FF00821E67 /* SceneDelegate.swift in Sources */,
 				C846509126FC00C0009C5782 /* CustomSearchViewController.swift in Sources */,
 				C858DC6D26F9DA8300821E67 /* ConversationListView.swift in Sources */,

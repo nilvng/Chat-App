@@ -140,8 +140,8 @@ class ConversationListController: UIViewController {
     
     @objc func addButtonPressed(){
         print("Add Contact...")
-        let searchVC = CustomSearchController()
-        navigationController?.pushViewController(searchVC, animated: true)
+        let cmc = ComposeMessageController()
+        self.present(cmc, animated: true, completion: nil)
     }
     
     @objc func searchButtonPressed(){
@@ -174,8 +174,10 @@ extension ConversationListController : UITableViewDelegate{
         
         messagesViewController.configure(conversation: selected){ messages in
             
+            guard selected.messages != messages else { return }
+            print("yes, new message")
             selected.messages = messages
-            
+
             self.conversationList.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .none)
 

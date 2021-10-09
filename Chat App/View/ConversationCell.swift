@@ -66,7 +66,8 @@ class ConversationCell : UITableViewCell {
         if let avatar = model.thumbnail{
             thumbnail.image = avatar
         } else {
-            thumbnail.createTextLayer(name: model.title)
+            let firstCharacter = String(model.title.first!) as NSString
+            thumbnail.drawText(text: firstCharacter)
         }
         
         // don't have any messages in this conversation -> shouldn't become a cell

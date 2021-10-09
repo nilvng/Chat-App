@@ -242,13 +242,12 @@ extension MessagesViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: MessageCell.identifier, for: indexPath) as! MessageCell
-        
+        let reverseIndex = conversation!.messages.count - indexPath.row - 1
+        cell.message = conversation!.messages[reverseIndex]
+
         cell.transform = CGAffineTransform(scaleX: 1, y: -1)
 
         
-        let reverseIndex = conversation!.messages.count - indexPath.row - 1
-        cell.configure(model: conversation!.messages[reverseIndex])
-
         return cell
         
     }

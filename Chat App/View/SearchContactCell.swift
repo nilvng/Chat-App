@@ -49,10 +49,11 @@ class SearchContactCell : UITableViewCell {
         if let avatar = model.thumbnail{
             thumbnail.image = avatar
         } else {
-            thumbnail.createTextLayer(name: model.title)
+            let firstCharacter = String(model.title.first!) as NSString
+            thumbnail.drawText(text: firstCharacter)
         }
-     
-        }
+        
+    }
     // MARK: Design Cell
     
     private var verticalPadding : CGFloat = 7
@@ -85,7 +86,7 @@ class SearchContactCell : UITableViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
                 
         let constraints : [NSLayoutConstraint] = [
-            titleLabel.centerYAnchor.constraint(equalTo: thumbnail.centerYAnchor,constant: -14),
+            titleLabel.centerYAnchor.constraint(equalTo: thumbnail.centerYAnchor,constant: -5),
             titleLabel.leadingAnchor.constraint(equalTo: thumbnail.trailingAnchor, constant: 14)
         ]
         NSLayoutConstraint.activate(constraints)

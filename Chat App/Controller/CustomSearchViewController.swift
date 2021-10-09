@@ -24,11 +24,13 @@ class CustomSearchController : UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.titleView = searchField
+        self.navigationItem.titleView = searchField        
+        
         searchField.delegate = self
         
         tableView.register(SearchContactCell.self, forCellReuseIdentifier: SearchContactCell.identifier)
-        
+        tableView.rowHeight = 80
+
         filteredItems = items
 
         tableView.separatorStyle  = .none
@@ -60,10 +62,6 @@ class CustomSearchController : UITableViewController {
         cell.configure(model: converation)
 
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
