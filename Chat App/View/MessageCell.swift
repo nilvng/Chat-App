@@ -20,17 +20,12 @@ class MessageCell: UITableViewCell {
         return label
     }()
     
-    let bubleBackground : UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 20
-        return view
-    }()
+    let bubbleBackground = BubbleImageView()
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(bubleBackground)
+        contentView.addSubview(bubbleBackground)
         contentView.addSubview(messageBody)
         setupMessageBody()
         setupBubbleBackground()
@@ -38,19 +33,21 @@ class MessageCell: UITableViewCell {
     
     func configure(model: Message){
         messageBody.text = model.content
+        bubbleBackground.bubbleSize = messageBody.intrinsicContentSize
         // align bubble based on whether the sender is the user themselves
         if model.sender == Friend.me {
             // sent message will align to the right and it's green bubble
             inboundConstraint?.isActive = false
             outboundConstraint?.isActive = true
-            bubleBackground.backgroundColor = UIColor.babyBlue
+            bubbleBackground.bubbleColor = UIColor.babyBlue
         } else {
             // received message will align to the left and it's white bubble
             outboundConstraint?.isActive = false
             inboundConstraint?.isActive = true
-            bubleBackground.backgroundColor = UIColor.trueLightGray
+            bubbleBackground.bubbleColor = UIColor.trueLightGray
             
         }
+        bubbleBackground.configure()
     }
     
     func setupMessageBody(){
@@ -74,12 +71,12 @@ class MessageCell: UITableViewCell {
     }
     
     func setupBubbleBackground(){
-        bubleBackground.translatesAutoresizingMaskIntoConstraints = false
+        bubbleBackground.translatesAutoresizingMaskIntoConstraints = false
         let constraints : [NSLayoutConstraint] = [
-            bubleBackground.topAnchor.constraint(equalTo: messageBody.topAnchor, constant: -16),
-            bubleBackground.leadingAnchor.constraint(equalTo: messageBody.leadingAnchor, constant: -16),
-            bubleBackground.bottomAnchor.constraint(equalTo:  messageBody.bottomAnchor, constant: 16),
-            bubleBackground.trailingAnchor.constraint(equalTo: messageBody.trailingAnchor, constant: 16),
+            bubbleBackground.topAnchor.constraint(equalTo: messageBody.topAnchor, constant: -16),
+            bubbleBackground.leadingAnchor.constraint(equalTo: messageBody.leadingAnchor, constant: -16),
+            bubbleBackground.bottomAnchor.constraint(equalTo:  messageBody.bottomAnchor, constant: 16),
+            bubbleBackground.trailingAnchor.constraint(equalTo: messageBody.trailingAnchor, constant: 16),
         ]
         
         NSLayoutConstraint.activate(constraints)

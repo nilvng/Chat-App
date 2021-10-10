@@ -26,6 +26,7 @@
 		C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C896E70F26F9F97100882298 /* MessagesViewController.swift */; };
 		C896E71326F9FADF00882298 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C896E71226F9FADF00882298 /* MessageCell.swift */; };
 		C8A5429E26FC7B9800304C19 /* ResultsTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A5429D26FC7B9800304C19 /* ResultsTableController.swift */; };
+		C8D87A052712BD29007BE93D /* BubbleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A042712BD29007BE93D /* BubbleImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		C896E70F26F9F97100882298 /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		C896E71226F9FADF00882298 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		C8A5429D26FC7B9800304C19 /* ResultsTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsTableController.swift; sourceTree = "<group>"; };
+		C8D87A042712BD29007BE93D /* BubbleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,10 +120,9 @@
 			isa = PBXGroup;
 			children = (
 				C858DC5026F9D6FF00821E67 /* ConversationListController.swift */,
-				C846509026FC00C0009C5782 /* CustomSearchViewController.swift */,
 				C8A5429D26FC7B9800304C19 /* ResultsTableController.swift */,
 				C896E70F26F9F97100882298 /* MessagesViewController.swift */,
-				C846509026FC00C0009C5782 /* SearchViewController.swift */,
+				C846509026FC00C0009C5782 /* CustomSearchViewController.swift */,
 				C8305BC6270404B30070C771 /* ChatController.swift */,
 			);
 			path = Controller;
@@ -135,6 +136,7 @@
 				C896E71226F9FADF00882298 /* MessageCell.swift */,
 				C8305BC9270457A30070C771 /* ChatboxView.swift */,
 				C846508826FBF4D2009C5782 /* SearchBar.swift */,
+				C8D87A042712BD29007BE93D /* BubbleImageView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -222,6 +224,7 @@
 				C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */,
 				C8305BC7270404B40070C771 /* ChatController.swift in Sources */,
 				C846508926FBF4D2009C5782 /* SearchBar.swift in Sources */,
+				C8D87A052712BD29007BE93D /* BubbleImageView.swift in Sources */,
 				C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */,
 				C896E70D26F9E07A00882298 /* ConversationCell.swift in Sources */,
 				C896E71326F9FADF00882298 /* MessageCell.swift in Sources */,
