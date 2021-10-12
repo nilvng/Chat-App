@@ -20,41 +20,67 @@ class MessageCell: UITableViewCell {
         label.numberOfLines = 0
         return label
     }()
-    let bubbleBackground = BubbleImageView()
+    var bubbleImageView : UIImageView = UIImageView()
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        contentView.addSubview(bubbleBackground)
+        contentView.addSubview(bubbleImageView)
         contentView.addSubview(messageBodyLabel)
 
         setupMessageBody()
         setupBubbleBackground()
-
+        
     }
         
-    func configure(with model: Message){
+    func configure(with model: Message, bubbleImage : UIImage){
         message = model
         messageBodyLabel.text = model.content
-        bubbleBackground.bubbleSize = messageBodyLabel.intrinsicContentSize
+        //bubbleImageView.bubbleSize = messageBodyLabel.intrinsicContentSize
         // align bubble based on whether the sender is the user themselves
 
         if model.sender == Friend.me {
             // sent message will align to the right and it's green bubble
             inboundConstraint?.isActive = false
             outboundConstraint?.isActive = true
-            bubbleBackground.bubbleColor = UIColor.babyBlue
         } else {
             // received message will align to the left and it's white bubble
             outboundConstraint?.isActive = false
             inboundConstraint?.isActive = true
-            bubbleBackground.bubbleColor = UIColor.trueLightGray
-            
         }
-        bubbleBackground.configure()
+        bubbleImageView.image = bubbleToFit(bubbleImage: bubbleImage,
+                                            size: messageBodyLabel.intrinsicContentSize)
     }
     
+    func bubbleToFit(bubbleImage : UIImage, size: CGSize) -> UIImage{
+        //let trueSize = CGSize(width: size.width + 5, height: size.width + 5)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { _ in
+            bubbleImage.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        }
+    }
+    
+    func incomingBubbleImage() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: messageBodyLabel.intrinsicContentSize)
+        let im = renderer.image { _ in
+            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 200, height: 65), cornerRadius: 25)
+            UIColor.trueLightGray?.setFill()
+            path.fill()
+        }
+        return im
+    }
+    
+    func outgoingBubbleImage() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: messageBodyLabel.intrinsicContentSize)
+        let im = renderer.image { _ in
+            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 200, height: 65), cornerRadius: 25)
+            UIColor.babyBlue?.setFill()
+            path.fill()
+        }
+        return im
+    }
+
     func setupMessageBody(){
         messageBodyLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -74,12 +100,13 @@ class MessageCell: UITableViewCell {
     }
     
     func setupBubbleBackground(){
-        bubbleBackground.translatesAutoresizingMaskIntoConstraints = false
+        
+        bubbleImageView.translatesAutoresizingMaskIntoConstraints = false
         let constraints : [NSLayoutConstraint] = [
-            bubbleBackground.topAnchor.constraint(equalTo: messageBodyLabel.topAnchor, constant: -16),
-            bubbleBackground.leadingAnchor.constraint(equalTo: messageBodyLabel.leadingAnchor, constant: -16),
-            bubbleBackground.bottomAnchor.constraint(equalTo:  messageBodyLabel.bottomAnchor, constant: 16),
-            bubbleBackground.trailingAnchor.constraint(equalTo: messageBodyLabel.trailingAnchor, constant: 16),
+            bubbleImageView.topAnchor.constraint(equalTo: messageBodyLabel.topAnchor, constant: -16),
+            bubbleImageView.leadingAnchor.constraint(equalTo: messageBodyLabel.leadingAnchor, constant: -16),
+            bubbleImageView.bottomAnchor.constraint(equalTo:  messageBodyLabel.bottomAnchor, constant: 16),
+            bubbleImageView.trailingAnchor.constraint(equalTo: messageBodyLabel.trailingAnchor, constant: 16),
         ]
         
         NSLayoutConstraint.activate(constraints)

@@ -31,8 +31,16 @@ class BubbleImageView: UIImageView {
         super.layoutSubviews()
     }
     
-    func configure(){
-        drawBubble()
+    func configure(size: CGSize, isIncoming: Bool){
+        let width = size.width
+        let height = size.height
+        let renderer = UIGraphicsImageRenderer(size: size)
+        
+        self.image = isIncoming ? incomingBubbleImage() : outgoingBubbleImage()
+        
+        self.image = renderer.image { _ in
+            self.image?.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
+        }
     }
     
     func drawBubble(){
@@ -42,12 +50,7 @@ class BubbleImageView: UIImageView {
         
         let renderer = UIGraphicsImageRenderer(size: theSize!)
         let im = renderer.image { _ in
-            let path = UIBezierPath(
-                roundedRect: CGRect(x: 0, y: 0, width: width, height: height),
-                byRoundingCorners: corners,
-                cornerRadii: CGSize(width: radius!, height: 0))
-            self.bubbleColor?.setFill()
-            path.fill()
+            self.image?.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
         }
         self.image = im
     }
@@ -56,4 +59,24 @@ class BubbleImageView: UIImageView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func incomingBubbleImage() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: self.frame.size)
+        let im = renderer.image { _ in
+            let path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 15)
+            UIColor.trueLightGray?.setFill()
+            path.fill()
+        }
+        return im
+    }
+    
+    func outgoingBubbleImage() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: self.frame.size)
+        let im = renderer.image { _ in
+            let path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 15)
+            UIColor.babyBlue?.setFill()
+            path.fill()
+        }
+        return im
+    }
+
 }

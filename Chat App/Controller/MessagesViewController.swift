@@ -29,7 +29,27 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     var chatBarView : ChatbarView!
     
     var chatBarBottomConstraint : NSLayoutConstraint?
+    var incomingBubbleImage : UIImage = {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 200, height: 120))
+        let im = renderer.image { _ in
+            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0,width: 200, height: 120), cornerRadius: 15)
+            UIColor.trueLightGray?.setFill()
+            path.fill()
+        }
+        return im
+    }()
     
+    var outgoingBubbleImage : UIImage = {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 200, height: 120))
+        let im = renderer.image { _ in
+            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0,width: 200, height: 120), cornerRadius: 15)
+            UIColor.babyBlue?.setFill()
+            path.fill()
+        }
+        return im
+    }()
+
+
     init() {
         super.init(nibName: nil, bundle: nil)
         
@@ -132,7 +152,10 @@ extension MessagesViewController : UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: MessageCell.identifier, for: indexPath) as! MessageCell
         let reverseIndex = conversation!.messages.count - indexPath.row - 1
-        cell.configure(with: conversation!.messages[reverseIndex])
+        let message =  conversation!.messages[reverseIndex]
+        
+        let bubble = message.sender == Friend.me ? outgoingBubbleImage : incomingBubbleImage
+        cell.configure(with: message, bubbleImage: bubble)
 
         cell.transform = CGAffineTransform(scaleX: 1, y: -1)
 
