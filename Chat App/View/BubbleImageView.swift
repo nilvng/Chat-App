@@ -20,12 +20,11 @@ class BubbleImageView: UIImageView {
 
     var bubbleColor : UIColor?
     var bubbleSize : CGSize?
-    var radius : CGFloat? = 30
+    var radius : CGFloat? = 20
     var corners : UIRectCorner = .allCorners
     
     init() {
         super.init(frame: .zero)
-
     }
     
     override func layoutSubviews() {

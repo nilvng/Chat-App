@@ -10,7 +10,7 @@ import UIKit
 struct Conversation {
     var id = UUID().uuidString
     var title : String
-    var thumbnail : UIImage?
+    var thumbnail : UIImage? // url
     var messages : [Message] = []
 }
 

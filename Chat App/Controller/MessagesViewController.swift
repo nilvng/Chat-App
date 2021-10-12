@@ -8,7 +8,7 @@
 import UIKit
 
 class MessagesViewController: UIViewController, UITableViewDelegate {
-    
+
     typealias MessageChangedAction = ([Message]) -> Void
     
     var actionDelegate : MessageChangedAction?
@@ -19,8 +19,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         }
     }
     
-    var inputContent : String = ""
-    
     var tableView : UITableView = {
         let table = UITableView()
         table.separatorStyle = .none
@@ -28,46 +26,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         return table
     }()
     
-    lazy var inputStackViewContainer : UIStackView = {
-        let view = UIStackView()
-        view.axis = .horizontal
-        view.alignment = .bottom
-        view.spacing = 7
-        view.distribution = .fillProportionally
-        view.isLayoutMarginsRelativeArrangement = true
-        view.backgroundColor = .white
-        view.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 2, leading: 3, bottom: 5, trailing:3)
-        view.addArrangedSubview(inputField)
-        view.addArrangedSubview(submitButton)
-        return view
-    }()
+    var chatBarView : ChatbarView!
     
-    var inputContainerBottomConstraint : NSLayoutConstraint?
-    
-    var inputHeight : CGFloat = 55
-    
-    var inputField : UITextView = {
-        let tview = UITextView()
-//        tview.backgroundColor = UIColor(named: "trueLightGray")
-        tview.isScrollEnabled = false
-        tview.contentInsetAdjustmentBehavior = .automatic
-        tview.font = UIFont(name: "Arial", size: 16)
-        return tview
-    }()
-
-    var submitButton : UIButton = {
-        let button = UIButton()
-        button.setImage(.btn_send_forboy, for: .normal)
-        button.setImage(.btn_send_forboy_disabled, for: .disabled)
-        return button
-    }()
-    
-    var separatorLine : UIView = {
-        let line = UIView()
-        line.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
-        return line
-    }()
-
+    var chatBarBottomConstraint : NSLayoutConstraint?
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -92,13 +53,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         view.isUserInteractionEnabled = true
         tableView.addGestureRecognizer(tapGesture)
         
-        setupInputContainer()
-
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification), name: UIResponder.keyboardDidShowNotification, object: nil)
+        setupChatbarView()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-
     
     func setupTableView(){
         
@@ -123,65 +80,32 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
 
     }
     
-    func setupInputContainer(){
-        // styling inputContainer
-        inputStackViewContainer.addSubview(separatorLine)
-        view.addSubview(inputStackViewContainer)
+    func setupChatbarView(){
+        chatBarView = ChatbarView()
+        chatBarView.delegate = self
         
-
-        inputStackViewContainer.translatesAutoresizingMaskIntoConstraints = false
-        
-        separatorLine.translatesAutoresizingMaskIntoConstraints = false
-        
-        inputContainerBottomConstraint = inputStackViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        view.addSubview(chatBarView)
+        chatBarView.translatesAutoresizingMaskIntoConstraints = false
 
         let margin = view.safeAreaLayoutGuide
+        chatBarBottomConstraint = chatBarView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10)
 
         NSLayoutConstraint.activate([
-            inputStackViewContainer.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
-            inputStackViewContainer.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            inputContainerBottomConstraint!,
-            separatorLine.bottomAnchor.constraint(equalTo: inputField.topAnchor, constant: -5),
-                separatorLine.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                separatorLine.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            separatorLine.heightAnchor.constraint(equalToConstant: 0.7)
+            chatBarView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
+            chatBarView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
+            chatBarBottomConstraint!,
+            chatBarView.heightAnchor.constraint(greaterThanOrEqualToConstant: 44),
             ])
-        
-        // declare actions
-        inputField.delegate  = self
-        submitButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
 
     }
-
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
-        NotificationCenter.default.removeObserver(self)
-        
+                
         actionDelegate?(conversation!.messages)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-    }
-
-    @objc func handleKeyboardNotification(notification: NSNotification){
-        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue? else {
-            return
-        }
-        print("Keyboard is moving...")
-        
-        let moveUp = notification.name == UIResponder.keyboardDidShowNotification
-        let scalingValue =  moveUp ? keyboardFrame.cgRectValue.height : 0
-
-        inputContainerBottomConstraint?.constant = -scalingValue
-        
-        let animateDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
-        UIView.animate(withDuration: animateDuration, delay: 0, options: .curveEaseOut, animations: {
-            self.tableView.contentInset.top = moveUp ? scalingValue + 23 : self.inputHeight // TODO: hardcoded!!!
-            self.view.layoutIfNeeded()
-        }, completion: { (completed) in
-            self.scrollToLastMessage()
-        })
     }
     
     func scrollToLastMessage(animated: Bool = true){
@@ -191,13 +115,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         }
     }
 
-    @objc func sendMessage(){
-        print("sending message..")
-        conversation?.messages.append(Message.newMessage(content: self.inputContent))
-        inputField.text = ""
-        tableView.reloadData()
-        scrollToLastMessage()
-    }
     
     @objc func handleTap(){
         print("tapping..")
@@ -205,34 +122,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     }
 }
 
-extension MessagesViewController : UITextViewDelegate{
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if let originalText = textView.text {
-            
-            // Send message
-            if text == "\n" {
-                if  let msg = textView.text ,msg != ""{
-                    sendMessage()
-                }
-                return false
-            }
-            
-            // Usual edit message
-            let title = (originalText as NSString).replacingCharacters(in: range, with: text)
-            
-            ///  remove leading and trailing whitespace
-            let cleanValue = title.trimmingCharacters(in: .whitespacesAndNewlines)
-            
-            /// only update when it truly changes
-            if cleanValue != originalText{
-                inputContent = cleanValue
-            }
-        }
-        return true
-
-    }
-
-}
 
 extension MessagesViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -243,7 +132,7 @@ extension MessagesViewController : UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: MessageCell.identifier, for: indexPath) as! MessageCell
         let reverseIndex = conversation!.messages.count - indexPath.row - 1
-        cell.message = conversation!.messages[reverseIndex]
+        cell.configure(with: conversation!.messages[reverseIndex])
 
         cell.transform = CGAffineTransform(scaleX: 1, y: -1)
 
@@ -253,4 +142,26 @@ extension MessagesViewController : UITableViewDataSource {
     }
     
     
+}
+
+extension MessagesViewController : ChatBarDelegate {
+    func keyboardMoved(keyboardFrame: NSValue, moveUp: Bool, animateDuration: Double) {
+        let scalingValue =  moveUp ? keyboardFrame.cgRectValue.height : 0
+
+        chatBarBottomConstraint?.constant = -scalingValue
+        
+        UIView.animate(withDuration: animateDuration, delay: 0, options: .curveEaseOut, animations: {
+            self.tableView.contentInset.top = moveUp ? scalingValue + 23 : 55 // TODO: hardcoded!!!
+            self.view.layoutIfNeeded()
+        }, completion: { (completed) in
+            self.scrollToLastMessage()
+        })
+
+    }
+    
+    func messageSubmitted(message: String) {
+        conversation?.messages.append(Message.newMessage(content: message))
+        tableView.reloadData()
+        scrollToLastMessage()
+    }
 }

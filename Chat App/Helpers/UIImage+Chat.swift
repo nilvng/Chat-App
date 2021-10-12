@@ -15,5 +15,7 @@ extension UIImage {
     
     static let navigation_button_plus = UIImage(named: "navigation_button_plus")
     static let navigation_button_plus_selected = UIImage(named: "navigation_button_plus_selected")
+    
+    static let compose_message = UIImage(named: "compose_message")
 
 }

@@ -42,7 +42,6 @@ class SearchContactCell : UITableViewCell {
     
     func configure (model : Conversation){
         
-
         titleLabel.text = model.title
         
         // check if contact has image, or else create an image of their first letter name

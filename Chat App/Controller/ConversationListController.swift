@@ -19,14 +19,26 @@ class ConversationListController: UIViewController {
         return table
     }()
     
-    var addButton : UIButton = {
+    var composeButton : UIButton = {
         let button = UIButton()
         button.setImage(UIImage.navigation_button_plus, for: .normal)
-        button.sizeToFit()
         button.setImage(UIImage.navigation_button_plus_selected, for: .selected)
+        button.sizeToFit()
+
         button.backgroundColor = UIColor.complementZaloBlue
         button.layer.cornerRadius = 33
+
         return button
+    }()
+    
+    var addButton : UIButton = {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
+        button.setImage(UIImage.navigation_button_plus, for: .normal)
+        button.setImage(UIImage.navigation_button_plus_selected, for: .selected)
+        button.sizeToFit()
+
+        return button
+
     }()
     
     lazy var blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
@@ -69,7 +81,7 @@ class ConversationListController: UIViewController {
 
         setupNavigationBar()
         setupTableView()
-        setupAddButton()
+        setupComposeButton()
 
         
     }
@@ -89,9 +101,8 @@ class ConversationListController: UIViewController {
             navigationItem.titleView?.layoutSubviews()
         }//
         
-//        navigationItem.rightBarButtonItems = [ UIBarButtonItem(customView: searchButton)]
-//
-//        searchButton.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
+        navigationItem.rightBarButtonItems = [ UIBarButtonItem(customView: addButton)]
+        addButton.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
 
     }
     
@@ -113,12 +124,13 @@ class ConversationListController: UIViewController {
     
     }
     
-    func setupAddButton(){
+    func setupComposeButton(){
+
         blurEffectView.tintColor = .clear
-        blurEffectView.contentView.addSubview(addButton)
+        blurEffectView.contentView.addSubview(composeButton)
         view.addSubview(blurEffectView)
 
-        addButton.translatesAutoresizingMaskIntoConstraints = false
+        composeButton.translatesAutoresizingMaskIntoConstraints = false
         blurEffectView.translatesAutoresizingMaskIntoConstraints = false
         let margins = view.layoutMarginsGuide
         NSLayoutConstraint.activate([
@@ -128,18 +140,23 @@ class ConversationListController: UIViewController {
             blurEffectView.heightAnchor.constraint(equalToConstant: 90),
             blurEffectView.widthAnchor.constraint(equalToConstant: 90),
 //            // addButton constraints
-            addButton.topAnchor.constraint(equalTo: blurEffectView.contentView.topAnchor, constant: 10),
-            addButton.leadingAnchor.constraint(equalTo: blurEffectView.contentView.leadingAnchor, constant: 10),
-            addButton.bottomAnchor.constraint(equalTo: blurEffectView.contentView.bottomAnchor, constant: -10),
-            addButton.trailingAnchor.constraint(equalTo: blurEffectView.contentView.trailingAnchor, constant: -10),
+            composeButton.topAnchor.constraint(equalTo: blurEffectView.contentView.topAnchor, constant: 10),
+            composeButton.leadingAnchor.constraint(equalTo: blurEffectView.contentView.leadingAnchor, constant: 10),
+            composeButton.bottomAnchor.constraint(equalTo: blurEffectView.contentView.bottomAnchor, constant: -10),
+            composeButton.trailingAnchor.constraint(equalTo: blurEffectView.contentView.trailingAnchor, constant: -10),
         ])
         
-        addButton.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
+        composeButton.addTarget(self, action: #selector(composeButtonPressed), for: .touchUpInside)
 
     }
     
     @objc func addButtonPressed(){
         print("Add Contact...")
+
+    }
+    
+    @objc func composeButtonPressed(){
+        print("Compose message...")
         let cmc = ComposeMessageController()
         self.present(cmc, animated: true, completion: nil)
     }
