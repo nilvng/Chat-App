@@ -19,3 +19,13 @@ extension UIImage {
     static let compose_message = UIImage(named: "compose_message")
 
 }
+
+extension UIImage{
+    func resizedImage(size: CGSize) -> UIImage{
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { _ in
+            self.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        }
+
+    }
+}

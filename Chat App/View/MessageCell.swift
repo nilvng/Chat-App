@@ -33,6 +33,7 @@ class MessageCell: UITableViewCell {
         setupBubbleBackground()
         
     }
+    
         
     func configure(with model: Message, bubbleImage : UIImage){
         message = model
@@ -49,10 +50,9 @@ class MessageCell: UITableViewCell {
             outboundConstraint?.isActive = false
             inboundConstraint?.isActive = true
         }
-        bubbleImageView.image = bubbleToFit(bubbleImage: bubbleImage,
-                                            size: messageBodyLabel.intrinsicContentSize)
+        bubbleImageView.image = bubbleImage.resizedImage(size: messageBodyLabel.intrinsicContentSize)
     }
-    
+        
     func bubbleToFit(bubbleImage : UIImage, size: CGSize) -> UIImage{
         //let trueSize = CGSize(width: size.width + 5, height: size.width + 5)
         let renderer = UIGraphicsImageRenderer(size: size)
@@ -110,7 +110,7 @@ class MessageCell: UITableViewCell {
         ]
         
         NSLayoutConstraint.activate(constraints)
-    }
+        }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

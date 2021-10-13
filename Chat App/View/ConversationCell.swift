@@ -35,7 +35,8 @@ class ConversationCell : UITableViewCell {
 
     }()
     private let thumbnail : TextCircleAvatarView = {
-        let image = TextCircleAvatarView(frame: CGRect(x: 0, y: 0, width: 72, height: 72))
+        let image = TextCircleAvatarView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
+        image.contentMode = .scaleAspectFill
         return image
     }()
     
@@ -59,16 +60,10 @@ class ConversationCell : UITableViewCell {
     
     func configure (model : Conversation){
         
-
+        
         titleLabel.text = model.title
         
-        // check if contact has image, or else create an image of their first letter name
-        if let avatar = model.thumbnail{
-            thumbnail.image = avatar
-        } else {
-            let firstCharacter = String(model.title.first!) as NSString
-            thumbnail.drawText(text: firstCharacter)
-        }
+        update(displaying: nil)
         
         // don't have any messages in this conversation -> shouldn't become a cell
         guard let lastMsg = model.messages.last else {
@@ -76,7 +71,17 @@ class ConversationCell : UITableViewCell {
         }
         lastMessageLabel.text = lastMsg.content
         timestampLabel.text = formatTimestampString(date: lastMsg.timestamp)
+    }
+    func update(displaying image: UIImage?){
+        // check if contact has image, or else create an image of their first letter name
+        if let avatar = image{
+            thumbnail.image = avatar
+        } else {
+            let firstCharacter = String((titleLabel.text?.first)!) as NSString
+            thumbnail.drawText(text: firstCharacter)
         }
+    }
+
     
     func formatTimestampString(date: Date) -> String {
         let formatter = DateFormatter()

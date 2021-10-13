@@ -45,14 +45,14 @@ class SearchContactCell : UITableViewCell {
     
     func configure (model : Conversation){
         
-        titleLabel.text = model.title
-        // check if contact has image, or else create an image of their first letter name
-        if let avatar = model.thumbnail{
-            thumbnail.image = avatar
-        } else {
-            let firstCharacter = String(model.title.first!) as NSString
-            thumbnail.drawText(text: firstCharacter)
-        }
+//        titleLabel.text = model.title
+//        // check if contact has image, or else create an image of their first letter name
+//        if let avatar = model.thumbnail{
+//            thumbnail.image = avatar
+//        } else {
+//            let firstCharacter = String(model.title.first!) as NSString
+//            thumbnail.drawText(text: firstCharacter)
+//        }
         
     }
     // MARK: Design Cell
