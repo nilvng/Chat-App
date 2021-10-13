@@ -16,7 +16,7 @@ class ComposeMessageController : UIViewController {
         
     lazy var tableView : UITableView = {
         let tv = UITableView()
-        tv.rowHeight = 80
+        tv.rowHeight = 75
         tv.separatorStyle = .none
         return tv
     }()
@@ -49,11 +49,13 @@ class ComposeMessageController : UIViewController {
         
         searchField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            searchField.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            searchField.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
             searchField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             searchField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            searchField.heightAnchor.constraint(equalToConstant: 50)
+            searchField.heightAnchor.constraint(equalToConstant: 40)
                                         ])
+        searchField.layer.cornerRadius = 15
+        searchField.layer.masksToBounds = true
         searchField.searchTextField.backgroundColor = .white
 
     }
@@ -64,6 +66,8 @@ class ComposeMessageController : UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(SearchContactCell.self, forCellReuseIdentifier: SearchContactCell.identifier)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "NewContactCell")
+
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -84,16 +88,26 @@ extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
           return filteredItems.count
         }
 
-        return items.count
+        return items.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // first row when user have not searched for any friend : add new contact
+        if indexPath.row == 0 && !isFiltering{
+            let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
+            cell.titleLabel.text = "New Contact"
+            cell.thumbnail.image = UIImage(named: "NewContact")
+            cell.thumbnail.backgroundColor = UIColor.babyBlue
+            return cell
+        }
+        
+
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
         let converation: Conversation
         if isFiltering {
             converation = filteredItems[indexPath.row]
         } else {
-            converation = items[indexPath.row]
+            converation = items[indexPath.row - 1]
         }
         cell.configure(model: converation)
 
@@ -103,18 +117,29 @@ extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // show chat view
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        // first row when user have not searched for any friend : add new contact
+        print(isFiltering)
+        if indexPath.row == 0 && !isFiltering{
+            print("Navigate to Add Contact view")
+            return
+        }
+        
+        let row = !isFiltering ? indexPath.row - 1 : indexPath.row
+        
+        
         let msgVC = MessagesViewController()
         
-        var selected = filteredItems[indexPath.row]
-
+        var selected = filteredItems[row]
         msgVC.configure(conversation: selected){ messages in
-            
-            selected.messages = messages
-            
-            print("update conversation list!!!\n \(messages)")
+            if messages != selected.messages{
+                selected.messages = messages
+                print("update conversation list!!!\n \(messages)")
+            }
         }
-
-        navigationController?.pushViewController(msgVC, animated: true)
+        let presentingVC = self.presentingViewController as? UINavigationController
+        presentingVC?.pushViewController(msgVC, animated: true)
+        self.dismiss(animated: false, completion: nil)
     }
 
 }

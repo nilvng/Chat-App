@@ -63,17 +63,6 @@ class ConversationListController: UIViewController {
 
         return sc
     }()
-    
-    func changePlaceholderColor(_ color : UIColor){
-//        guard let sbTextFieldLabel : AnyClass = NSClassFromString("UISearchBarTextFieldLabel"),
-//              let field = searchController.searchBar.searchTextField else{
-//            return
-//        }
-//
-//        for subview in field.subviews where subview.isKind(of: sbTextFieldLabel){
-//            (subview as! UILabel).textColor = color
-//        }
-    }
 
 
     override func viewDidLoad() {
@@ -230,14 +219,13 @@ extension ConversationListController : UITableViewDataSource {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         print("text field editing..")
-        searchController.searchBar.searchTextField.textColor = .black
-        searchController.searchBar.searchTextField.tintColor = .black
+        searchController.searchBar.placeholder = ""
         searchController.searchBar.searchTextField.backgroundColor = .white
         searchController.searchBar.setLeftIcon(UIImage.navigation_search_selected!.withTintColor(UIColor.darkGray))
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        searchController.searchBar.searchTextField.tintColor = .white
+        searchController.searchBar.placeholder = "Search a Friend"
         searchController.searchBar.searchTextField.backgroundColor = UIColor.zaloBlue
         searchController.searchBar.setLeftIcon(UIImage.navigation_search_selected!.withTintColor(.white))
 

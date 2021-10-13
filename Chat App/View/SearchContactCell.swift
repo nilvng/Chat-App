@@ -13,13 +13,13 @@ class SearchContactCell : UITableViewCell {
     
     static let identifier  = "SearchContactCell"
         
-    private let titleLabel : UILabel = {
+    let titleLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 19)
+        label.font = UIFont.boldSystemFont(ofSize: 19)
         label.textAlignment = .left
         return label
     }()
-    private let thumbnail : TextCircleAvatarView = {
+    let thumbnail : TextCircleAvatarView = {
         let image = TextCircleAvatarView(frame: CGRect(x: 0, y: 0, width: 72, height: 72))
         return image
     }()
@@ -36,14 +36,16 @@ class SearchContactCell : UITableViewCell {
         
         contentView.addSubview(titleLabel)
         contentView.addSubview(thumbnail)
-        contentView.addSubview(separatorLine)
+        //contentView.addSubview(separatorLine)
+        setupThumbnail()
+        setupTitleLabel()
+        //setupSeparatorLine()
 
     }
     
     func configure (model : Conversation){
         
         titleLabel.text = model.title
-        
         // check if contact has image, or else create an image of their first letter name
         if let avatar = model.thumbnail{
             thumbnail.image = avatar
@@ -59,9 +61,7 @@ class SearchContactCell : UITableViewCell {
     private var horizontalPadding : CGFloat = 10
 
     override func layoutSubviews() {
-        setupThumbnail()
-        setupTitleLabel()
-        setupSeparatorLine()
+
     }
     
     
@@ -69,8 +69,8 @@ class SearchContactCell : UITableViewCell {
     func setupThumbnail() {
         thumbnail.translatesAutoresizingMaskIntoConstraints = false
         
-        let width : CGFloat = 68
-        let height : CGFloat = 68
+        let width : CGFloat = 55
+        let height : CGFloat = 55
         
         let constraints : [NSLayoutConstraint] = [
             thumbnail.centerYAnchor.constraint(equalTo: centerYAnchor),
