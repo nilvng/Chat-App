@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TextCircleAvatarView: CircleView {
+class TextCircleView: CircleView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -17,15 +17,18 @@ class TextCircleAvatarView: CircleView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(image: UIImage?, text: String?){
+    func update(url: URL?, text: String?){
         // check if contact has image, or else create an image of their first letter name
-        if let avatar = image{
-            self.image = avatar
-        } else {
+        guard let theUrl = url else {
             let firstCharacter = String((text?.first)!) as NSString
             self.drawText(text: firstCharacter)
+            return
         }
-
+        PhotoStore.shared.fetchImage(url: theUrl){ res in
+            if case let .success(image) = res{
+                self.image = image
+            }
+        }
     }
     
     func drawText(text: NSString){

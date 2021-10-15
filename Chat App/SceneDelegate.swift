@@ -23,7 +23,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
         
         let homeController = ConversationListController()
-        homeController.photoStore = PhotoStore()
         let navController = UINavigationController(rootViewController: homeController)
         
         navController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]

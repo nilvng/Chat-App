@@ -13,9 +13,12 @@ enum PhotoError : Error {
 }
 
 class PhotoStore{
+
+    static let shared = PhotoStore()
+    private init(){}
     
     let cachedStore = CachedStore()
-    
+
     private let session : URLSession = {
         let config = URLSessionConfiguration.default
         return URLSession(configuration: config)

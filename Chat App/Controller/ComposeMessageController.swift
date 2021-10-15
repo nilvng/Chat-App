@@ -8,8 +8,6 @@
 import UIKit
 
 class ComposeMessageController : UIViewController {
-
-    var photoStore = PhotoStore()
     
     lazy var searchField : UISearchBar = {
         let bar = UISearchBar()
@@ -147,34 +145,6 @@ extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
         presentingVC?.pushViewController(msgVC, animated: true)
         self.dismiss(animated: false, completion: nil)
     }
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
-        guard indexPath.row > 0 else {
-            return
-        }
-        
-        let targetRow = indexPath.row - 1
-        
-        let selected = items[targetRow]
-        guard let url = selected.avatar else {
-            return
-        }
-        photoStore.fetchImage(url: url){ res in
-            guard let convIndex = self.items.firstIndex(of: selected),
-                case let .success(image) = res else {
-                    return
-            }
-            let indexPath = IndexPath(item: convIndex, section: 0)
-
-            // When the request finishes, only update the cell if it's still visible
-            if let cell = self.tableView.cellForRow(at: indexPath)
-                                                         as? ConversationCell {
-                cell.updateAvatar(displaying: image)
-            }
-
-        }
-    }
-
 }
 
 extension ComposeMessageController: UISearchBarDelegate {

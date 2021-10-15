@@ -19,8 +19,8 @@ class SearchContactCell : UITableViewCell {
         label.textAlignment = .left
         return label
     }()
-    let thumbnail : TextCircleAvatarView = {
-        let image = TextCircleAvatarView(frame: CGRect(x: 0, y: 0, width: 72, height: 72))
+    let thumbnail : TextCircleView = {
+        let image = TextCircleView(frame: CGRect(x: 0, y: 0, width: 72, height: 72))
         return image
     }()
     
@@ -36,23 +36,13 @@ class SearchContactCell : UITableViewCell {
         
         contentView.addSubview(titleLabel)
         contentView.addSubview(thumbnail)
-        //contentView.addSubview(separatorLine)
         setupThumbnail()
         setupTitleLabel()
-        //setupSeparatorLine()
-
     }
     
     func configure (model : Friend){
-        
-        
         titleLabel.text = model.fullName
-        
-        thumbnail.update(image: nil, text: model.fullName)
-    }
-    
-    func updateAvatar(displaying image: UIImage?){
-        thumbnail.update(image: image, text: nil)
+        thumbnail.update(url: model.avatar, text: model.firstName)
     }
 
     // MARK: Design Cell

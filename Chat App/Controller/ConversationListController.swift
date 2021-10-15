@@ -11,7 +11,6 @@ class ConversationListController: UIViewController {
     
     var conversationList : [Conversation] = Conversation.stubList
     var currentSearchText : String = ""
-    var photoStore : PhotoStore!
     
     var dataSource : UITableViewDataSource?
     var tableView : UITableView = {
@@ -176,27 +175,6 @@ extension ConversationListController : UITableViewDelegate{
 
         navigationController?.pushViewController(messagesViewController, animated: true)
 
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let selected = conversationList[indexPath.row]
-        guard let url = selected.thumbnail else {
-            return
-        }
-        photoStore.fetchImage(url: url){ res in
-            guard let convIndex = self.conversationList.firstIndex(of: selected),
-                case let .success(image) = res else {
-                    return
-            }
-            let indexPath = IndexPath(item: convIndex, section: 0)
-
-            // When the request finishes, only update the cell if it's still visible
-            if let cell = self.tableView.cellForRow(at: indexPath)
-                                                         as? ConversationCell {
-                cell.updateAvatar(displaying: image)
-            }
-
-        }
     }
 
 }

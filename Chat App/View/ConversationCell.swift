@@ -34,8 +34,8 @@ class ConversationCell : UITableViewCell {
         return label
 
     }()
-    private let thumbnail : TextCircleAvatarView = {
-        let image = TextCircleAvatarView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
+    private let thumbnail : TextCircleView = {
+        let image = TextCircleView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
         image.contentMode = .scaleAspectFill
         return image
     }()
@@ -63,17 +63,14 @@ class ConversationCell : UITableViewCell {
         
         titleLabel.text = model.title
         
-        thumbnail.update(image: nil, text: model.title)
-
+        thumbnail.update(url: model.thumbnail, text: model.title)
+        
         // don't have any message in this conversation -> shouldn't become a cell
         guard let lastMsg = model.messages.last else {
             return
         }
         lastMessageLabel.text = lastMsg.content
         timestampLabel.text = lastMsg.timestamp.toTimestampString()
-    }
-    func updateAvatar(displaying image: UIImage?){
-        thumbnail.update(image: image, text: nil)
     }
 
     // MARK: Design Cell
