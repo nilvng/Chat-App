@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CircleAvatarView: UIImageView {
+class CircleView: UIImageView {
 
     var path : UIBezierPath!
 

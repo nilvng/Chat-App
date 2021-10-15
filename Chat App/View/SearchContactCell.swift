@@ -43,18 +43,18 @@ class SearchContactCell : UITableViewCell {
 
     }
     
-    func configure (model : Conversation){
+    func configure (model : Friend){
         
-//        titleLabel.text = model.title
-//        // check if contact has image, or else create an image of their first letter name
-//        if let avatar = model.thumbnail{
-//            thumbnail.image = avatar
-//        } else {
-//            let firstCharacter = String(model.title.first!) as NSString
-//            thumbnail.drawText(text: firstCharacter)
-//        }
         
+        titleLabel.text = model.fullName
+        
+        thumbnail.update(image: nil, text: model.fullName)
     }
+    
+    func updateAvatar(displaying image: UIImage?){
+        thumbnail.update(image: image, text: nil)
+    }
+
     // MARK: Design Cell
     
     private var verticalPadding : CGFloat = 7

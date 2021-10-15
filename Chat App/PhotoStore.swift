@@ -12,7 +12,7 @@ enum PhotoError : Error {
     case missingImageURL
 }
 
-class FlickrPhotoStore{
+class PhotoStore{
     
     let cachedStore = CachedStore()
     

@@ -11,8 +11,9 @@ class ConversationListController: UIViewController {
     
     var conversationList : [Conversation] = Conversation.stubList
     var currentSearchText : String = ""
-    var photoStore : FlickrPhotoStore!
-
+    var photoStore : PhotoStore!
+    
+    var dataSource : UITableViewDataSource?
     var tableView : UITableView = {
         let table = UITableView()
         table.separatorStyle = .none
@@ -32,26 +33,7 @@ class ConversationListController: UIViewController {
         return button
     }()
     
-    var addButton : UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
-        button.setImage(UIImage.navigation_button_plus, for: .normal)
-        button.setImage(UIImage.navigation_button_plus_selected, for: .selected)
-        button.sizeToFit()
-
-        return button
-
-    }()
-    
     lazy var blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-    
-    var searchButton : UIButton = {
-        let searchButton = UIButton()
-        searchButton.setImage(UIImage.navigation_search, for: .normal)
-        searchButton.setImage(UIImage.navigation_search_selected, for: .selected)
-
-        return searchButton
-    }()
-
     
     private lazy var searchController: UISearchController = {
         let resultController =  ResultsTableController()
@@ -90,16 +72,14 @@ class ConversationListController: UIViewController {
             navigationItem.titleView = searchController.searchBar
             navigationItem.titleView?.layoutSubviews()
         }//
-        
-        navigationItem.rightBarButtonItems = [ UIBarButtonItem(customView: addButton)]
-        addButton.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
-
     }
     
     func setupTableView(){
+        dataSource = ConversationListDataSource()
+        
         view.addSubview(tableView)
         
-        tableView.dataSource = self
+        tableView.dataSource = dataSource
         tableView.delegate = self
         tableView.register(ConversationCell.self, forCellReuseIdentifier: ConversationCell.identifier)
         
@@ -197,21 +177,6 @@ extension ConversationListController : UITableViewDelegate{
         navigationController?.pushViewController(messagesViewController, animated: true)
 
     }
-}
-
-extension ConversationListController : UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.conversationList.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: ConversationCell.identifier, for: indexPath) as! ConversationCell
-        
-        cell.configure(model: conversationList[indexPath.row])
-        return cell
-        
-    }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let selected = conversationList[indexPath.row]
@@ -228,12 +193,12 @@ extension ConversationListController : UITableViewDataSource {
             // When the request finishes, only update the cell if it's still visible
             if let cell = self.tableView.cellForRow(at: indexPath)
                                                          as? ConversationCell {
-                cell.update(displaying: image)
+                cell.updateAvatar(displaying: image)
             }
 
         }
     }
-    
+
 }
 // MARK: - UISearchResult Updating and UISearchControllerDelegate  Extension
   extension ConversationListController: UISearchResultsUpdating, UISearchControllerDelegate, UISearchTextFieldDelegate {

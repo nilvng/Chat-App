@@ -129,6 +129,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     }
     
     func scrollToLastMessage(animated: Bool = true){
+        guard conversation!.messages.count > 0 else {
+            return
+        }
         DispatchQueue.main.async {
             let lastindex = IndexPath(row: 0, section: 0)
             self.tableView.scrollToRow(at: lastindex, at: .bottom, animated: animated)

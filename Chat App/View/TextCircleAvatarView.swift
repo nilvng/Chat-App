@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TextCircleAvatarView: CircleAvatarView {
+class TextCircleAvatarView: CircleView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -15,6 +15,17 @@ class TextCircleAvatarView: CircleAvatarView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func update(image: UIImage?, text: String?){
+        // check if contact has image, or else create an image of their first letter name
+        if let avatar = image{
+            self.image = avatar
+        } else {
+            let firstCharacter = String((text?.first)!) as NSString
+            self.drawText(text: firstCharacter)
+        }
+
     }
     
     func drawText(text: NSString){
@@ -25,7 +36,7 @@ class TextCircleAvatarView: CircleAvatarView {
             let textColor       = UIColor.white
             let textStyle       = NSMutableParagraphStyle()
             textStyle.alignment = NSTextAlignment.center
-            let textFont        = UIFont(name: "Helvetica", size: 20)!
+            let textFont        = UIFont(name: "Helvetica", size: self.frame.size.width / 3)!
             let attributes      = [NSAttributedString.Key.font:textFont,
                             NSAttributedString.Key.paragraphStyle:textStyle,
                             NSAttributedString.Key.foregroundColor:textColor]

@@ -36,8 +36,8 @@ class CustomSearchController : UITableViewController {
         tableView.separatorStyle  = .none
     }
     
-    let items : [Conversation] = Conversation.stubList
-    var filteredItems : [Conversation] = []
+    let items : [Friend] = Friend.stubList
+    var filteredItems : [Friend] = []
 
     var isFiltering: Bool {
       return currentSearchText != ""
@@ -51,15 +51,26 @@ class CustomSearchController : UITableViewController {
         return items.count
     }
     
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
-        let converation: Conversation
-        if isFiltering {
-            converation = filteredItems[indexPath.row]
-        } else {
-            converation = items[indexPath.row]
+        // first row when user have not searched for any friend : add new contact
+        if indexPath.row == 0 && !isFiltering{
+            let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
+            cell.titleLabel.text = "New Contact"
+            cell.thumbnail.image = UIImage(named: "NewContact")
+            cell.thumbnail.backgroundColor = UIColor.babyBlue
+            return cell
         }
-        cell.configure(model: converation)
+        
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
+        let friend: Friend
+        if isFiltering {
+            friend = filteredItems[indexPath.row]
+        } else {
+            friend = items[indexPath.row - 1]
+        }
+        cell.configure(model: friend)
 
         return cell
     }
@@ -67,20 +78,36 @@ class CustomSearchController : UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // show chat view
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        // first row when user have not searched for any friend : add new contact
+        print(isFiltering)
+        if indexPath.row == 0 && !isFiltering{
+            print("Navigate to Add Contact view")
+            return
+        }
+        
+        let row = !isFiltering ? indexPath.row - 1 : indexPath.row
+        
+        
         let msgVC = MessagesViewController()
         
-        var selected = filteredItems[indexPath.row]
+        let selected = filteredItems[row]
+        
+        // Check if the user has chat with the selected friend before
+        var conversation = Conversation.stubList.first(where: { conv in
+            return conv.members.contains(selected)
+        }) ?? Conversation(friend: selected)
 
-        msgVC.configure(conversation: selected){ messages in
-            
-            selected.messages = messages
-            
-            print("update conversation list!!!\n \(messages)")
+        msgVC.configure(conversation: conversation){ messages in
+            if messages != conversation.messages{
+                conversation.messages = messages
+                print("update conversation list!!!\n \(messages)")
+            }
         }
-
-        navigationController?.pushViewController(msgVC, animated: true)
+        let presentingVC = self.presentingViewController as? UINavigationController
+        presentingVC?.pushViewController(msgVC, animated: true)
+        self.dismiss(animated: false, completion: nil)
     }
-
 }
 
 extension CustomSearchController: UITextFieldDelegate {
@@ -116,10 +143,14 @@ extension CustomSearchController: UITextFieldDelegate {
     
     func filterItemForSearchKey(_ key: String){
         self.currentSearchText = key
-      self.filteredItems = self.items.filter { (item: Conversation) -> Bool in
-          return item.title.lowercased().contains(key.lowercased())
-      }
-      tableView.reloadData()
+        if key == ""{
+            self.filteredItems = self.items
+        } else{
+            self.filteredItems = self.items.filter { item in
+                return item.fullName.lowercased().contains(key.lowercased())
+            }
+        }
+        tableView.reloadData()
   }
 }
 

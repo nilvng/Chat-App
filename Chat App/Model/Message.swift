@@ -21,9 +21,9 @@ struct Message {
 extension Message {
     static let stub1 : Message = Message(sender: Friend.me, content: "Today is Tuesday",
                                          timestamp: "2020-09-30 01:10:01".toDate()!)
-    static let stub2 : Message = .init(sender: Friend.stubDan, content: "Tomorrow is Wednesday",
+    static let stub2 : Message = .init(sender: Friend.daniel, content: "Tomorrow is Wednesday",
                                        timestamp: "2021-08-23 08:10:01".toDate()!)
-    static let stub3 : Message = .init(sender: Friend.stubDan, content: "How is goin?",
+    static let stub3 : Message = .init(sender: Friend.daniel, content: "How is goin?",
                                        timestamp: "2021-09-29 12:10:01".toDate()!)
     static let stub4 : Message = .init(sender:Friend.me, content: "Just dance. How about you?",
                                        timestamp: "2021-09-30 15:10:01".toDate()!)
@@ -40,11 +40,15 @@ extension Message : Equatable {
 }
 
 struct Friend {
+    var id = UUID().uuidString
     var firstName : String
     var lastName : String
-    
-    static var me : Friend = .init(firstName: "It's", lastName: "Me")
-    static var stubDan : Friend = .init(firstName: "Daniel", lastName: "Bourke")
+    var avatar : URL?
+    var fullName : String {
+        get{
+            return "\(firstName) \(lastName)"
+        }
+    }
 }
 
 extension Friend : Equatable {
@@ -54,10 +58,13 @@ extension Friend : Equatable {
     }
 }
 
-
-func stringToDate(_ st: String) -> Date? {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    return formatter.date(from: st)
+extension Friend {
+    
+    static var me : Friend = .init(firstName: "It's", lastName: "Me")
+    static var daniel : Friend = .init(firstName: "Daniel", lastName: "Bourke")
+    static var john = Friend(firstName: "John", lastName: "Fish")
+    static var angelou = Friend(firstName: "Maya", lastName: "Angelou")
+    static var steve = Friend(firstName: "Steve", lastName: "Job")
+    
+    static var stubList = [Friend.daniel, Friend.john, Friend.angelou, Friend.steve]
 }
-

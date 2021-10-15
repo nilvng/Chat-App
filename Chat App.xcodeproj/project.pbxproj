@@ -24,14 +24,16 @@
 		C896E71326F9FADF00882298 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C896E71226F9FADF00882298 /* MessageCell.swift */; };
 		C8A5429E26FC7B9800304C19 /* ResultsTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A5429D26FC7B9800304C19 /* ResultsTableController.swift */; };
 		C8D879BE2705A466007BE93D /* Date+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879BD2705A466007BE93D /* Date+Chat.swift */; };
-		C8D879C42706B0BD007BE93D /* CircleAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879C32706B0BD007BE93D /* CircleAvatarView.swift */; };
+		C8D879C42706B0BD007BE93D /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879C32706B0BD007BE93D /* CircleView.swift */; };
 		C8D879CB27098D40007BE93D /* TextCircleAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879CA27098D40007BE93D /* TextCircleAvatarView.swift */; };
 		C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879CE270B00D0007BE93D /* SearchContactCell.swift */; };
 		C8D879F5270F3F02007BE93D /* ComposeMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879F4270F3F02007BE93D /* ComposeMessageController.swift */; };
 		C8D87A052712BD29007BE93D /* BubbleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A042712BD29007BE93D /* BubbleImageView.swift */; };
 		C8D87A122716C0CE007BE93D /* FlickrAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A112716C0CE007BE93D /* FlickrAPI.swift */; };
-		C8D87A152716C13D007BE93D /* FlickrPhotoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A142716C13D007BE93D /* FlickrPhotoStore.swift */; };
+		C8D87A152716C13D007BE93D /* PhotoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A142716C13D007BE93D /* PhotoStore.swift */; };
 		C8D87A192716C40F007BE93D /* CachedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A182716C40F007BE93D /* CachedStore.swift */; };
+		C8D87A1E27171DAB007BE93D /* ConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A1D27171DAA007BE93D /* ConversationViewModel.swift */; };
+		C8D87A2227171EA8007BE93D /* ConversationListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A2127171EA8007BE93D /* ConversationListDataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,14 +56,16 @@
 		C896E71226F9FADF00882298 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		C8A5429D26FC7B9800304C19 /* ResultsTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsTableController.swift; sourceTree = "<group>"; };
 		C8D879BD2705A466007BE93D /* Date+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Chat.swift"; sourceTree = "<group>"; };
-		C8D879C32706B0BD007BE93D /* CircleAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleAvatarView.swift; sourceTree = "<group>"; };
+		C8D879C32706B0BD007BE93D /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		C8D879CA27098D40007BE93D /* TextCircleAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCircleAvatarView.swift; sourceTree = "<group>"; };
 		C8D879CE270B00D0007BE93D /* SearchContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactCell.swift; sourceTree = "<group>"; };
 		C8D879F4270F3F02007BE93D /* ComposeMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeMessageController.swift; sourceTree = "<group>"; };
 		C8D87A042712BD29007BE93D /* BubbleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleImageView.swift; sourceTree = "<group>"; };
 		C8D87A112716C0CE007BE93D /* FlickrAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrAPI.swift; sourceTree = "<group>"; };
-		C8D87A142716C13D007BE93D /* FlickrPhotoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrPhotoStore.swift; sourceTree = "<group>"; };
+		C8D87A142716C13D007BE93D /* PhotoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStore.swift; sourceTree = "<group>"; };
 		C8D87A182716C40F007BE93D /* CachedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedStore.swift; sourceTree = "<group>"; };
+		C8D87A1D27171DAA007BE93D /* ConversationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewModel.swift; sourceTree = "<group>"; };
+		C8D87A2127171EA8007BE93D /* ConversationListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,8 +116,9 @@
 				C858DC5726F9D70200821E67 /* LaunchScreen.storyboard */,
 				C858DC5A26F9D70200821E67 /* Info.plist */,
 				C8D87A112716C0CE007BE93D /* FlickrAPI.swift */,
-				C8D87A142716C13D007BE93D /* FlickrPhotoStore.swift */,
+				C8D87A142716C13D007BE93D /* PhotoStore.swift */,
 				C8D87A182716C40F007BE93D /* CachedStore.swift */,
+				C8D87A2027171DC4007BE93D /* ViewModel */,
 				C858DC6A26F9D87700821E67 /* View */,
 				C858DC6926F9D85E00821E67 /* Controller */,
 				C858DC6826F9D84800821E67 /* Model */,
@@ -138,6 +143,7 @@
 				C896E70F26F9F97100882298 /* MessagesViewController.swift */,
 				C846509026FC00C0009C5782 /* CustomSearchViewController.swift */,
 				C8D879F4270F3F02007BE93D /* ComposeMessageController.swift */,
+				C8D87A2127171EA8007BE93D /* ConversationListDataSource.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -149,11 +155,19 @@
 				C896E71226F9FADF00882298 /* MessageCell.swift */,
 				C8D879CE270B00D0007BE93D /* SearchContactCell.swift */,
 				C8305BC9270457A30070C771 /* ChatbarView.swift */,
-				C8D879C32706B0BD007BE93D /* CircleAvatarView.swift */,
+				C8D879C32706B0BD007BE93D /* CircleView.swift */,
 				C8D879CA27098D40007BE93D /* TextCircleAvatarView.swift */,
 				C8D87A042712BD29007BE93D /* BubbleImageView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		C8D87A2027171DC4007BE93D /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				C8D87A1D27171DAA007BE93D /* ConversationViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,17 +250,19 @@
 				C858DC6626F9D7E600821E67 /* Conversation.swift in Sources */,
 				C8D879F5270F3F02007BE93D /* ComposeMessageController.swift in Sources */,
 				C858DC4F26F9D6FF00821E67 /* SceneDelegate.swift in Sources */,
+				C8D87A2227171EA8007BE93D /* ConversationListDataSource.swift in Sources */,
 				C846509126FC00C0009C5782 /* CustomSearchViewController.swift in Sources */,
 				C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */,
-				C8D879C42706B0BD007BE93D /* CircleAvatarView.swift in Sources */,
+				C8D879C42706B0BD007BE93D /* CircleView.swift in Sources */,
 				C8D87A192716C40F007BE93D /* CachedStore.swift in Sources */,
 				C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */,
 				C8D87A052712BD29007BE93D /* BubbleImageView.swift in Sources */,
 				C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */,
 				C896E70D26F9E07A00882298 /* ConversationCell.swift in Sources */,
-				C8D87A152716C13D007BE93D /* FlickrPhotoStore.swift in Sources */,
+				C8D87A152716C13D007BE93D /* PhotoStore.swift in Sources */,
 				C8D879BE2705A466007BE93D /* Date+Chat.swift in Sources */,
 				C896E71326F9FADF00882298 /* MessageCell.swift in Sources */,
+				C8D87A1E27171DAB007BE93D /* ConversationViewModel.swift in Sources */,
 				C8D87A122716C0CE007BE93D /* FlickrAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

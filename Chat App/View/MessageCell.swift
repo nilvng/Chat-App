@@ -52,34 +52,6 @@ class MessageCell: UITableViewCell {
         }
         bubbleImageView.image = bubbleImage.resizedImage(size: messageBodyLabel.intrinsicContentSize)
     }
-        
-    func bubbleToFit(bubbleImage : UIImage, size: CGSize) -> UIImage{
-        //let trueSize = CGSize(width: size.width + 5, height: size.width + 5)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { _ in
-            bubbleImage.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        }
-    }
-    
-    func incomingBubbleImage() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: messageBodyLabel.intrinsicContentSize)
-        let im = renderer.image { _ in
-            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 200, height: 65), cornerRadius: 25)
-            UIColor.trueLightGray?.setFill()
-            path.fill()
-        }
-        return im
-    }
-    
-    func outgoingBubbleImage() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: messageBodyLabel.intrinsicContentSize)
-        let im = renderer.image { _ in
-            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 200, height: 65), cornerRadius: 25)
-            UIColor.babyBlue?.setFill()
-            path.fill()
-        }
-        return im
-    }
 
     func setupMessageBody(){
         messageBodyLabel.translatesAutoresizingMaskIntoConstraints = false

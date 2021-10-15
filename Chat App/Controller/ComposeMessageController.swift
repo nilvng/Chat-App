@@ -9,6 +9,8 @@ import UIKit
 
 class ComposeMessageController : UIViewController {
 
+    var photoStore = PhotoStore()
+    
     lazy var searchField : UISearchBar = {
         let bar = UISearchBar()
         return bar
@@ -35,8 +37,8 @@ class ComposeMessageController : UIViewController {
 
     }
     
-    let items : [Conversation] = Conversation.stubList
-    var filteredItems : [Conversation] = []
+    let items : [Friend] = Friend.stubList
+    var filteredItems : [Friend] = []
 
     var isFiltering: Bool {
       return currentSearchText != ""
@@ -103,13 +105,13 @@ extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
         
 
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
-        let converation: Conversation
+        let friend: Friend
         if isFiltering {
-            converation = filteredItems[indexPath.row]
+            friend = filteredItems[indexPath.row]
         } else {
-            converation = items[indexPath.row - 1]
+            friend = items[indexPath.row - 1]
         }
-        cell.configure(model: converation)
+        cell.configure(model: friend)
 
         return cell
     }
@@ -119,7 +121,6 @@ extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
         tableView.deselectRow(at: indexPath, animated: true)
         
         // first row when user have not searched for any friend : add new contact
-        print(isFiltering)
         if indexPath.row == 0 && !isFiltering{
             print("Navigate to Add Contact view")
             return
@@ -130,16 +131,48 @@ extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
         
         let msgVC = MessagesViewController()
         
-        var selected = filteredItems[row]
-        msgVC.configure(conversation: selected){ messages in
-            if messages != selected.messages{
-                selected.messages = messages
+        let selected = filteredItems[row]
+        // Check if the user has chat with the selected friend before
+        var conversation = Conversation.stubList.first(where: { conv in
+            return conv.members.contains(selected)
+        }) ?? Conversation(friend: selected)
+        
+        msgVC.configure(conversation: conversation){ messages in
+            if messages != conversation.messages{
+                conversation.messages = messages
                 print("update conversation list!!!\n \(messages)")
             }
         }
         let presentingVC = self.presentingViewController as? UINavigationController
         presentingVC?.pushViewController(msgVC, animated: true)
         self.dismiss(animated: false, completion: nil)
+    }
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        guard indexPath.row > 0 else {
+            return
+        }
+        
+        let targetRow = indexPath.row - 1
+        
+        let selected = items[targetRow]
+        guard let url = selected.avatar else {
+            return
+        }
+        photoStore.fetchImage(url: url){ res in
+            guard let convIndex = self.items.firstIndex(of: selected),
+                case let .success(image) = res else {
+                    return
+            }
+            let indexPath = IndexPath(item: convIndex, section: 0)
+
+            // When the request finishes, only update the cell if it's still visible
+            if let cell = self.tableView.cellForRow(at: indexPath)
+                                                         as? ConversationCell {
+                cell.updateAvatar(displaying: image)
+            }
+
+        }
     }
 
 }
@@ -180,8 +213,8 @@ extension ComposeMessageController: UISearchBarDelegate {
         if key == ""{
             self.filteredItems = self.items
         } else{
-            self.filteredItems = self.items.filter { (item: Conversation) -> Bool in
-                return item.title.lowercased().contains(key.lowercased())
+            self.filteredItems = self.items.filter { item in
+                return item.fullName.lowercased().contains(key.lowercased())
             }
         }
         tableView.reloadData()
