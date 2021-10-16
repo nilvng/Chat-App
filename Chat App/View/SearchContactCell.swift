@@ -15,21 +15,15 @@ class SearchContactCell : UITableViewCell {
         
     let titleLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 19)
+        label.font = UIFont.systemFont(ofSize: 18)
         label.textAlignment = .left
         return label
     }()
     let thumbnail : TextCircleView = {
         let image = TextCircleView(frame: CGRect(x: 0, y: 0, width: 72, height: 72))
+        image.contentMode = .scaleAspectFill
         return image
     }()
-    
-    var separatorLine : UIView = {
-        let line = UIView()
-        line.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
-        return line
-    }()
-
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -40,21 +34,15 @@ class SearchContactCell : UITableViewCell {
         setupTitleLabel()
     }
     
-    func configure (model : Friend){
-        titleLabel.text = model.fullName
-        thumbnail.update(url: model.avatar, text: model.firstName)
+    func configure (friend : Friend){
+        titleLabel.text = friend.fullName
+        thumbnail.update(url: friend.avatar, text: friend.firstName)
     }
-
+    
     // MARK: Design Cell
     
     private var verticalPadding : CGFloat = 7
     private var horizontalPadding : CGFloat = 10
-
-    override func layoutSubviews() {
-
-    }
-    
-    
     
     func setupThumbnail() {
         thumbnail.translatesAutoresizingMaskIntoConstraints = false
@@ -79,18 +67,6 @@ class SearchContactCell : UITableViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: thumbnail.trailingAnchor, constant: 14)
         ]
         NSLayoutConstraint.activate(constraints)
-    }
-
-    func setupSeparatorLine(){
-        
-        separatorLine.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-        separatorLine.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            separatorLine.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            separatorLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            separatorLine.heightAnchor.constraint(equalToConstant: 0.5)
-        ])
     }
     
     required init?(coder: NSCoder) {

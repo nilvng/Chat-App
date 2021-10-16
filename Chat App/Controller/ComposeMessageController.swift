@@ -21,6 +21,8 @@ class ComposeMessageController : UIViewController {
         return tv
     }()
         
+    var dataSource : UITableViewDataSource!
+    
     var currentSearchText : String = ""
     
     override func viewDidLoad() {
@@ -63,8 +65,7 @@ class ComposeMessageController : UIViewController {
     func setupTableView(){
         view.addSubview(tableView)
         
-        tableView.dataSource = self
-        tableView.delegate = self
+
         tableView.register(SearchContactCell.self, forCellReuseIdentifier: SearchContactCell.identifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "NewContactCell")
 
@@ -77,8 +78,14 @@ class ComposeMessageController : UIViewController {
         tableView.rightAnchor.constraint(equalTo: margin.rightAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 7).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    
+        
+        self.dataSource = IndexedContactDataSource()
+        tableView.dataSource = dataSource
+        tableView.delegate = self
+        tableView.reloadData()
     }
+    
+    
 }
 
 extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
@@ -90,7 +97,6 @@ extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
 
         return items.count + 1
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // first row when user have not searched for any friend : add new contact
         if indexPath.row == 0 && !isFiltering{
@@ -101,7 +107,6 @@ extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
             return cell
         }
         
-
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
         let friend: Friend
         if isFiltering {
@@ -109,7 +114,7 @@ extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
         } else {
             friend = items[indexPath.row - 1]
         }
-        cell.configure(model: friend)
+        cell.configure(friend: friend)
 
         return cell
     }

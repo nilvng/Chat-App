@@ -129,12 +129,7 @@ class ConversationListController: UIViewController {
         let cmc = ComposeMessageController()
         self.present(cmc, animated: true, completion: nil)
     }
-    
-    @objc func searchButtonPressed(){
-        print("Searching...")
-        let searchVC = CustomSearchController()
-        navigationController?.pushViewController(searchVC, animated: true)
-    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         

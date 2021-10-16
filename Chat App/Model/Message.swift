@@ -66,5 +66,11 @@ extension Friend {
     static var angelou = Friend(firstName: "Maya", lastName: "Angelou")
     static var steve = Friend(firstName: "Steve", lastName: "Job")
     
-    static var stubList = [Friend.daniel, Friend.john, Friend.angelou, Friend.steve]
+    static var stubList = [Friend.john, Friend.angelou, Friend.steve, Friend.daniel]
+}
+
+extension Friend : Searchable{
+    func getKeyword() -> String {
+        return fullName
+    }
 }

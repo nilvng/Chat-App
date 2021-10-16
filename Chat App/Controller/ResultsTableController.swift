@@ -55,7 +55,7 @@ class ResultsTableController: UITableViewController {
         } else {
             friend = items[indexPath.row - 1]
         }
-        cell.configure(model: friend)
+        cell.configure(friend: friend)
 
         return cell
     }
@@ -65,7 +65,6 @@ class ResultsTableController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         // first row when user have not searched for any friend : add new contact
-        print(isFiltering)
         if indexPath.row == 0 && !isFiltering{
             print("Navigate to Add Contact view")
             return
@@ -82,16 +81,15 @@ class ResultsTableController: UITableViewController {
         var conversation = Conversation.stubList.first(where: { conv in
             return conv.members.contains(selected)
         }) ?? Conversation(friend: selected)
-
+        
         msgVC.configure(conversation: conversation){ messages in
             if messages != conversation.messages{
                 conversation.messages = messages
                 print("update conversation list!!!\n \(messages)")
             }
         }
-        let presentingVC = self.presentingViewController as? UINavigationController
-        presentingVC?.pushViewController(msgVC, animated: true)
-        self.dismiss(animated: false, completion: nil)
+        let navigationVC = UINavigationController(rootViewController: msgVC)
+        self.present(navigationVC, animated: true, completion: nil) // NOT DONE
     }
     /*
     // MARK: - Navigation
