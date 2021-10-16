@@ -59,6 +59,7 @@ class ConversationListController: UIViewController {
 
     private func setupNavigationBar(){
         navigationItem.title = "Chats"
+        navigationItem.backButtonDisplayMode = .minimal
 
         if #available(iOS 11.0, *) {
 

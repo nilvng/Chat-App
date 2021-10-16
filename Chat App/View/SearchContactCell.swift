@@ -63,7 +63,7 @@ class SearchContactCell : UITableViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
                 
         let constraints : [NSLayoutConstraint] = [
-            titleLabel.centerYAnchor.constraint(equalTo: thumbnail.centerYAnchor,constant: -5),
+            titleLabel.centerYAnchor.constraint(equalTo: thumbnail.centerYAnchor,constant: 0),
             titleLabel.leadingAnchor.constraint(equalTo: thumbnail.trailingAnchor, constant: 14)
         ]
         NSLayoutConstraint.activate(constraints)

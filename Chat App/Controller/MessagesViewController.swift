@@ -13,9 +13,11 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     var actionDelegate : MessageChangedAction?
     
+    var navigationBar  = ChatViewNavigationBar()
+    
     var conversation : Conversation? {
         didSet{
-           navigationItem.title = conversation?.title
+           navigationBar.title = conversation?.title
         }
     }
     
@@ -66,7 +68,8 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-             
+                     
+        setupNavigationBar()
         setupTableView()
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -75,6 +78,10 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         
         setupChatbarView()
         
+    }
+    
+    func setupNavigationBar(){
+        navigationItem.titleView = navigationBar
     }
     
     func setupTableView(){

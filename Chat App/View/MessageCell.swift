@@ -20,6 +20,11 @@ class MessageCell: UITableViewCell {
         label.numberOfLines = 0
         return label
     }()
+    let timestampLabel : UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 10)
+        return label
+    }()
     var bubbleImageView : UIImageView = UIImageView()
     
     
@@ -83,6 +88,11 @@ class MessageCell: UITableViewCell {
         
         NSLayoutConstraint.activate(constraints)
         }
+    
+    func setupTimestampLabel(){
+        contentView.addSubview(timestampLabel)
+        timestampLabel.translatesAutoresizingMaskIntoConstraints  = false
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

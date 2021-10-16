@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		C82DB71C271A4A4A002AE563 /* IndexedContactDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB71B271A4A4A002AE563 /* IndexedContactDataSource.swift */; };
+		C82DB722271AB6D2002AE563 /* ChatViewNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB721271AB6D2002AE563 /* ChatViewNavigationBar.swift */; };
 		C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8305BBC27017AEF0070C771 /* UIColor+Chat.swift */; };
 		C8305BCA270457A30070C771 /* ChatbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8305BC9270457A30070C771 /* ChatbarView.swift */; };
 		C846508D26FBF9C5009C5782 /* UIImage+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */; };
 		C858DC4D26F9D6FF00821E67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C858DC4C26F9D6FF00821E67 /* AppDelegate.swift */; };
 		C858DC4F26F9D6FF00821E67 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C858DC4E26F9D6FF00821E67 /* SceneDelegate.swift */; };
 		C858DC5126F9D6FF00821E67 /* ConversationListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C858DC5026F9D6FF00821E67 /* ConversationListController.swift */; };
-		C858DC5426F9D6FF00821E67 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C858DC5226F9D6FF00821E67 /* Main.storyboard */; };
 		C858DC5626F9D70200821E67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C858DC5526F9D70200821E67 /* Assets.xcassets */; };
 		C858DC5926F9D70200821E67 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C858DC5726F9D70200821E67 /* LaunchScreen.storyboard */; };
 		C858DC6226F9D75E00821E67 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = C858DC6126F9D75E00821E67 /* Message.swift */; };
@@ -29,7 +29,6 @@
 		C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879CE270B00D0007BE93D /* SearchContactCell.swift */; };
 		C8D879F5270F3F02007BE93D /* ComposeMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879F4270F3F02007BE93D /* ComposeMessageController.swift */; };
 		C8D87A052712BD29007BE93D /* BubbleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A042712BD29007BE93D /* BubbleImageView.swift */; };
-		C8D87A122716C0CE007BE93D /* FlickrAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A112716C0CE007BE93D /* FlickrAPI.swift */; };
 		C8D87A152716C13D007BE93D /* PhotoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A142716C13D007BE93D /* PhotoStore.swift */; };
 		C8D87A192716C40F007BE93D /* CachedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A182716C40F007BE93D /* CachedStore.swift */; };
 		C8D87A1E27171DAB007BE93D /* ConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A1D27171DAA007BE93D /* ConversationViewModel.swift */; };
@@ -38,6 +37,7 @@
 
 /* Begin PBXFileReference section */
 		C82DB71B271A4A4A002AE563 /* IndexedContactDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedContactDataSource.swift; sourceTree = "<group>"; };
+		C82DB721271AB6D2002AE563 /* ChatViewNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewNavigationBar.swift; sourceTree = "<group>"; };
 		C8305BBC27017AEF0070C771 /* UIColor+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Chat.swift"; sourceTree = "<group>"; };
 		C8305BC9270457A30070C771 /* ChatbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatbarView.swift; sourceTree = "<group>"; };
 		C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Chat.swift"; sourceTree = "<group>"; };
@@ -45,7 +45,6 @@
 		C858DC4C26F9D6FF00821E67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C858DC4E26F9D6FF00821E67 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C858DC5026F9D6FF00821E67 /* ConversationListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListController.swift; sourceTree = "<group>"; };
-		C858DC5326F9D6FF00821E67 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C858DC5526F9D70200821E67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C858DC5826F9D70200821E67 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C858DC5A26F9D70200821E67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -61,7 +60,6 @@
 		C8D879CE270B00D0007BE93D /* SearchContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactCell.swift; sourceTree = "<group>"; };
 		C8D879F4270F3F02007BE93D /* ComposeMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeMessageController.swift; sourceTree = "<group>"; };
 		C8D87A042712BD29007BE93D /* BubbleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleImageView.swift; sourceTree = "<group>"; };
-		C8D87A112716C0CE007BE93D /* FlickrAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrAPI.swift; sourceTree = "<group>"; };
 		C8D87A142716C13D007BE93D /* PhotoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStore.swift; sourceTree = "<group>"; };
 		C8D87A182716C40F007BE93D /* CachedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedStore.swift; sourceTree = "<group>"; };
 		C8D87A1D27171DAA007BE93D /* ConversationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewModel.swift; sourceTree = "<group>"; };
@@ -111,11 +109,9 @@
 				C846508B26FBF9AD009C5782 /* Helpers */,
 				C858DC4C26F9D6FF00821E67 /* AppDelegate.swift */,
 				C858DC4E26F9D6FF00821E67 /* SceneDelegate.swift */,
-				C858DC5226F9D6FF00821E67 /* Main.storyboard */,
 				C858DC5526F9D70200821E67 /* Assets.xcassets */,
 				C858DC5726F9D70200821E67 /* LaunchScreen.storyboard */,
 				C858DC5A26F9D70200821E67 /* Info.plist */,
-				C8D87A112716C0CE007BE93D /* FlickrAPI.swift */,
 				C8D87A142716C13D007BE93D /* PhotoStore.swift */,
 				C8D87A182716C40F007BE93D /* CachedStore.swift */,
 				C8D87A2027171DC4007BE93D /* ViewModel */,
@@ -158,6 +154,7 @@
 				C8D879C32706B0BD007BE93D /* CircleView.swift */,
 				C8D879CA27098D40007BE93D /* TextCircleView.swift */,
 				C8D87A042712BD29007BE93D /* BubbleImageView.swift */,
+				C82DB721271AB6D2002AE563 /* ChatViewNavigationBar.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -229,7 +226,6 @@
 			files = (
 				C858DC5926F9D70200821E67 /* LaunchScreen.storyboard in Resources */,
 				C858DC5626F9D70200821E67 /* Assets.xcassets in Resources */,
-				C858DC5426F9D6FF00821E67 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +250,7 @@
 				C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */,
 				C8D879C42706B0BD007BE93D /* CircleView.swift in Sources */,
 				C8D87A192716C40F007BE93D /* CachedStore.swift in Sources */,
+				C82DB722271AB6D2002AE563 /* ChatViewNavigationBar.swift in Sources */,
 				C82DB71C271A4A4A002AE563 /* IndexedContactDataSource.swift in Sources */,
 				C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */,
 				C8D87A052712BD29007BE93D /* BubbleImageView.swift in Sources */,
@@ -263,21 +260,12 @@
 				C8D879BE2705A466007BE93D /* Date+Chat.swift in Sources */,
 				C896E71326F9FADF00882298 /* MessageCell.swift in Sources */,
 				C8D87A1E27171DAB007BE93D /* ConversationViewModel.swift in Sources */,
-				C8D87A122716C0CE007BE93D /* FlickrAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		C858DC5226F9D6FF00821E67 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C858DC5326F9D6FF00821E67 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		C858DC5726F9D70200821E67 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
