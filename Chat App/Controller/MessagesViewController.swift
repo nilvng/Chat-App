@@ -15,7 +15,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     var navigationBar  = ChatViewNavigationBar()
     
-    var conversation : Conversation? {
+    var conversation : Conversation! {
         didSet{
            navigationBar.title = conversation?.title
         }
@@ -81,7 +81,13 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     }
     
     func setupNavigationBar(){
+
         navigationItem.titleView = navigationBar
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage.chat_menu,
+            style: .plain,
+            target: self,
+            action: #selector(menuButtonPressed))
     }
     
     func setupTableView(){
@@ -133,6 +139,16 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    @objc func menuButtonPressed(){
+        print("menu open...")
+        let menuViewController = MessagesMenuViewController()
+        menuViewController.configure(conversation){
+            ChatManager.shared.deleteChat(self.conversation)
+            self.navigationController?.popViewController(animated: true)
+        }
+        navigationController?.pushViewController(menuViewController, animated: true)
     }
     
     func scrollToLastMessage(animated: Bool = true){

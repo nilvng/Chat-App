@@ -7,12 +7,11 @@
 
 import UIKit
 
-class ConversationListController: UIViewController {
+class ConversationListController: UIViewController, UIGestureRecognizerDelegate {
     
-    var conversationList : [Conversation] = Conversation.stubList
     var currentSearchText : String = ""
     
-    var dataSource : UITableViewDataSource?
+    var dataSource : ConversationListDataSource!
     var tableView : UITableView = {
         let table = UITableView()
         table.separatorStyle = .none
@@ -50,11 +49,38 @@ class ConversationListController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        ChatManager.shared.delegate = self
+        
         setupNavigationBar()
         setupTableView()
         setupComposeButton()
-
+        setupLongPressGesture()
         
+    }
+    
+    func setupLongPressGesture(){
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        longPress.minimumPressDuration = 1.0 // 1 second press
+        longPress.delegate = self
+        tableView.addGestureRecognizer(longPress)
+
+    }
+    
+    @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer){
+        if gestureRecognizer.state == .began {
+            let touchPoint = gestureRecognizer.location(in: self.tableView)
+            if let indexPath = tableView.indexPathForRow(at: touchPoint) {
+                print(indexPath.row)
+                let configView = ConversationConfigViewController()
+                configView.configure {
+                    let itemToDelete = self.dataSource.conversationList[indexPath.row]
+                    ChatManager.shared.deleteChat(itemToDelete)
+                }
+                configView.modalPresentationStyle = UIModalPresentationStyle.custom
+                configView.transitioningDelegate = self
+                self.present(configView, animated: true, completion: nil)
+            }
+        }
     }
 
     private func setupNavigationBar(){
@@ -76,6 +102,7 @@ class ConversationListController: UIViewController {
     
     func setupTableView(){
         dataSource = ConversationListDataSource()
+        dataSource.reloadDataSource()
         
         view.addSubview(tableView)
         
@@ -119,12 +146,7 @@ class ConversationListController: UIViewController {
         composeButton.addTarget(self, action: #selector(composeButtonPressed), for: .touchUpInside)
 
     }
-    
-    @objc func addButtonPressed(){
-        print("Add Contact...")
-
-    }
-    
+        
     @objc func composeButtonPressed(){
         print("Compose message...")
         let cmc = ComposeMessageController()
@@ -134,7 +156,7 @@ class ConversationListController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        print("view did appear...")
+        print("view will appear...")
  
         navigationController?.navigationBar.barStyle = .black
 
@@ -146,13 +168,104 @@ class ConversationListController: UIViewController {
 
 }
 
+extension ConversationListController : ChatManagerDelegate {
+    func conversationDeleted(_ item: Conversation) {
+        guard let indexToDelete = dataSource.conversationList.firstIndex(where: {$0 == item}) else {
+            print("Warning: cannot find conversation to delete")
+            return
+        }
+        // update data source
+        dataSource.conversationList.remove(at: indexToDelete)
+        // animate
+        let pathToDelete = IndexPath(row: indexToDelete, section: 0)
+        tableView.deleteRows(at: [pathToDelete], with: .automatic)
+    }
+    
+    func conversationAdded(_ item: Conversation) {
+        fatalError()
+    }
+    
+    func conversationUpdated(_ item: Conversation) {
+        fatalError()
+    }
+    
+    
+}
+
+extension ConversationListController : UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return HalfSizePresentationController(presentedViewController: presented, presenting: presentingViewController)
+    }
+}
+
+class HalfSizePresentationController: UIPresentationController {
+    let blurEffectView: UIVisualEffectView = {
+        let effect = UIBlurEffect(style: .dark)
+        let effectView = UIVisualEffectView(effect: effect)
+        effectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        return effectView
+    }()
+    var tapGesture : UITapGestureRecognizer!
+    var swipeGesture : UISwipeGestureRecognizer!
+    override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
+        
+        super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
+        
+        setupTapDismissGesture()
+        setupSwipeDismissGesture()
+    }
+    
+    func setupTapDismissGesture(){
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismiss))
+        self.blurEffectView.isUserInteractionEnabled = true
+        self.blurEffectView.addGestureRecognizer(tapGesture)
+    }
+    
+    func setupSwipeDismissGesture(){
+        swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(self.dismiss))
+        swipeGesture.direction = .down
+        self.presentedView?.addGestureRecognizer(swipeGesture)
+    }
+
+    
+    override var frameOfPresentedViewInContainerView: CGRect {
+        guard let bounds = containerView?.bounds else { return .zero }
+        print(bounds)
+        return CGRect(x: 0, y: bounds.height / 2, width: bounds.width, height: bounds.height / 2)
+    }
+    
+    @objc func dismiss(){
+        self.presentedViewController.dismiss(animated: true, completion: nil)
+    }
+    
+    override func presentationTransitionWillBegin() {
+        self.blurEffectView.alpha = 0
+        self.containerView?.addSubview(blurEffectView)
+        self.presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
+            self.blurEffectView.alpha = 0.4
+        }, completion:  nil)
+    }
+    override func containerViewWillLayoutSubviews() {
+        super.containerViewWillLayoutSubviews()
+        presentedView!.layer.masksToBounds = true
+        presentedView!.layer.cornerRadius = 10
+    }
+    override func containerViewDidLayoutSubviews() {
+        super.containerViewDidLayoutSubviews()
+        self.presentedView?.frame = frameOfPresentedViewInContainerView
+        blurEffectView.frame = containerView!.bounds
+    }
+
+}
+
 extension ConversationListController : UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         tableView.deselectRow(at: indexPath, animated: true)
         // navigate to conversation detail view
         let messagesViewController = MessagesViewController()
         
-        var selected = conversationList[indexPath.row]
+        var selected = dataSource.conversationList[indexPath.row]
         
         messagesViewController.configure(conversation: selected){ messages in
             
@@ -160,11 +273,11 @@ extension ConversationListController : UITableViewDelegate{
             print("yes, new message")
             selected.messages = messages
 
-            self.conversationList.remove(at: indexPath.row)
+            self.dataSource.conversationList.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .none)
 
             
-            self.conversationList.insert(selected, at: 0)
+            self.dataSource.conversationList.insert(selected, at: 0)
             self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
 
         }

@@ -39,21 +39,13 @@ class ResultsTableController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // first row when user have not searched for any friend : add new contact
-        if indexPath.row == 0 && !isFiltering{
-            let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
-            cell.titleLabel.text = "New Contact"
-            cell.thumbnail.image = UIImage(named: "NewContact")
-            cell.thumbnail.backgroundColor = UIColor.babyBlue
-            return cell
-        }
-        
 
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
         let friend: Friend
         if isFiltering {
             friend = filteredItems[indexPath.row]
         } else {
-            friend = items[indexPath.row - 1]
+            friend = items[indexPath.row]
         }
         cell.configure(friend: friend)
 
@@ -64,17 +56,8 @@ class ResultsTableController: UITableViewController {
         // show chat view
         tableView.deselectRow(at: indexPath, animated: true)
         
-        // first row when user have not searched for any friend : add new contact
-        if indexPath.row == 0 && !isFiltering{
-            print("Navigate to Add Contact view")
-            return
-        }
-        
-        let row = !isFiltering ? indexPath.row - 1 : indexPath.row
-        
-        
+        let row = indexPath.row
         let msgVC = MessagesViewController()
-        
         let selected = filteredItems[row]
         
         // Check if the user has chat with the selected friend before
@@ -91,15 +74,6 @@ class ResultsTableController: UITableViewController {
         let navigationVC = UINavigationController(rootViewController: msgVC)
         self.present(navigationVC, animated: true, completion: nil) // NOT DONE
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 // MARK: - UISearchResult Updating and UISearchControllerDelegate  Extension

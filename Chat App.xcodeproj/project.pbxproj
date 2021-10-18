@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		C82DB71C271A4A4A002AE563 /* IndexedContactDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB71B271A4A4A002AE563 /* IndexedContactDataSource.swift */; };
 		C82DB722271AB6D2002AE563 /* ChatViewNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB721271AB6D2002AE563 /* ChatViewNavigationBar.swift */; };
+		C82DB727271B055B002AE563 /* ChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB726271B055B002AE563 /* ChatManager.swift */; };
+		C82DB72A271C08BE002AE563 /* MessagesMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB729271C08BE002AE563 /* MessagesMenuViewController.swift */; };
+		C82DB72E271C580A002AE563 /* ConversationConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB72D271C580A002AE563 /* ConversationConfigViewController.swift */; };
 		C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8305BBC27017AEF0070C771 /* UIColor+Chat.swift */; };
 		C8305BCA270457A30070C771 /* ChatbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8305BC9270457A30070C771 /* ChatbarView.swift */; };
 		C846508D26FBF9C5009C5782 /* UIImage+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */; };
@@ -38,6 +41,9 @@
 /* Begin PBXFileReference section */
 		C82DB71B271A4A4A002AE563 /* IndexedContactDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedContactDataSource.swift; sourceTree = "<group>"; };
 		C82DB721271AB6D2002AE563 /* ChatViewNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewNavigationBar.swift; sourceTree = "<group>"; };
+		C82DB726271B055B002AE563 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
+		C82DB729271C08BE002AE563 /* MessagesMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesMenuViewController.swift; sourceTree = "<group>"; };
+		C82DB72D271C580A002AE563 /* ConversationConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationConfigViewController.swift; sourceTree = "<group>"; };
 		C8305BBC27017AEF0070C771 /* UIColor+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Chat.swift"; sourceTree = "<group>"; };
 		C8305BC9270457A30070C771 /* ChatbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatbarView.swift; sourceTree = "<group>"; };
 		C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Chat.swift"; sourceTree = "<group>"; };
@@ -114,6 +120,7 @@
 				C858DC5A26F9D70200821E67 /* Info.plist */,
 				C8D87A142716C13D007BE93D /* PhotoStore.swift */,
 				C8D87A182716C40F007BE93D /* CachedStore.swift */,
+				C82DB726271B055B002AE563 /* ChatManager.swift */,
 				C8D87A2027171DC4007BE93D /* ViewModel */,
 				C858DC6A26F9D87700821E67 /* View */,
 				C858DC6926F9D85E00821E67 /* Controller */,
@@ -135,11 +142,13 @@
 			isa = PBXGroup;
 			children = (
 				C858DC5026F9D6FF00821E67 /* ConversationListController.swift */,
+				C8D87A2127171EA8007BE93D /* ConversationListDataSource.swift */,
 				C8A5429D26FC7B9800304C19 /* ResultsTableController.swift */,
 				C896E70F26F9F97100882298 /* MessagesViewController.swift */,
+				C82DB729271C08BE002AE563 /* MessagesMenuViewController.swift */,
 				C8D879F4270F3F02007BE93D /* ComposeMessageController.swift */,
-				C8D87A2127171EA8007BE93D /* ConversationListDataSource.swift */,
 				C82DB71B271A4A4A002AE563 /* IndexedContactDataSource.swift */,
+				C82DB72D271C580A002AE563 /* ConversationConfigViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -236,6 +245,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C82DB727271B055B002AE563 /* ChatManager.swift in Sources */,
 				C846508D26FBF9C5009C5782 /* UIImage+Chat.swift in Sources */,
 				C858DC5126F9D6FF00821E67 /* ConversationListController.swift in Sources */,
 				C8A5429E26FC7B9800304C19 /* ResultsTableController.swift in Sources */,
@@ -249,8 +259,10 @@
 				C8D87A2227171EA8007BE93D /* ConversationListDataSource.swift in Sources */,
 				C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */,
 				C8D879C42706B0BD007BE93D /* CircleView.swift in Sources */,
+				C82DB72A271C08BE002AE563 /* MessagesMenuViewController.swift in Sources */,
 				C8D87A192716C40F007BE93D /* CachedStore.swift in Sources */,
 				C82DB722271AB6D2002AE563 /* ChatViewNavigationBar.swift in Sources */,
+				C82DB72E271C580A002AE563 /* ConversationConfigViewController.swift in Sources */,
 				C82DB71C271A4A4A002AE563 /* IndexedContactDataSource.swift in Sources */,
 				C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */,
 				C8D87A052712BD29007BE93D /* BubbleImageView.swift in Sources */,

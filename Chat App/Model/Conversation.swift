@@ -32,6 +32,10 @@ extension Conversation : Equatable {
     static func == (lhs: Conversation, rhs: Conversation) -> Bool{
         return lhs.id == rhs.id
     }
+    static func > (lhs: Conversation, rhs: Conversation) -> Bool{
+        // Assume Conversation always has 1 message
+        return lhs.messages.last!.timestamp > rhs.messages.last!.timestamp
+    }
 }
 
 extension Conversation {

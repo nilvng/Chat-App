@@ -24,16 +24,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let homeController = ConversationListController()
         let navController = UINavigationController(rootViewController: homeController)
-        
+        // styling nav bar
         navController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         navController.navigationBar.tintColor = .white
         navController.navigationBar.barTintColor = UIColor.zaloBlue
         let attributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 22), NSAttributedString.Key.foregroundColor: UIColor.white]
         
         UINavigationBar.appearance().titleTextAttributes = attributes
-        
-        window?.rootViewController = navController
 
+        // finally set up root view
+        window?.rootViewController = navController
 
     }
 

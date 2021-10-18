@@ -7,7 +7,12 @@
 
 import UIKit
 class ConversationListDataSource :NSObject {
-    var conversationList : [Conversation] = Conversation.stubList
+    var conversationList : [Conversation] = ChatManager.shared.chatList
+    
+    // sorting conversation from the latest to oldest
+    func reloadDataSource(){
+        conversationList.sort(by: {$0 > $1})
+    }
 }
 extension ConversationListDataSource : UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

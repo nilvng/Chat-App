@@ -14,7 +14,14 @@ class ChatViewNavigationBar: UIStackView {
         }
     }
     
-    var button : UIButton = {
+    var backButton : UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage.back_button, for: .normal)
+        button.sizeToFit()
+        return button
+    }()
+
+    var menuButton : UIButton = {
         let button = UIButton()
         button.setImage(UIImage.chat_menu, for: .normal)
         return button
@@ -27,27 +34,23 @@ class ChatViewNavigationBar: UIStackView {
         return label
     }()
     
+    var spacer : UIView = {
+        let spacer = UIView()
+        let constraint = spacer.widthAnchor.constraint(greaterThanOrEqualToConstant: UIScreen.main.bounds.width)
+        constraint.isActive = true
+        constraint.priority = .defaultLow
+        return spacer
+    }()
+    
     init() {
-        super.init(frame:.zero)
-        alignment = .center
-        distribution = .equalSpacing
+        super.init(frame: .zero)
         axis  = .horizontal
-        backgroundColor = .brown
         
-        spacing = 196
         addArrangedSubview(titleLabel)
-        addArrangedSubview(button)
-        
-
+        addArrangedSubview(spacer)
     }
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setupTitleLabel(){
-        addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
     }
 }
