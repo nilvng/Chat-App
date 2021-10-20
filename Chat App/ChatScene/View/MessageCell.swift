@@ -18,6 +18,8 @@ class MessageCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.sizeToFit()
         return label
     }()
     let timestampLabel : UILabel = {
@@ -25,7 +27,10 @@ class MessageCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 10)
         return label
     }()
-    var bubbleImageView : UIImageView = UIImageView()
+    var bubbleImageView : UIImageView = {
+        let imageView = UIImageView()
+        return imageView
+    }()
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -36,14 +41,12 @@ class MessageCell: UITableViewCell {
 
         setupMessageBody()
         setupBubbleBackground()
-        
-    }
+        }
     
         
     func configure(with model: Message, bubbleImage : UIImage){
         message = model
         messageBodyLabel.text = model.content
-        //bubbleImageView.bubbleSize = messageBodyLabel.intrinsicContentSize
         // align bubble based on whether the sender is the user themselves
 
         if model.sender == Friend.me {
@@ -55,23 +58,27 @@ class MessageCell: UITableViewCell {
             outboundConstraint?.isActive = false
             inboundConstraint?.isActive = true
         }
-        bubbleImageView.image = bubbleImage.resizedImage(size: messageBodyLabel.intrinsicContentSize)
+        bubbleImageView.image = bubbleImage
     }
 
+    var bubbleVPadding : CGFloat = 14
+    var bubbleHPadding : CGFloat = 18
+
+    
     func setupMessageBody(){
         messageBodyLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        self.outboundConstraint =  messageBodyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -28)
-        self.inboundConstraint = messageBodyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28)
+        self.outboundConstraint =  messageBodyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -bubbleHPadding)
+        self.inboundConstraint = messageBodyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: bubbleHPadding)
 
         let constraints : [NSLayoutConstraint] = [
-            messageBodyLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 28),
-            messageBodyLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -14),
+            messageBodyLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: bubbleVPadding),
+            messageBodyLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -bubbleVPadding),
             outboundConstraint,
             inboundConstraint,
-            messageBodyLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 210),
+            messageBodyLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
         ]
-        
+        messageBodyLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         NSLayoutConstraint.activate(constraints)
 
     }
@@ -80,10 +87,10 @@ class MessageCell: UITableViewCell {
         
         bubbleImageView.translatesAutoresizingMaskIntoConstraints = false
         let constraints : [NSLayoutConstraint] = [
-            bubbleImageView.topAnchor.constraint(equalTo: messageBodyLabel.topAnchor, constant: -16),
-            bubbleImageView.leadingAnchor.constraint(equalTo: messageBodyLabel.leadingAnchor, constant: -16),
-            bubbleImageView.bottomAnchor.constraint(equalTo:  messageBodyLabel.bottomAnchor, constant: 16),
-            bubbleImageView.trailingAnchor.constraint(equalTo: messageBodyLabel.trailingAnchor, constant: 16),
+            bubbleImageView.topAnchor.constraint(equalTo: messageBodyLabel.topAnchor, constant: -bubbleVPadding * 2/3),
+            bubbleImageView.leadingAnchor.constraint(equalTo: messageBodyLabel.leadingAnchor, constant: -bubbleHPadding * 2/3),
+            bubbleImageView.bottomAnchor.constraint(equalTo:  messageBodyLabel.bottomAnchor, constant: bubbleVPadding * 2/3),
+            bubbleImageView.trailingAnchor.constraint(equalTo: messageBodyLabel.trailingAnchor, constant: bubbleHPadding * 2/3),
         ]
         
         NSLayoutConstraint.activate(constraints)

@@ -32,23 +32,26 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     var chatBarBottomConstraint : NSLayoutConstraint?
     var incomingBubbleImage : UIImage = {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 200, height: 120))
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 30, height: 30))
         let im = renderer.image { _ in
-            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0,width: 200, height: 120), cornerRadius: 15)
+            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0,width: 30, height: 30), cornerRadius: 15)
             UIColor.trueLightGray?.setFill()
             path.fill()
         }
-        return im
+        let resizable_im = im.resizableImage(withCapInsets: UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15), resizingMode: .stretch)
+        return resizable_im
     }()
     
     var outgoingBubbleImage : UIImage = {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 200, height: 120))
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 30, height: 30))
         let im = renderer.image { _ in
-            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0,width: 200, height: 120), cornerRadius: 15)
+            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0,width: 30, height: 30), cornerRadius: 15)
             UIColor.babyBlue?.setFill()
             path.fill()
         }
-        return im
+        let resizable_im = im.resizableImage(withCapInsets: UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15), resizingMode: .stretch)
+        return resizable_im
+
     }()
 
 
@@ -95,7 +98,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(MessageCell.self, forCellReuseIdentifier: MessageCell.identifier)
-
+        tableView.estimatedRowHeight = 30
+        tableView.rowHeight = UITableView.automaticDimension
+        
         view.addSubview(tableView)
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -109,7 +114,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
 
-        tableView.contentInset = UIEdgeInsets(top: 55, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 25, left: 0, bottom: 0, right: 0)
 
     }
     
@@ -121,7 +126,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         chatBarView.translatesAutoresizingMaskIntoConstraints = false
 
         let margin = view.safeAreaLayoutGuide
-        chatBarBottomConstraint = chatBarView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10)
+        chatBarBottomConstraint = chatBarView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
 
         NSLayoutConstraint.activate([
             chatBarView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
@@ -200,7 +205,7 @@ extension MessagesViewController : ChatBarDelegate {
         chatBarBottomConstraint?.constant = -scalingValue
         
         UIView.animate(withDuration: animateDuration, delay: 0, options: .curveEaseOut, animations: {
-            self.tableView.contentInset.top = moveUp ? scalingValue + 23 : 55 // TODO: hardcoded!!!
+            self.tableView.contentInset.top = moveUp ? scalingValue + 23 : 25 // TODO: hardcoded!!!
             self.view.layoutIfNeeded()
         }, completion: { (completed) in
             self.scrollToLastMessage()

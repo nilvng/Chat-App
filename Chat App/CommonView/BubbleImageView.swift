@@ -20,27 +20,16 @@ class BubbleImageView: UIImageView {
 
     var bubbleColor : UIColor?
     var bubbleSize : CGSize?
-    var radius : CGFloat? = 20
+    var radius : CGFloat! = 15
     var corners : UIRectCorner = .allCorners
     
     init() {
         super.init(frame: .zero)
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-    
-    func configure(size: CGSize, isIncoming: Bool){
-        let width = size.width
-        let height = size.height
-        let renderer = UIGraphicsImageRenderer(size: size)
-        
-        self.image = isIncoming ? incomingBubbleImage() : outgoingBubbleImage()
-        
-        self.image = renderer.image { _ in
-            self.image?.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
-        }
+    func configure(isIncoming: Bool){
+        let im = isIncoming ? incomingBubbleImage() : outgoingBubbleImage()
+        self.image = im.resizableImage(withCapInsets: UIEdgeInsets(top: self.radius, left: radius, bottom: radius, right: radius), resizingMode: .stretch)
     }
     
     func drawBubble(){
@@ -62,7 +51,7 @@ class BubbleImageView: UIImageView {
     func incomingBubbleImage() -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: self.frame.size)
         let im = renderer.image { _ in
-            let path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 15)
+            let path = UIBezierPath(roundedRect: self.bounds, cornerRadius: radius)
             UIColor.trueLightGray?.setFill()
             path.fill()
         }
@@ -72,7 +61,7 @@ class BubbleImageView: UIImageView {
     func outgoingBubbleImage() -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: self.frame.size)
         let im = renderer.image { _ in
-            let path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 15)
+            let path = UIBezierPath(roundedRect: self.bounds, cornerRadius: radius)
             UIColor.babyBlue?.setFill()
             path.fill()
         }

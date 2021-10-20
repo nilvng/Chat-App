@@ -58,13 +58,13 @@ class ChatbarView: UIView {
         textView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            textView.bottomAnchor.constraint(equalTo: bottomAnchor, constant:  -5),
+            textView.bottomAnchor.constraint(equalTo: bottomAnchor),
             textView.topAnchor.constraint(equalTo: topAnchor, constant:  5),
             textView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             textView.trailingAnchor.constraint(equalTo: submitButton.leadingAnchor, constant:  -5),
 
         ])
-        textView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        textView.setContentHuggingPriority(.defaultLow, for: .horizontal)
     }
     
     func setupSubmitButton(){
@@ -73,13 +73,11 @@ class ChatbarView: UIView {
         
         NSLayoutConstraint.activate([
             submitButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            submitButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            submitButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
             submitButton.widthAnchor.constraint(equalToConstant: 50),
             submitButton.heightAnchor.constraint(equalToConstant: 50)
         ])
         
-        submitButton.setContentHuggingPriority(.defaultLow, for: .horizontal)
-
     }
     
     func setupSeparatorLine(){

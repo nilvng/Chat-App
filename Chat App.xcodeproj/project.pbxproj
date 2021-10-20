@@ -163,7 +163,6 @@
 			children = (
 				C858DC5526F9D70200821E67 /* Assets.xcassets */,
 				C858DC5726F9D70200821E67 /* LaunchScreen.storyboard */,
-				C858DC5A26F9D70200821E67 /* Info.plist */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -197,6 +196,7 @@
 		C858DC4B26F9D6FF00821E67 /* Chat App */ = {
 			isa = PBXGroup;
 			children = (
+				C858DC5A26F9D70200821E67 /* Info.plist */,
 				C82DB73C271FB410002AE563 /* Data */,
 				C82DB73B271FB3C7002AE563 /* Application */,
 				C82DB738271FB31F002AE563 /* ComposeScene */,
