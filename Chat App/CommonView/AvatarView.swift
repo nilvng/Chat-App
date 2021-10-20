@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TextCircleView: CircleView {
+class AvatarView: CircleView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)

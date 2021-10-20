@@ -19,8 +19,8 @@ class SearchContactCell : UITableViewCell {
         label.textAlignment = .left
         return label
     }()
-    let thumbnail : TextCircleView = {
-        let image = TextCircleView(frame: CGRect(x: 0, y: 0, width: 72, height: 72))
+    let thumbnail : AvatarView = {
+        let image = AvatarView(frame: CGRect(x: 0, y: 0, width: 72, height: 72))
         image.contentMode = .scaleAspectFill
         return image
     }()

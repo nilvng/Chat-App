@@ -25,7 +25,9 @@ class ChatManager {
     private init(){}
     
     func addChat(_ item: Conversation){
+        print("Manager: add conversation")
         chatList.append(item)
+        delegate?.conversationAdded(item)
     }
     
     func getChatIndex(_ item: Conversation) -> Int?{
@@ -33,6 +35,7 @@ class ChatManager {
     }
     
     func deleteChat(_ item: Conversation){
+        print("Manager: delete conversation")
         guard let itemIndexToDelete = getChatIndex(item)else {
             print("Error: delete non exist item")
             return
@@ -43,13 +46,15 @@ class ChatManager {
         delegate?.conversationDeleted(item)
     }
     
-    func updateChat(_ former: Conversation, with newItem: Conversation){
-        guard let itemIndexToUpdate = getChatIndex(former)else {
+    func updateChat(newItem: Conversation){
+        print("Manager: update conversation")
+        guard let itemIndexToUpdate = getChatIndex(newItem)else {
             print("Error: update non exist item")
             return
         }
 
         chatList[itemIndexToUpdate] = newItem
+        delegate?.conversationUpdated(newItem)
     }
 
 }

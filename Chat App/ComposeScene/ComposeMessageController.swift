@@ -21,15 +21,14 @@ class ComposeMessageController : UIViewController {
         return tv
     }()
         
-    var dataSource : UITableViewDataSource!
+    var dataSource : IndexedContactDataSource!
     
     var currentSearchText : String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = UIColor.zaloBlue
-        
+           
+        view.backgroundColor = .white
         setupSearchField()
         setupTableView()
         
@@ -124,26 +123,41 @@ extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
         tableView.deselectRow(at: indexPath, animated: true)
         
         // first row when user have not searched for any friend : add new contact
-        if indexPath.row == 0 && !isFiltering{
+        if indexPath.section == 0 && !isFiltering{
             print("Navigate to Add Contact view")
             return
         }
         
-        let row = !isFiltering ? indexPath.row - 1 : indexPath.row
-        
-        
+       // let row = !isFiltering ? indexPath.row - 1 : indexPath.row
+        let row = indexPath.row
+        print(row)
         let msgVC = MessagesViewController()
         
-        let selected = filteredItems[row]
+        let selectedContact = dataSource.items[row]
         // Check if the user has chat with the selected friend before
-        var conversation = Conversation.stubList.first(where: { conv in
-            return conv.members.contains(selected)
-        }) ?? Conversation(friend: selected)
-        
-        msgVC.configure(conversation: conversation){ messages in
-            if messages != conversation.messages{
-                conversation.messages = messages
-                print("update conversation list!!!\n \(messages)")
+        let currentConversation = Conversation.stubList.first(where: { conv in
+            return conv.members.contains(selectedContact)
+        })
+        // conversation exist
+        if let selected = currentConversation {
+            msgVC.configure(conversation: selected){ messages in
+                if messages != selected.messages{
+                    var updatedItem = selected
+                    updatedItem.messages = messages
+                    print("Update conversation callback: \(selected.id)")
+                    ChatManager.shared.updateChat(newItem: updatedItem)
+                }
+            }
+        } else {
+        // brand new conversation
+            let selected = Conversation(friend: selectedContact)
+            msgVC.configure(conversation: selected){ messages in
+                if messages != selected.messages{
+                    var addedItem = selected
+                    addedItem.messages = messages
+                    print("New conversation callback: \(selected.id)")
+                    ChatManager.shared.addChat(addedItem)
+                }
             }
         }
         let presentingVC = self.presentingViewController as? UINavigationController

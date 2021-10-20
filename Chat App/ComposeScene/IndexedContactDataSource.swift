@@ -106,4 +106,5 @@ extension IndexedContactDataSource : UITableViewDataSource{
         
         return cell
     }
+    
 }

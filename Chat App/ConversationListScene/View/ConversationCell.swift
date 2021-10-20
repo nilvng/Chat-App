@@ -34,8 +34,8 @@ class ConversationCell : UITableViewCell {
         return label
 
     }()
-    private let thumbnail : TextCircleView = {
-        let image = TextCircleView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
+    private let thumbnail : AvatarView = {
+        let image = AvatarView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
         image.contentMode = .scaleAspectFill
         return image
     }()

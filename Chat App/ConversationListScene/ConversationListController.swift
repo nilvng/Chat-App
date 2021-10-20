@@ -182,13 +182,33 @@ extension ConversationListController : ChatManagerDelegate {
     }
     
     func conversationAdded(_ item: Conversation) {
-        fatalError()
+        // update data source
+        dataSource.conversationList.insert(item, at: 0)
+        // animate
+        let path = IndexPath(row: 0, section: 0)
+        tableView.insertRows(at: [path], with: .automatic)
+
     }
     
     func conversationUpdated(_ item: Conversation) {
-        fatalError()
+        guard let indexToUpdate = dataSource.conversationList.firstIndex(where: {$0 == item}) else {
+            print("Warning: cannot find conversation to update")
+            return
+        }
+        // if the conversation has already on top -> don't animate row
+        if indexToUpdate == 0 {
+            // update data source
+            dataSource.conversationList[indexToUpdate] = item
+        } else {
+            let indexPath = IndexPath(row: indexToUpdate, section: 0)
+            self.dataSource.conversationList.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .none)
+
+            
+            self.dataSource.conversationList.insert(item, at: 0)
+            self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
+        }
     }
-    
     
 }
 
@@ -273,12 +293,15 @@ extension ConversationListController : UITableViewDelegate{
             print("yes, new message")
             selected.messages = messages
 
+            
             self.dataSource.conversationList.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .none)
 
             
             self.dataSource.conversationList.insert(selected, at: 0)
             self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
+            
+            ChatManager.shared.updateChat(newItem: selected)
 
         }
 
