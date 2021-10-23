@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol SearchItemDataSource : UITableViewDataSource {
+    func getItem(at index: IndexPath) -> Friend
+}
+
 class ComposeMessageController : UIViewController {
     
     lazy var searchField : UISearchBar = {
@@ -21,7 +25,7 @@ class ComposeMessageController : UIViewController {
         return tv
     }()
         
-    var dataSource : IndexedContactDataSource!
+    var dataSource : SearchItemDataSource!
     
     var currentSearchText : String = ""
     
@@ -87,36 +91,8 @@ class ComposeMessageController : UIViewController {
     
 }
 
-extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
+extension ComposeMessageController : UITableViewDelegate{
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isFiltering {
-          return filteredItems.count
-        }
-
-        return items.count + 1
-    }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // first row when user have not searched for any friend : add new contact
-        if indexPath.row == 0 && !isFiltering{
-            let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
-            cell.titleLabel.text = "New Contact"
-            cell.thumbnail.image = UIImage(named: "NewContact")
-            cell.thumbnail.backgroundColor = UIColor.babyBlue
-            return cell
-        }
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
-        let friend: Friend
-        if isFiltering {
-            friend = filteredItems[indexPath.row]
-        } else {
-            friend = items[indexPath.row - 1]
-        }
-        cell.configure(friend: friend)
-
-        return cell
-    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // show chat view
@@ -129,11 +105,9 @@ extension ComposeMessageController : UITableViewDelegate, UITableViewDataSource{
         }
         
        // let row = !isFiltering ? indexPath.row - 1 : indexPath.row
-        let row = indexPath.row
-        print(row)
         let msgVC = MessagesViewController()
         
-        let selectedContact = dataSource.items[row]
+        let selectedContact = dataSource.getItem(at: indexPath)
         // Check if the user has chat with the selected friend before
         let currentConversation = Conversation.stubList.first(where: { conv in
             return conv.members.contains(selectedContact)
@@ -170,6 +144,7 @@ extension ComposeMessageController: UISearchBarDelegate {
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         
+//        self.dataSource = UnorderedSearchDataSource()
         guard let text = searchBar.searchTextField.text, text != "" else {
             return
         }
@@ -187,7 +162,7 @@ extension ComposeMessageController: UISearchBarDelegate {
             let cleanText = title.trimmingCharacters(in: .whitespacesAndNewlines)
             
             // only update when it truly changes
-            if cleanText != originalText{
+            if cleanText != currentSearchText{
                 
                 print("search \(cleanText)")
                 

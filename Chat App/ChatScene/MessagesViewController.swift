@@ -32,24 +32,31 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     var chatBarBottomConstraint : NSLayoutConstraint?
     var incomingBubbleImage : UIImage = {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 30, height: 30))
+        let edge = 40
+        let size = CGSize(width: edge, height: edge)
+        let radius :CGFloat = 13
+        let renderer = UIGraphicsImageRenderer(size: size)
         let im = renderer.image { _ in
-            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0,width: 30, height: 30), cornerRadius: 15)
+            let path = UIBezierPath(roundedRect: CGRect(origin: .zero, size: size), cornerRadius: radius)
             UIColor.trueLightGray?.setFill()
             path.fill()
         }
-        let resizable_im = im.resizableImage(withCapInsets: UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15), resizingMode: .stretch)
+        let resizable_im = im.resizableImage(withCapInsets: UIEdgeInsets(top: radius, left: radius, bottom: radius, right: radius), resizingMode: .stretch)
         return resizable_im
+
     }()
     
     var outgoingBubbleImage : UIImage = {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 30, height: 30))
+        let edge = 40
+        let size = CGSize(width: edge, height: edge)
+        let radius :CGFloat = 13
+        let renderer = UIGraphicsImageRenderer(size: size)
         let im = renderer.image { _ in
-            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0,width: 30, height: 30), cornerRadius: 15)
+            let path = UIBezierPath(roundedRect: CGRect(origin: .zero, size: size), cornerRadius: radius)
             UIColor.babyBlue?.setFill()
             path.fill()
         }
-        let resizable_im = im.resizableImage(withCapInsets: UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15), resizingMode: .stretch)
+        let resizable_im = im.resizableImage(withCapInsets: UIEdgeInsets(top: radius, left: radius, bottom: radius, right: radius), resizingMode: .stretch)
         return resizable_im
 
     }()
@@ -80,6 +87,15 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         tableView.addGestureRecognizer(tapGesture)
         
         setupChatbarView()
+        setupObserveKeyboard()
+        
+    }
+    
+    func setupObserveKeyboard(){
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardMoving), name: UIResponder.keyboardDidShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardMoving), name: UIResponder.keyboardWillHideNotification, object: nil)
         
     }
     
@@ -137,9 +153,27 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
 
     }
     
+    
+    @objc func handleKeyboardMoving(notification: NSNotification){
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue? else {
+            return
+        }
+        print("Keyboard is moving...")
+        let moveUp = notification.name == UIResponder.keyboardDidShowNotification
+        let animateDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+        self.keyboardMoved(keyboardFrame: keyboardFrame, moveUp: moveUp, animateDuration: animateDuration)
+        
+    }
+    
+    func unobserveKeyboard(){
+        NotificationCenter.default.removeObserver(self)
+
+    }
+
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-                
+        unobserveKeyboard()
         actionDelegate?(conversation!.messages)
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -186,8 +220,14 @@ extension MessagesViewController : UITableViewDataSource {
         let message =  conversation!.messages[reverseIndex]
         
         let bubble = message.sender == Friend.me ? outgoingBubbleImage : incomingBubbleImage
-        cell.configure(with: message, bubbleImage: bubble)
-
+        if reverseIndex + 1 < conversation.messages.count {
+        let laterMessage = conversation!.messages[reverseIndex + 1]
+        cell.configure(with: message,
+                       bubbleImage: bubble,
+                       lastContinuousMess: laterMessage.sender != message.sender)
+        } else {
+            cell.configure(with: message, bubbleImage: bubble, lastContinuousMess:  true)
+        }
         cell.transform = CGAffineTransform(scaleX: 1, y: -1)
 
         
@@ -200,6 +240,7 @@ extension MessagesViewController : UITableViewDataSource {
 
 extension MessagesViewController : ChatBarDelegate {
     func keyboardMoved(keyboardFrame: NSValue, moveUp: Bool, animateDuration: Double) {
+        print(keyboardFrame.cgRectValue.height)
         let scalingValue =  moveUp ? keyboardFrame.cgRectValue.height : 0
 
         chatBarBottomConstraint?.constant = -scalingValue

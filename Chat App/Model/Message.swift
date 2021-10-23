@@ -21,7 +21,7 @@ struct Message {
 extension Message {
     static let stub1 : Message = Message(sender: Friend.me, content: "Today is Tuesday",
                                          timestamp: "2020-09-30 01:10:01".toDate()!)
-    static let stub2 : Message = .init(sender: Friend.daniel, content: "Tomorrow is Wednesday",
+    static let stub2 : Message = .init(sender: Friend.daniel, content: "Tomorrow is Wednesday haha, not feel well right now",
                                        timestamp: "2021-08-23 08:10:01".toDate()!)
     static let stub3 : Message = .init(sender: Friend.daniel, content: "How is goin?",
                                        timestamp: "2021-09-29 12:10:01".toDate()!)
@@ -43,11 +43,17 @@ struct Friend {
     var id = UUID().uuidString
     var firstName : String
     var lastName : String
-    var avatar : URL?
+    var avatar : String?
     var fullName : String {
         get{
             return "\(firstName) \(lastName)"
         }
+    }
+    
+    init(firstName: String, lastName: String, avatar: String? = nil) {
+        self.firstName = firstName
+        self.lastName = lastName
+        self.avatar = avatar
     }
 }
 
@@ -61,9 +67,9 @@ extension Friend : Equatable {
 extension Friend {
     
     static var me : Friend = .init(firstName: "It's", lastName: "Me")
-    static var daniel : Friend = .init(firstName: "Daniel", lastName: "Bourke")
-    static var john = Friend(firstName: "John", lastName: "Fish")
-    static var angelou = Friend(firstName: "Maya", lastName: "Angelou")
+    static var daniel : Friend = .init(firstName: "Daniel", lastName: "Bourke", avatar: AvatarURL.daniel.rawValue)
+    static var john = Friend(firstName: "John", lastName: "Fish", avatar: AvatarURL.john.rawValue)
+    static var angelou = Friend(firstName: "Maya", lastName: "Angelou", avatar: AvatarURL.angelou.rawValue)
     static var steve = Friend(firstName: "Steve", lastName: "Job")
     
     static var stubList = [Friend.john, Friend.angelou, Friend.steve, Friend.daniel]

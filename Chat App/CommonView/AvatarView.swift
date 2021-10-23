@@ -17,15 +17,15 @@ class AvatarView: CircleView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(url: URL?, text: String?){
+    func update(url: String?, text: String?){
         // check if contact has image, or else create an image of their first letter name
         guard let theUrl = url else {
             let firstCharacter = String((text?.first)!) as NSString
             self.drawText(text: firstCharacter)
             return
         }
-        PhotoStore.shared.fetchImage(url: theUrl){ res in
-            if case let .success(image) = res{
+        CachedStore.shared.getImage(forKey: theUrl){ res in
+        if case let .success(image) = res{
                 self.image = image
             }
         }

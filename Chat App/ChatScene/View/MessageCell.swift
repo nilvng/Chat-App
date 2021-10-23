@@ -13,6 +13,8 @@ class MessageCell: UITableViewCell {
     static let identifier = "MessageCell"
     var inboundConstraint : NSLayoutConstraint!
     var outboundConstraint : NSLayoutConstraint!
+    var continuousConstraint : NSLayoutConstraint!
+
     
     let messageBodyLabel : UILabel = {
         let label = UILabel()
@@ -32,6 +34,10 @@ class MessageCell: UITableViewCell {
         return imageView
     }()
     
+    var avatarView : UIImageView = {
+        let view = AvatarView(frame: .zero)
+        return view
+    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -43,12 +49,14 @@ class MessageCell: UITableViewCell {
         setupBubbleBackground()
         }
     
-        
-    func configure(with model: Message, bubbleImage : UIImage){
+    
+    func configure(with model: Message, bubbleImage : UIImage, lastContinuousMess: Bool = false){
         message = model
         messageBodyLabel.text = model.content
-        // align bubble based on whether the sender is the user themselves
+        bubbleImageView.image = bubbleImage
 
+        // align bubble based on whether the sender is the user themselves
+        
         if model.sender == Friend.me {
             // sent message will align to the right and it's green bubble
             inboundConstraint?.isActive = false
@@ -57,8 +65,23 @@ class MessageCell: UITableViewCell {
             // received message will align to the left and it's white bubble
             outboundConstraint?.isActive = false
             inboundConstraint?.isActive = true
+            if lastContinuousMess{
+                setupAvatarView()
+                CachedStore.shared.getImage(forKey: AvatarURL.daniel.rawValue) { res in
+                    if case let .success(image) = res{
+                        self.avatarView.image = image
+                    }
+                }
+                
+            }
         }
-        bubbleImageView.image = bubbleImage
+        if !lastContinuousMess {
+            continuousConstraint.constant = -bubbleVPadding + 3
+        }
+    }
+    
+    func updateAvatar(){
+        
     }
 
     var bubbleVPadding : CGFloat = 14
@@ -67,16 +90,16 @@ class MessageCell: UITableViewCell {
     
     func setupMessageBody(){
         messageBodyLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         self.outboundConstraint =  messageBodyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -bubbleHPadding)
-        self.inboundConstraint = messageBodyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: bubbleHPadding)
+        self.inboundConstraint = messageBodyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: bubbleHPadding + 40)
+        self.continuousConstraint = messageBodyLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -bubbleVPadding)
 
         let constraints : [NSLayoutConstraint] = [
             messageBodyLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: bubbleVPadding),
-            messageBodyLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -bubbleVPadding),
+            continuousConstraint,
             outboundConstraint,
             inboundConstraint,
-            messageBodyLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
+            messageBodyLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 220),
         ]
         messageBodyLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         NSLayoutConstraint.activate(constraints)
@@ -87,14 +110,26 @@ class MessageCell: UITableViewCell {
         
         bubbleImageView.translatesAutoresizingMaskIntoConstraints = false
         let constraints : [NSLayoutConstraint] = [
-            bubbleImageView.topAnchor.constraint(equalTo: messageBodyLabel.topAnchor, constant: -bubbleVPadding * 2/3),
+            bubbleImageView.topAnchor.constraint(equalTo: messageBodyLabel.topAnchor, constant: -bubbleVPadding * 3/4),
             bubbleImageView.leadingAnchor.constraint(equalTo: messageBodyLabel.leadingAnchor, constant: -bubbleHPadding * 2/3),
-            bubbleImageView.bottomAnchor.constraint(equalTo:  messageBodyLabel.bottomAnchor, constant: bubbleVPadding * 2/3),
+            bubbleImageView.bottomAnchor.constraint(equalTo:  messageBodyLabel.bottomAnchor, constant: bubbleVPadding * 3/4),
             bubbleImageView.trailingAnchor.constraint(equalTo: messageBodyLabel.trailingAnchor, constant: bubbleHPadding * 2/3),
         ]
         
         NSLayoutConstraint.activate(constraints)
         }
+    
+    func setupAvatarView(){
+        contentView.addSubview(avatarView)
+        avatarView.translatesAutoresizingMaskIntoConstraints = false
+        let constraints : [NSLayoutConstraint] = [
+            avatarView.bottomAnchor.constraint(equalTo: bubbleImageView.bottomAnchor),
+            avatarView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 7),
+            avatarView.widthAnchor.constraint(equalToConstant: 33),
+            avatarView.heightAnchor.constraint(equalToConstant: 33)
+        ]
+        NSLayoutConstraint.activate(constraints)
+    }
     
     func setupTimestampLabel(){
         contentView.addSubview(timestampLabel)

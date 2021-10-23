@@ -41,12 +41,18 @@ class IndexedContactDataSource: NSObject {
         self.sortByAlphabet()
     }
     
-    func setupOtherOption(){
+    private func setupOtherOption(){
         // options like New contact, Create group chat etc
         var options = [OtherOptions]()
         options.append(OtherOptions(title: "New contact", image: UIImage.new_contact))
         options.append(OtherOptions(title: "New group chat", image: UIImage.new_group_chat))
         sections.append(Section(letter: nil, items: options, type: .options))
+    }
+}
+extension IndexedContactDataSource : SearchItemDataSource {
+    
+    func getItem(at index: IndexPath) -> Friend{
+        return sections[index.section].items[index.row] as! Friend
     }
 }
 

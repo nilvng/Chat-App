@@ -10,7 +10,7 @@ import UIKit
 struct Conversation {
     var id = UUID().uuidString
     var title : String
-    var thumbnail : URL? // url
+    var thumbnail : String? // url
     var messages : [Message] = []
     var members : [Friend]  = []
     
@@ -20,7 +20,7 @@ struct Conversation {
         members.append(friend)
     }
     
-    init(title: String, thumbnail: URL? = nil, messages: [Message], members: [Friend]) {
+    init(title: String, thumbnail: String? = nil, messages: [Message], members: [Friend]) {
         self.title = title
         self.thumbnail = thumbnail
         self.messages = messages
@@ -41,20 +41,20 @@ extension Conversation : Equatable {
 extension Conversation {
     static let stubList : [Conversation] = [
         .init(title: "John Fish",
-              thumbnail:  URL(string: AvatarURL.john.rawValue),
+              thumbnail:  Friend.john.avatar,
               messages: [Message.stub1],
               members: [Friend.john]),
-        .init(title: "Daniel Bourke", thumbnail: URL(string: AvatarURL.daniel.rawValue),
+        .init(title: "Daniel Bourke", thumbnail: Friend.daniel.avatar,
               messages: [ Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub2,],
               members: [Friend.daniel]),
         .init(title: "Maya Angelou",
-              thumbnail:URL(string: AvatarURL.angelou.rawValue),
+              thumbnail: Friend.angelou.avatar,
               messages: [.stub5],
               members: [Friend.angelou]
               ),
-        .init(title: "John Fish", thumbnail:  URL(string: AvatarURL.john.rawValue), messages: [Message.stub1],
+        .init(title: "John Fish", thumbnail:  Friend.john.avatar, messages: [Message.stub1],
               members: [Friend.john]),
-        .init(title: "Daniel Bourke", thumbnail: URL(string: AvatarURL.daniel.rawValue),
+        .init(title: "Daniel Bourke", thumbnail: Friend.daniel.avatar,
               messages: [ Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4,],
               members: [Friend.daniel]),
         .init(title: "Maya Angelou", messages: [.stub5],

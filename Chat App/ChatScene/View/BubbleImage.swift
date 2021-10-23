@@ -16,11 +16,40 @@ import Foundation
 
 import UIKit
 
+class BubbleFactory {
+    var middleBubble = UIImage()
+    var lastBubble = UIImage()
+    var onlyBubble = UIImage()
+    var firstBubble = UIImage()
+    
+    init() {
+        firstBubble = drawBubble(corners: [.bottomRight, .topRight, .topLeft])
+        middleBubble = drawBubble(corners: [.bottomRight, .topRight])
+        lastBubble = drawBubble(corners: [.bottomRight, .topRight, .bottomLeft])
+        onlyBubble = drawBubble(corners: [.allCorners])
+
+    }
+    
+    func drawBubble(corners: UIRectCorner, radius : CGFloat = 13) -> UIImage{
+        let edge = 40
+        let size = CGSize(width: edge, height: edge)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let im = renderer.image { _ in
+            let path = UIBezierPath(roundedRect: CGRect(origin: .zero, size: size), cornerRadius: radius)
+            UIColor.orange.setFill()
+            path.fill()
+        }
+        let resizable_im = im.resizableImage(withCapInsets: UIEdgeInsets(top: radius, left: radius, bottom: radius, right: radius), resizingMode: .stretch)
+        return resizable_im.withRenderingMode(.alwaysTemplate)
+
+    }
+}
+
 class BubbleImageView: UIImageView {
 
     var bubbleColor : UIColor?
     var bubbleSize : CGSize?
-    var radius : CGFloat! = 15
+    var radius : CGFloat! = 20
     var corners : UIRectCorner = .allCorners
     
     init() {

@@ -10,39 +10,24 @@ import UIKit
 enum PhotoError : Error {
     case imageCreationError
     case missingImageURL
+    case brokenURL
 }
 
-class PhotoStore{
+class PhotoRequest{
 
-    static let shared = PhotoStore()
-    private init(){}
+    static let shared = PhotoRequest()
+    init(){}
     
-    let cachedStore = CachedStore()
-
     private let session : URLSession = {
         let config = URLSessionConfiguration.default
         return URLSession(configuration: config)
     }()
     
     func fetchImage(url: URL, completion: @escaping (Result<UIImage, Error>) -> Void){
-        // check for cached image
-        if let image = cachedStore.image(forKey: url.absoluteString) {
-            OperationQueue.main.addOperation {
-                completion(.success(image))
-            }
-            return
-        }
-        // If it has not been cached, fetch image
         let request = URLRequest(url: url)
         let task = session.dataTask(with: request){ (data, response, error) in
             let result = self.processImageRequest(data: data, error: error)
-            
-            if case let .success(image) = result {
-                // cache image
-                print("Image to be cached")
-                    self.cachedStore.setImage(image, forKey: url.absoluteString)                
-            }
-            
+
             OperationQueue.main.addOperation {
                 completion(result)
             }

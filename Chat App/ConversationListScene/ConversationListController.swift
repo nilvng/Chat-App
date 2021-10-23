@@ -26,8 +26,9 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         button.sizeToFit()
 
         button.backgroundColor = UIColor.complementZaloBlue
-        button.layer.cornerRadius = 33
-
+        button.layer.shadowColor = UIColor.gray.cgColor
+        button.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        button.layer.shadowOpacity = 1.0
         return button
     }()
     
@@ -123,26 +124,17 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
     
     func setupComposeButton(){
 
-        blurEffectView.tintColor = .clear
-        blurEffectView.contentView.addSubview(composeButton)
-        view.addSubview(blurEffectView)
+        view.addSubview(composeButton)
 
         composeButton.translatesAutoresizingMaskIntoConstraints = false
-        blurEffectView.translatesAutoresizingMaskIntoConstraints = false
         let margins = view.layoutMarginsGuide
         NSLayoutConstraint.activate([
-            // blurEffect constraints
-            blurEffectView.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -10),
-            blurEffectView.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -20),
-            blurEffectView.heightAnchor.constraint(equalToConstant: 90),
-            blurEffectView.widthAnchor.constraint(equalToConstant: 90),
-//            // addButton constraints
-            composeButton.topAnchor.constraint(equalTo: blurEffectView.contentView.topAnchor, constant: 10),
-            composeButton.leadingAnchor.constraint(equalTo: blurEffectView.contentView.leadingAnchor, constant: 10),
-            composeButton.bottomAnchor.constraint(equalTo: blurEffectView.contentView.bottomAnchor, constant: -10),
-            composeButton.trailingAnchor.constraint(equalTo: blurEffectView.contentView.trailingAnchor, constant: -10),
+            composeButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -10),
+            composeButton.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -20),
+            composeButton.heightAnchor.constraint(equalToConstant: 66),
+            composeButton.widthAnchor.constraint(equalToConstant: 66),
         ])
-        
+        composeButton.layer.cornerRadius = 33
         composeButton.addTarget(self, action: #selector(composeButtonPressed), for: .touchUpInside)
 
     }

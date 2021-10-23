@@ -40,11 +40,6 @@ class ChatbarView: UIView {
         
         backgroundColor = .white
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardMoving), name: UIResponder.keyboardDidShowNotification, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardMoving), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        
         setupSubmitButton()
         setupTextView()
         setupSeparatorLine()
@@ -97,19 +92,6 @@ class ChatbarView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    @objc func handleKeyboardMoving(notification: NSNotification){
-        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue? else {
-            return
-        }
-        print("Keyboard is moving...")
-        let moveUp = notification.name == UIResponder.keyboardDidShowNotification
-        let animateDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
-        delegate?.keyboardMoved(keyboardFrame: keyboardFrame, moveUp: moveUp, animateDuration: animateDuration)
-        
-    }
 
     @objc func submitButtonPressed(){
         print("submit button pressed")
