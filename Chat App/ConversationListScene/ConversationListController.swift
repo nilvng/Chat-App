@@ -35,13 +35,13 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
     lazy var blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     
     private lazy var searchController: UISearchController = {
-        let resultController =  ResultsTableController()
+        let resultController =  ConversationSearchResultController()
         let sc = UISearchController(searchResultsController:resultController)
         sc.searchResultsUpdater = resultController
         sc.delegate = self
         sc.searchBar.searchTextField.delegate = self
-        
-        sc.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Search a Friend", attributes: [NSAttributedString.Key.foregroundColor : UIColor.trueLightGray!])
+        sc.definesPresentationContext = true
+        sc.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Searching...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.trueLightGray!])
 
         return sc
     }()
@@ -74,7 +74,7 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
                 print(indexPath.row)
                 let configView = ConversationConfigViewController()
                 configView.configure {
-                    let itemToDelete = self.dataSource.conversationList[indexPath.row]
+                    let itemToDelete = self.dataSource.items[indexPath.row]
                     ChatManager.shared.deleteChat(itemToDelete)
                 }
                 configView.modalPresentationStyle = UIModalPresentationStyle.custom
@@ -103,7 +103,8 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
     
     func setupTableView(){
         dataSource = ConversationListDataSource()
-        dataSource.reloadDataSource()
+        dataSource.items = ChatManager.shared.chatList
+        dataSource.sortByLatest()
         
         view.addSubview(tableView)
         
@@ -145,29 +146,29 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         self.present(cmc, animated: true, completion: nil)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
-        print("view will appear...")
+        print("List did appear...")
  
         navigationController?.navigationBar.barStyle = .black
 
-        searchController.searchBar.searchTextField.tintColor = .white
-        searchController.searchBar.searchTextField.backgroundColor = UIColor.zaloBlue
-        searchController.searchBar.setLeftIcon(UIImage.navigation_search_selected!.withTintColor(.white))
-        
-    }
+        // refresh table if row orders changes due to new messages, etc..
+        if dataSource.sortByLatest(){
+            tableView.reloadData()
+            }
+        }
 
 }
 
 extension ConversationListController : ChatManagerDelegate {
     func conversationDeleted(_ item: Conversation) {
-        guard let indexToDelete = dataSource.conversationList.firstIndex(where: {$0 == item}) else {
+        guard let indexToDelete = dataSource.items.firstIndex(where: {$0 == item}) else {
             print("Warning: cannot find conversation to delete")
             return
         }
         // update data source
-        dataSource.conversationList.remove(at: indexToDelete)
+        dataSource.items.remove(at: indexToDelete)
         // animate
         let pathToDelete = IndexPath(row: indexToDelete, section: 0)
         tableView.deleteRows(at: [pathToDelete], with: .automatic)
@@ -175,7 +176,7 @@ extension ConversationListController : ChatManagerDelegate {
     
     func conversationAdded(_ item: Conversation) {
         // update data source
-        dataSource.conversationList.insert(item, at: 0)
+        dataSource.items.insert(item, at: 0)
         // animate
         let path = IndexPath(row: 0, section: 0)
         tableView.insertRows(at: [path], with: .automatic)
@@ -183,21 +184,21 @@ extension ConversationListController : ChatManagerDelegate {
     }
     
     func conversationUpdated(_ item: Conversation) {
-        guard let indexToUpdate = dataSource.conversationList.firstIndex(where: {$0 == item}) else {
+        guard let indexToUpdate = dataSource.items.firstIndex(where: {$0 == item}) else {
             print("Warning: cannot find conversation to update")
             return
         }
         // if the conversation has already on top -> don't animate row
         if indexToUpdate == 0 {
             // update data source
-            dataSource.conversationList[indexToUpdate] = item
+            dataSource.items[indexToUpdate] = item
         } else {
             let indexPath = IndexPath(row: indexToUpdate, section: 0)
-            self.dataSource.conversationList.remove(at: indexPath.row)
+            self.dataSource.items.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .none)
 
             
-            self.dataSource.conversationList.insert(item, at: 0)
+            self.dataSource.items.insert(item, at: 0)
             self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
         }
     }
@@ -277,7 +278,7 @@ extension ConversationListController : UITableViewDelegate{
         // navigate to conversation detail view
         let messagesViewController = MessagesViewController()
         
-        var selected = dataSource.conversationList[indexPath.row]
+        var selected = dataSource.items[indexPath.row]
         
         messagesViewController.configure(conversation: selected){ messages in
             
@@ -286,11 +287,11 @@ extension ConversationListController : UITableViewDelegate{
             selected.messages = messages
 
             
-            self.dataSource.conversationList.remove(at: indexPath.row)
+            self.dataSource.items.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .none)
 
             
-            self.dataSource.conversationList.insert(selected, at: 0)
+            self.dataSource.items.insert(selected, at: 0)
             self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
             
             ChatManager.shared.updateChat(newItem: selected)
@@ -303,26 +304,22 @@ extension ConversationListController : UITableViewDelegate{
 
 }
 // MARK: - UISearchResult Updating and UISearchControllerDelegate  Extension
-  extension ConversationListController: UISearchResultsUpdating, UISearchControllerDelegate, UISearchTextFieldDelegate {
+  extension ConversationListController: UISearchControllerDelegate, UISearchTextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         print("text field editing..")
         searchController.searchBar.placeholder = ""
         searchController.searchBar.searchTextField.backgroundColor = .white
+        searchController.searchBar.searchTextField.textColor = .black
+        searchController.searchBar.searchTextField.tintColor = .black
         searchController.searchBar.setLeftIcon(UIImage.navigation_search_selected!.withTintColor(UIColor.darkGray))
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        searchController.searchBar.placeholder = "Search a Friend"
+        searchController.searchBar.placeholder = "Searching..."
         searchController.searchBar.searchTextField.backgroundColor = UIColor.zaloBlue
         searchController.searchBar.setLeftIcon(UIImage.navigation_search_selected!.withTintColor(.white))
 
-    }
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        print("Searching with: " + (searchController.searchBar.text ?? ""))
-        let searchText = (searchController.searchBar.text ?? "")
-        self.currentSearchText = searchText
     }
  }
 

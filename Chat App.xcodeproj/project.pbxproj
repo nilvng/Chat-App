@@ -26,7 +26,7 @@
 		C896E70D26F9E07A00882298 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C896E70C26F9E07A00882298 /* ConversationCell.swift */; };
 		C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C896E70F26F9F97100882298 /* MessagesViewController.swift */; };
 		C896E71326F9FADF00882298 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C896E71226F9FADF00882298 /* MessageCell.swift */; };
-		C8A5429E26FC7B9800304C19 /* ResultsTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A5429D26FC7B9800304C19 /* ResultsTableController.swift */; };
+		C8A5429E26FC7B9800304C19 /* ConversationSearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A5429D26FC7B9800304C19 /* ConversationSearchResultController.swift */; };
 		C8D879BE2705A466007BE93D /* Date+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879BD2705A466007BE93D /* Date+Chat.swift */; };
 		C8D879C42706B0BD007BE93D /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879C32706B0BD007BE93D /* CircleView.swift */; };
 		C8D879CB27098D40007BE93D /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879CA27098D40007BE93D /* AvatarView.swift */; };
@@ -60,7 +60,7 @@
 		C896E70C26F9E07A00882298 /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
 		C896E70F26F9F97100882298 /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		C896E71226F9FADF00882298 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
-		C8A5429D26FC7B9800304C19 /* ResultsTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsTableController.swift; sourceTree = "<group>"; };
+		C8A5429D26FC7B9800304C19 /* ConversationSearchResultController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSearchResultController.swift; sourceTree = "<group>"; };
 		C8D879BD2705A466007BE93D /* Date+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Chat.swift"; sourceTree = "<group>"; };
 		C8D879C32706B0BD007BE93D /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		C8D879CA27098D40007BE93D /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
@@ -88,7 +88,7 @@
 			children = (
 				C858DC5026F9D6FF00821E67 /* ConversationListController.swift */,
 				C8D87A2127171EA8007BE93D /* ConversationListDataSource.swift */,
-				C8A5429D26FC7B9800304C19 /* ResultsTableController.swift */,
+				C8A5429D26FC7B9800304C19 /* ConversationSearchResultController.swift */,
 				C82DB72D271C580A002AE563 /* ConversationConfigViewController.swift */,
 				C82DB735271FB1DD002AE563 /* View */,
 			);
@@ -304,7 +304,7 @@
 				C82DB727271B055B002AE563 /* ChatManager.swift in Sources */,
 				C846508D26FBF9C5009C5782 /* UIImage+Chat.swift in Sources */,
 				C858DC5126F9D6FF00821E67 /* ConversationListController.swift in Sources */,
-				C8A5429E26FC7B9800304C19 /* ResultsTableController.swift in Sources */,
+				C8A5429E26FC7B9800304C19 /* ConversationSearchResultController.swift in Sources */,
 				C858DC6226F9D75E00821E67 /* Message.swift in Sources */,
 				C858DC4D26F9D6FF00821E67 /* AppDelegate.swift in Sources */,
 				C8D879CB27098D40007BE93D /* AvatarView.swift in Sources */,

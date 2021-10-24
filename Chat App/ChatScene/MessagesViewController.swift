@@ -220,6 +220,7 @@ extension MessagesViewController : UITableViewDataSource {
         let message =  conversation!.messages[reverseIndex]
         
         let bubble = message.sender == Friend.me ? outgoingBubbleImage : incomingBubbleImage
+        
         if reverseIndex + 1 < conversation.messages.count {
         let laterMessage = conversation!.messages[reverseIndex + 1]
         cell.configure(with: message,

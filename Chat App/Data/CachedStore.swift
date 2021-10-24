@@ -137,7 +137,7 @@ class CachedStore {
     
     func imageURL(forKey key: String) -> URL {
         let documentsDirectories =
-            FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
         let documentDirectory = documentsDirectories.first!
 
         return documentDirectory.appendingPathComponent(key)

@@ -62,6 +62,7 @@ class MessageCell: UITableViewCell {
             // sent message will align to the right and it's green bubble
             inboundConstraint?.isActive = false
             outboundConstraint?.isActive = true
+            avatarView.removeFromSuperview()
         } else {
             // received message will align to the left and it's white bubble
             outboundConstraint?.isActive = false
@@ -69,6 +70,8 @@ class MessageCell: UITableViewCell {
             if lastContinuousMess{
                 setupAvatarView()
                 avatarView.update(url: model.sender.avatar, text: model.sender.firstName)
+            } else {
+                avatarView.removeFromSuperview()
             }
         }
         if !lastContinuousMess {

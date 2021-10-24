@@ -32,12 +32,16 @@ struct Section {
 }
 
 class IndexedContactDataSource: NSObject {
-    var items : [Friend] = Friend.stubList
+    var items: [Friend]! {
+        didSet {
+            filteredItems = items
+        }
+    }
+    private var filteredItems : [Friend] = []
     var sections = [Section]()
     
     override init() {
         super.init()
-        setupOtherOption()
         self.sortByAlphabet()
     }
     
@@ -48,23 +52,48 @@ class IndexedContactDataSource: NSObject {
         options.append(OtherOptions(title: "New group chat", image: UIImage.new_group_chat))
         sections.append(Section(letter: nil, items: options, type: .options))
     }
+    
+    func sortByAlphabet(){
+        sections = []
+        setupOtherOption()
+        let groupedDictionary = Dictionary(grouping: filteredItems, by: {String($0.firstName.prefix(1))})
+        // get the keys and sort them
+        let keys = groupedDictionary.keys.sorted()
+        // map the sorted keys to a struct
+        sections += keys.map{ Section(letter: $0, items: groupedDictionary[$0]!) }
+    }
+
 }
 extension IndexedContactDataSource : SearchItemDataSource {
     
     func getItem(at index: IndexPath) -> Friend{
         return sections[index.section].items[index.row] as! Friend
     }
+    func setupData(friends: [Friend]){
+        self.items = friends
+        self.sortByAlphabet()
+    }
+    func filterItemBy(key: String){
+        guard key != "" else {
+            self.clearSearch()
+            return
+        }
+        self.filteredItems = self.items.filter { item in
+            return item.fullName.lowercased().contains(key.lowercased())
+        }
+        
+        // update data source
+        sortByAlphabet()
+    }
+    
+    func clearSearch(){
+        filteredItems = items
+        sortByAlphabet()
+    }
+
 }
 
 extension IndexedContactDataSource : UITableViewDataSource{
-    
-    func sortByAlphabet(){
-        let groupedDictionary = Dictionary(grouping: items, by: {String($0.firstName.prefix(1))})
-        // get the keys and sort them
-        let keys = groupedDictionary.keys.sorted()
-        // map the sorted keys to a struct
-        sections += keys.map{ Section(letter: $0, items: groupedDictionary[$0]!) }
-    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sections[section].items.count

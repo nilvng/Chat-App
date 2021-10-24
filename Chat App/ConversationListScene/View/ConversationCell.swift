@@ -119,7 +119,7 @@ class ConversationCell : UITableViewCell {
         let constraints : [NSLayoutConstraint] = [
             lastMessageLabel.centerYAnchor.constraint(equalTo: thumbnail.centerYAnchor,constant:11),
             lastMessageLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            lastMessageLabel.trailingAnchor.constraint(equalTo: timestampLabel.leadingAnchor)
+            lastMessageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 200)
         ]
         lastMessageLabel.setContentHuggingPriority(.init(250), for: .vertical)
         lastMessageLabel.setContentCompressionResistancePriority(.init(249), for: .vertical)

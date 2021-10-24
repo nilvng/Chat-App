@@ -8,7 +8,10 @@
 import UIKit
 
 protocol SearchItemDataSource : UITableViewDataSource {
+    func setupData(friends: [Friend])
     func getItem(at index: IndexPath) -> Friend
+    func filterItemBy(key: String)
+    func clearSearch()
 }
 
 class ComposeMessageController : UIViewController {
@@ -26,9 +29,14 @@ class ComposeMessageController : UIViewController {
     }()
         
     var dataSource : SearchItemDataSource!
-    
+    var friendList : [Friend] = ChatManager.shared.friendList
     var currentSearchText : String = ""
     
+    var isFiltering: Bool {
+      return currentSearchText != ""
+    }
+    
+
     override func viewDidLoad() {
         super.viewDidLoad()
            
@@ -36,17 +44,7 @@ class ComposeMessageController : UIViewController {
         setupSearchField()
         setupTableView()
         
-        filteredItems = items
-
     }
-    
-    let items : [Friend] = Friend.stubList
-    var filteredItems : [Friend] = []
-
-    var isFiltering: Bool {
-      return currentSearchText != ""
-    }
-    
     func setupSearchField(){
         
         view.addSubview(searchField)
@@ -83,6 +81,7 @@ class ComposeMessageController : UIViewController {
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         self.dataSource = IndexedContactDataSource()
+        self.dataSource.setupData(friends: friendList)
         tableView.dataSource = dataSource
         tableView.delegate = self
         tableView.reloadData()
@@ -175,11 +174,9 @@ extension ComposeMessageController: UISearchBarDelegate {
     func filterItemForSearchKey(_ key: String){
         self.currentSearchText = key
         if key == ""{
-            self.filteredItems = self.items
+            dataSource.clearSearch()
         } else{
-            self.filteredItems = self.items.filter { item in
-                return item.fullName.lowercased().contains(key.lowercased())
-            }
+            dataSource.filterItemBy(key: key)
         }
         tableView.reloadData()
   }
