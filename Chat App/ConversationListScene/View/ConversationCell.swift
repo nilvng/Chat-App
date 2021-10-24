@@ -36,7 +36,7 @@ class ConversationCell : UITableViewCell {
     }()
     private let thumbnail : AvatarView = {
         let image = AvatarView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
-        image.contentMode = .center
+        image.contentMode = .scaleAspectFill
         return image
     }()
     

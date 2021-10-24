@@ -19,40 +19,51 @@ class AvatarView: CircleView {
     
     func update(url: String?, text: String?){
         // check if contact has image, or else create an image of their first letter name
-        guard let theUrl = url else {
-            let firstCharacter = String((text?.first)!) as NSString
-            self.drawText(text: firstCharacter)
+        let theKey = url != nil ? url! : text
+
+        guard theKey != nil else {
+            self.image = UIImage(named: "default")
             return
         }
-        CachedStore.shared.getImage(forKey: theUrl){ res in
+        CachedStore.shared.getImage(forKey: theKey!){ res in
         if case let .success(image) = res{
                 self.image = image
+        } else {
+            self.usePlaceholderAvatar(with: text!)
             }
         }
     }
     
-    func drawText(text: NSString){
-        let renderer = UIGraphicsImageRenderer(size: self.frame.size)
+    func usePlaceholderAvatar(with text: String){
+        let firstCharacter = String((text.first)!) as NSString
+        let im = self.drawText(text: firstCharacter)
+        let model = CachedStore.shared.setImage(im, forKey: text, inMemOnly: true)
+        self.image = model.roundedImage
+    }
+    
+    func drawText(text: NSString) -> UIImage{
+        let size = CGSize(width: 70, height: 70)
+        let renderer = UIGraphicsImageRenderer(size: size)
         let colorImage = UIImage(named: "bg_color")!
         let im = renderer.image { _ in
             // text attributes
             let textColor       = UIColor.white
             let textStyle       = NSMutableParagraphStyle()
             textStyle.alignment = NSTextAlignment.center
-            let textFont        = UIFont(name: "Helvetica", size: self.frame.size.width / 3)!
+            let textFont        = UIFont(name: "Helvetica", size: size.width / 3)!
             let attributes      = [NSAttributedString.Key.font:textFont,
                             NSAttributedString.Key.paragraphStyle:textStyle,
                             NSAttributedString.Key.foregroundColor:textColor]
             
-            colorImage.draw(in: CGRect(origin: CGPoint.zero, size: colorImage.size))
+            colorImage.draw(in: CGRect(origin: CGPoint.zero, size: size))
 
             //vertically center (depending on font)
             let text_h      = textFont.lineHeight
-            let text_y      = (self.frame.size.height-text_h)/2
-            let text_rect   = CGRect(x: 0, y: text_y, width: self.frame.size.width, height: text_h)
+            let text_y      = (size.height-text_h)/2
+            let text_rect   = CGRect(x: 0, y: text_y, width: size.width, height: text_h)
             text.draw(in: text_rect.integral, withAttributes: attributes)
         }
-        self.image = im
+        return im
     }
     
 }

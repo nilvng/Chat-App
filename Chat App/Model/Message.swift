@@ -27,7 +27,7 @@ extension Message {
                                        timestamp: "2021-09-29 12:10:01".toDate()!)
     static let stub4 : Message = .init(sender:Friend.me, content: "Just dance. How about you?",
                                        timestamp: "2021-09-30 15:10:01".toDate()!)
-    static let stub5 : Message = Message(sender: Friend.me, content: "let them know how much you care",
+    static let stub5 : Message = Message(sender: Friend.angelou, content: "let them know how much you care",
                                          timestamp: "2021-09-30 14:10:01".toDate()!)
 }
 

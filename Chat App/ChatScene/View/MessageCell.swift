@@ -34,8 +34,9 @@ class MessageCell: UITableViewCell {
         return imageView
     }()
     
-    var avatarView : UIImageView = {
-        let view = AvatarView(frame: .zero)
+    var avatarView : AvatarView = {
+        let view = AvatarView(frame: CGRect(x: 0, y: 0, width: 33, height: 33))
+        view.contentMode = .scaleAspectFill
         return view
     }()
     
@@ -67,23 +68,13 @@ class MessageCell: UITableViewCell {
             inboundConstraint?.isActive = true
             if lastContinuousMess{
                 setupAvatarView()
-                CachedStore.shared.getImage(forKey: AvatarURL.daniel.rawValue) { res in
-                    if case let .success(image) = res{
-                        self.avatarView.image = image
-                    }
-                }
-                
+                avatarView.update(url: model.sender.avatar, text: model.sender.firstName)
             }
         }
         if !lastContinuousMess {
             continuousConstraint.constant = -bubbleVPadding + 3
         }
     }
-    
-    func updateAvatar(){
-        
-    }
-
     var bubbleVPadding : CGFloat = 14
     var bubbleHPadding : CGFloat = 18
 

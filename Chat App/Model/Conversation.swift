@@ -26,6 +26,7 @@ struct Conversation {
         self.messages = messages
         self.members = members
     }
+    
 }
 
 extension Conversation : Equatable {
@@ -39,25 +40,23 @@ extension Conversation : Equatable {
 }
 
 extension Conversation {
+    init(friend: Friend, messages: [Message]){
+        self.init(friend: friend)
+        self.messages = messages
+    }
+
     static let stubList : [Conversation] = [
-        .init(title: "John Fish",
-              thumbnail:  Friend.john.avatar,
-              messages: [Message.stub1],
-              members: [Friend.john]),
-        .init(title: "Daniel Bourke", thumbnail: Friend.daniel.avatar,
-              messages: [ Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub2,],
-              members: [Friend.daniel]),
-        .init(title: "Maya Angelou",
-              thumbnail: Friend.angelou.avatar,
-              messages: [.stub5],
-              members: [Friend.angelou]
-              ),
-        .init(title: "John Fish", thumbnail:  Friend.john.avatar, messages: [Message.stub1],
-              members: [Friend.john]),
-        .init(title: "Daniel Bourke", thumbnail: Friend.daniel.avatar,
-              messages: [ Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4,],
-              members: [Friend.daniel]),
-        .init(title: "Maya Angelou", messages: [.stub5],
+        Conversation(friend: Friend.john,
+              messages: [Message.stub1]),
+        .init(friend: Friend.daniel,
+              messages: [ Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub2,]),
+        .init(friend: Friend.angelou,
+              messages: [.stub5]
+        ),
+        .init(friend: Friend.john, messages: [Message.stub1]),
+        .init(friend: Friend.daniel,
+              messages: [ Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4, Message.stub1, Message.stub2, Message.stub3, Message.stub4,]),
+        .init(title: "My group", messages: [.stub5],
               members: [Friend.angelou])
 
     ]
