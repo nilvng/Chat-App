@@ -42,11 +42,11 @@ class MessageCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
         contentView.addSubview(bubbleImageView)
         contentView.addSubview(messageBodyLabel)
-
+        
         setupMessageBody()
+        setupAvatarView()
         setupBubbleBackground()
         }
     
@@ -68,7 +68,6 @@ class MessageCell: UITableViewCell {
             outboundConstraint?.isActive = false
             inboundConstraint?.isActive = true
             if lastContinuousMess{
-                setupAvatarView()
                 avatarView.update(url: model.sender.avatar, text: model.sender.firstName)
             } else {
                 avatarView.removeFromSuperview()
@@ -81,6 +80,7 @@ class MessageCell: UITableViewCell {
     var bubbleVPadding : CGFloat = 14
     var bubbleHPadding : CGFloat = 18
 
+    
     
     func setupMessageBody(){
         messageBodyLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -117,7 +117,7 @@ class MessageCell: UITableViewCell {
         contentView.addSubview(avatarView)
         avatarView.translatesAutoresizingMaskIntoConstraints = false
         let constraints : [NSLayoutConstraint] = [
-            avatarView.bottomAnchor.constraint(equalTo: bubbleImageView.bottomAnchor),
+            avatarView.bottomAnchor.constraint(equalTo: messageBodyLabel.bottomAnchor),
             avatarView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 7),
             avatarView.widthAnchor.constraint(equalToConstant: 33),
             avatarView.heightAnchor.constraint(equalToConstant: 33)

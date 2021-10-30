@@ -42,7 +42,6 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         sc.searchBar.searchTextField.delegate = self
         sc.definesPresentationContext = true
         sc.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Searching...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.trueLightGray!])
-
         return sc
     }()
 
@@ -319,7 +318,6 @@ extension ConversationListController : UITableViewDelegate{
         searchController.searchBar.placeholder = "Searching..."
         searchController.searchBar.searchTextField.backgroundColor = UIColor.zaloBlue
         searchController.searchBar.setLeftIcon(UIImage.navigation_search_selected!.withTintColor(.white))
-
     }
  }
 

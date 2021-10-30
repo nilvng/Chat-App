@@ -42,10 +42,12 @@ class AvatarModel {
 class CachedStore {
     
     let cache = NSCache<NSString, AvatarModel>()
+    let cacheSizeLimit = 4500000
     let photoRequest = PhotoRequest()
     
     static let shared = CachedStore()
     private init(){
+        cache.totalCostLimit = 20
     }
         
     func setImage(_ image: UIImage, forKey key: String, inMemOnly: Bool = true) -> AvatarModel{
@@ -76,10 +78,9 @@ class CachedStore {
         } else {
             // Case2: Find on disk
             let url = imageURL(forKey: pKey)
-            print("Find on disk..\(url)")
             if let imageFromDisk = UIImage(contentsOfFile: url.path) {
                 targetAvatarModel = self.setImage(imageFromDisk, forKey: pKey, inMemOnly: true)
-                
+                print("Found on disk..")
             } else {
                 print("From server")
                 // Case3: Finally, request to the server
@@ -142,6 +143,89 @@ class CachedStore {
 
         return documentDirectory.appendingPathComponent(key)
     }
-    
-    
+
+    func clearCacheOnDisk(){
+  
+        // get folder size
+        let cacheURL =  FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        let fileManager = FileManager.default
+        var sizeOnDisk : Int?
+        do {
+            let cacheDirectory = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            sizeOnDisk = fileManager.directorySize(cacheDirectory)
+            if sizeOnDisk != nil  {
+                print("Size:", sizeOnDisk) // 
+            }
+        } catch {
+            print(error)
+        }
+        // Actually clear cache
+        do {
+            /// Get the directory contents urls (including subfolders urls)
+            var directoryContents = try FileManager.default.contentsOfDirectory( at: cacheURL, includingPropertiesForKeys: [.contentAccessDateKey], options: [])
+            /// sort item by its latest access date -> remove the oldest avatar only
+            do{
+            try directoryContents.sort(by: { (u1, u2) in
+                let ua1  = try u1.resourceValues(forKeys:[.contentAccessDateKey])
+                let ua2  = try u2.resourceValues(forKeys:[.contentAccessDateKey])
+                return ua1.contentAccessDate! < ua2.contentAccessDate!
+            }) } catch {
+                print("Cannot sort cache file .. abort clearing")
+                return
+            }
+            
+            /// clear cache until meet the limit size
+            for file in directoryContents {
+                do {
+                    // calculate amount if file/data to remove
+                    guard let fileSize = file.fileSize else {
+                        print("Cannot get size of this file: \(file)")
+                        continue
+                    }
+                    if sizeOnDisk! - fileSize > self.cacheSizeLimit {
+                        print("Remove file: \(file)")
+                        try fileManager.removeItem(at: file)
+                        sizeOnDisk! -= fileSize
+                    } else {
+                        break
+                    }
+                }
+                catch let error as NSError {
+                    debugPrint("Ooops! Something went wrong: \(error)")
+                }
+
+            }
+        } catch let error as NSError {
+            print(error.localizedDescription)
+        }
+    }
+}
+
+extension URL {
+    var fileSize: Int? { // in bytes
+        do {
+            let val = try self.resourceValues(forKeys: [.totalFileAllocatedSizeKey, .fileAllocatedSizeKey])
+            return val.totalFileAllocatedSize ?? val.fileAllocatedSize
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+}
+
+extension FileManager {
+    func directorySize(_ dir: URL) -> Int? { // in bytes
+        if let enumerator = self.enumerator(at: dir, includingPropertiesForKeys: [.totalFileAllocatedSizeKey, .fileAllocatedSizeKey], options: [], errorHandler: { (_, error) -> Bool in
+            print(error)
+            return false
+        }) {
+            var bytes = 0
+            for case let url as URL in enumerator {
+                bytes += url.fileSize ?? 0
+            }
+            return bytes
+        } else {
+            return nil
+        }
+    }
 }

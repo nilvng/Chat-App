@@ -60,7 +60,8 @@ class ComposeMessageController : UIViewController {
         searchField.layer.cornerRadius = 15
         searchField.layer.masksToBounds = true
         searchField.searchTextField.backgroundColor = .white
-
+        searchField.layer.borderWidth = 1.0
+        searchField.layer.borderColor = UIColor.zaloBlue?.cgColor
     }
     
     func setupTableView(){

@@ -89,6 +89,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         setupChatbarView()
         setupObserveKeyboard()
         
+ 
     }
     
     func setupObserveKeyboard(){
@@ -98,15 +99,21 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardMoving), name: UIResponder.keyboardWillHideNotification, object: nil)
         
     }
+    var menuButton : UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage.chat_menu, for: .normal)
+        return button
+    }()
     
     func setupNavigationBar(){
+        navigationItem.rightBarButtonItem = nil
 
         navigationItem.titleView = navigationBar
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage.chat_menu,
-            style: .plain,
-            target: self,
-            action: #selector(menuButtonPressed))
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(
+//            image: UIImage.chat_menu,
+//            style: .plain,
+//            target: self,
+//            action: #selector(menuButtonPressed))
     }
     
     func setupTableView(){
@@ -180,6 +187,11 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         super.viewWillAppear(animated)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+    }
+    
     @objc func menuButtonPressed(){
         print("menu open...")
         let menuViewController = MessagesMenuViewController()
@@ -230,7 +242,6 @@ extension MessagesViewController : UITableViewDataSource {
             cell.configure(with: message, bubbleImage: bubble, lastContinuousMess:  true)
         }
         cell.transform = CGAffineTransform(scaleX: 1, y: -1)
-
         
         return cell
         

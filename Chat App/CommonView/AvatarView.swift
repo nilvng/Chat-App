@@ -25,6 +25,7 @@ class AvatarView: CircleView {
             self.image = UIImage(named: "default")
             return
         }
+        self.image = UIImage(named: "default") // placeholder avatar
         CachedStore.shared.getImage(forKey: theKey!){ res in
         if case let .success(image) = res{
                 self.image = image

@@ -91,7 +91,7 @@ class ConversationCell : UITableViewCell {
     func setupThumbnail() {
         thumbnail.translatesAutoresizingMaskIntoConstraints = false
         
-        let height : CGFloat = self.frame.height * 5/6
+        let height : CGFloat = 70
         let width = height
         
         let constraints : [NSLayoutConstraint] = [

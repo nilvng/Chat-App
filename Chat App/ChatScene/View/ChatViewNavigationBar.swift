@@ -43,11 +43,12 @@ class ChatViewNavigationBar: UIStackView {
     }()
     
     init() {
-        super.init(frame: .zero)
+        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
         axis  = .horizontal
         
         addArrangedSubview(titleLabel)
         addArrangedSubview(spacer)
+        addArrangedSubview(menuButton)
     }
     
     required init(coder: NSCoder) {
