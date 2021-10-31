@@ -51,22 +51,33 @@ class MessageCell: UITableViewCell {
         }
     
     
-    func configure(with model: Message, bubbleImage : UIImage, lastContinuousMess: Bool = false){
+    func configure(with model: Message, lastContinuousMess: Bool = false){
         message = model
         messageBodyLabel.text = model.content
-        bubbleImageView.image = bubbleImage
 
         // align bubble based on whether the sender is the user themselves
         
         if model.sender == Friend.me {
-            // sent message will align to the right and it's green bubble
+            // get bubble
+            let  config = BackgroundConfig()
+            config.color = UIColor.babyBlue
+            config.radius = 13
+            bubbleImageView.image = BackgroundFactory.shared.getBackground(config: config)
+            // sent message will align to the right
             inboundConstraint?.isActive = false
             outboundConstraint?.isActive = true
+            // remove avatar view as message is sent by me
             avatarView.removeFromSuperview()
         } else {
-            // received message will align to the left and it's white bubble
+            // get the bubble image
+            let  config = BackgroundConfig()
+            config.color = UIColor.lightGray
+            config.radius = 13
+            bubbleImageView.image = BackgroundFactory.shared.getBackground(config: config)
+            // received message will align to the left
             outboundConstraint?.isActive = false
             inboundConstraint?.isActive = true
+            // show avatar view if is the last continuous message a friend sent
             if lastContinuousMess{
                 avatarView.update(url: model.sender.avatar, text: model.sender.firstName)
             } else {

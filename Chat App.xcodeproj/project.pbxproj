@@ -29,13 +29,12 @@
 		C8A5429E26FC7B9800304C19 /* ConversationSearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A5429D26FC7B9800304C19 /* ConversationSearchResultController.swift */; };
 		C8AA3E022728FBD40066A837 /* UIView+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA3E012728FBD40066A837 /* UIView+Chat.swift */; };
 		C8D879BE2705A466007BE93D /* Date+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879BD2705A466007BE93D /* Date+Chat.swift */; };
-		C8D879C42706B0BD007BE93D /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879C32706B0BD007BE93D /* CircleView.swift */; };
 		C8D879CB27098D40007BE93D /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879CA27098D40007BE93D /* AvatarView.swift */; };
 		C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879CE270B00D0007BE93D /* SearchContactCell.swift */; };
 		C8D879F5270F3F02007BE93D /* ComposeMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879F4270F3F02007BE93D /* ComposeMessageController.swift */; };
-		C8D87A052712BD29007BE93D /* BubbleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A042712BD29007BE93D /* BubbleImage.swift */; };
+		C8D87A052712BD29007BE93D /* BackgroundFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A042712BD29007BE93D /* BackgroundFactory.swift */; };
 		C8D87A152716C13D007BE93D /* PhotoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A142716C13D007BE93D /* PhotoRequest.swift */; };
-		C8D87A192716C40F007BE93D /* CachedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A182716C40F007BE93D /* CachedStore.swift */; };
+		C8D87A192716C40F007BE93D /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A182716C40F007BE93D /* ImageStore.swift */; };
 		C8D87A2227171EA8007BE93D /* ConversationListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A2127171EA8007BE93D /* ConversationListDataSource.swift */; };
 /* End PBXBuildFile section */
 
@@ -64,13 +63,12 @@
 		C8A5429D26FC7B9800304C19 /* ConversationSearchResultController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSearchResultController.swift; sourceTree = "<group>"; };
 		C8AA3E012728FBD40066A837 /* UIView+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Chat.swift"; sourceTree = "<group>"; };
 		C8D879BD2705A466007BE93D /* Date+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Chat.swift"; sourceTree = "<group>"; };
-		C8D879C32706B0BD007BE93D /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		C8D879CA27098D40007BE93D /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		C8D879CE270B00D0007BE93D /* SearchContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactCell.swift; sourceTree = "<group>"; };
 		C8D879F4270F3F02007BE93D /* ComposeMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeMessageController.swift; sourceTree = "<group>"; };
-		C8D87A042712BD29007BE93D /* BubbleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleImage.swift; sourceTree = "<group>"; };
+		C8D87A042712BD29007BE93D /* BackgroundFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundFactory.swift; sourceTree = "<group>"; };
 		C8D87A142716C13D007BE93D /* PhotoRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoRequest.swift; sourceTree = "<group>"; };
-		C8D87A182716C40F007BE93D /* CachedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedStore.swift; sourceTree = "<group>"; };
+		C8D87A182716C40F007BE93D /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 		C8D87A2127171EA8007BE93D /* ConversationListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,7 +116,6 @@
 		C82DB737271FB2D5002AE563 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				C8D87A042712BD29007BE93D /* BubbleImage.swift */,
 				C896E71226F9FADF00882298 /* MessageCell.swift */,
 				C8305BC9270457A30070C771 /* ChatbarView.swift */,
 				C82DB721271AB6D2002AE563 /* ChatViewNavigationBar.swift */,
@@ -159,7 +156,8 @@
 			isa = PBXGroup;
 			children = (
 				C8D87A142716C13D007BE93D /* PhotoRequest.swift */,
-				C8D87A182716C40F007BE93D /* CachedStore.swift */,
+				C8D87A182716C40F007BE93D /* ImageStore.swift */,
+				C8D87A042712BD29007BE93D /* BackgroundFactory.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -229,7 +227,6 @@
 		C858DC6A26F9D87700821E67 /* CommonView */ = {
 			isa = PBXGroup;
 			children = (
-				C8D879C32706B0BD007BE93D /* CircleView.swift */,
 				C8D879CA27098D40007BE93D /* AvatarView.swift */,
 			);
 			path = CommonView;
@@ -318,15 +315,14 @@
 				C858DC4F26F9D6FF00821E67 /* SceneDelegate.swift in Sources */,
 				C8D87A2227171EA8007BE93D /* ConversationListDataSource.swift in Sources */,
 				C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */,
-				C8D879C42706B0BD007BE93D /* CircleView.swift in Sources */,
 				C82DB72A271C08BE002AE563 /* MessagesMenuViewController.swift in Sources */,
-				C8D87A192716C40F007BE93D /* CachedStore.swift in Sources */,
+				C8D87A192716C40F007BE93D /* ImageStore.swift in Sources */,
 				C82DB722271AB6D2002AE563 /* ChatViewNavigationBar.swift in Sources */,
 				C82DB72E271C580A002AE563 /* ConversationConfigViewController.swift in Sources */,
 				C82DB71C271A4A4A002AE563 /* IndexedContactDataSource.swift in Sources */,
 				C88ED822272119440024781E /* UnorderedSearchDataSource.swift in Sources */,
 				C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */,
-				C8D87A052712BD29007BE93D /* BubbleImage.swift in Sources */,
+				C8D87A052712BD29007BE93D /* BackgroundFactory.swift in Sources */,
 				C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */,
 				C896E70D26F9E07A00882298 /* ConversationCell.swift in Sources */,
 				C8D87A152716C13D007BE93D /* PhotoRequest.swift in Sources */,

@@ -39,13 +39,13 @@ class AvatarModel {
     }
 }
 
-class CachedStore {
+class ImageStore {
     
     let cache = NSCache<NSString, AvatarModel>()
     let cacheSizeLimit = 4500000
     let photoRequest = PhotoRequest()
     
-    static let shared = CachedStore()
+    static let shared = ImageStore()
     private init(){
         cache.totalCostLimit = 20
     }
@@ -154,7 +154,7 @@ class CachedStore {
             let cacheDirectory = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             sizeOnDisk = fileManager.directorySize(cacheDirectory)
             if sizeOnDisk != nil  {
-                print("Size:", sizeOnDisk) // 
+                print("Size:", sizeOnDisk ?? -1) //
             }
         } catch {
             print(error)

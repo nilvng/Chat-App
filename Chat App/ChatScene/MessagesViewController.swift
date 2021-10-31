@@ -31,36 +31,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     var chatBarView : ChatbarView!
     
     var chatBarBottomConstraint : NSLayoutConstraint?
-    var incomingBubbleImage : UIImage = {
-        let edge = 40
-        let size = CGSize(width: edge, height: edge)
-        let radius :CGFloat = 13
-        let renderer = UIGraphicsImageRenderer(size: size)
-        let im = renderer.image { _ in
-            let path = UIBezierPath(roundedRect: CGRect(origin: .zero, size: size), cornerRadius: radius)
-            UIColor.trueLightGray?.setFill()
-            path.fill()
-        }
-        let resizable_im = im.resizableImage(withCapInsets: UIEdgeInsets(top: radius, left: radius, bottom: radius, right: radius), resizingMode: .stretch)
-        return resizable_im
-
-    }()
-    
-    var outgoingBubbleImage : UIImage = {
-        let edge = 40
-        let size = CGSize(width: edge, height: edge)
-        let radius :CGFloat = 13
-        let renderer = UIGraphicsImageRenderer(size: size)
-        let im = renderer.image { _ in
-            let path = UIBezierPath(roundedRect: CGRect(origin: .zero, size: size), cornerRadius: radius)
-            UIColor.babyBlue?.setFill()
-            path.fill()
-        }
-        let resizable_im = im.resizableImage(withCapInsets: UIEdgeInsets(top: radius, left: radius, bottom: radius, right: radius), resizingMode: .stretch)
-        return resizable_im
-
-    }()
-
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -230,17 +200,14 @@ extension MessagesViewController : UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: MessageCell.identifier, for: indexPath) as! MessageCell
         let reverseIndex = conversation!.messages.count - indexPath.row - 1
         let message =  conversation!.messages[reverseIndex]
-        
-        let bubble = message.sender == Friend.me ? outgoingBubbleImage : incomingBubbleImage
-        
+        var isLastContinuous = true
         if reverseIndex + 1 < conversation.messages.count {
-        let laterMessage = conversation!.messages[reverseIndex + 1]
-        cell.configure(with: message,
-                       bubbleImage: bubble,
-                       lastContinuousMess: laterMessage.sender != message.sender)
-        } else {
-            cell.configure(with: message, bubbleImage: bubble, lastContinuousMess:  true)
+            let laterMessage = conversation!.messages[reverseIndex + 1]
+            isLastContinuous = laterMessage.sender != message.sender
         }
+        
+        cell.configure(with: message, lastContinuousMess: isLastContinuous)
+        
         cell.transform = CGAffineTransform(scaleX: 1, y: -1)
         
         return cell

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AvatarView: CircleView {
+class AvatarView: UIImageView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,7 +26,7 @@ class AvatarView: CircleView {
             return
         }
         self.image = UIImage(named: "default") // placeholder avatar
-        CachedStore.shared.getImage(forKey: theKey!){ res in
+        ImageStore.shared.getImage(forKey: theKey!){ res in
         if case let .success(image) = res{
                 self.image = image
         } else {
@@ -38,7 +38,7 @@ class AvatarView: CircleView {
     func usePlaceholderAvatar(with text: String){
         let firstCharacter = String((text.first)!) as NSString
         let im = self.drawText(text: firstCharacter)
-        let model = CachedStore.shared.setImage(im, forKey: text, inMemOnly: true)
+        let model = ImageStore.shared.setImage(im, forKey: text, inMemOnly: true)
         self.image = model.roundedImage
     }
     
