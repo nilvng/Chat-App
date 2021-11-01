@@ -25,10 +25,12 @@ class AvatarView: UIImageView {
             self.image = UIImage(named: "default")
             return
         }
-        self.image = UIImage(named: "default") // placeholder avatar
-        ImageStore.shared.getImage(forKey: theKey!){ res in
+        //self.image = UIImage(named: "default") // placeholder avatar
+        
+        ImageStore.shared.getImage(forUrl: theKey!, type: .rounded){ res in
         if case let .success(image) = res{
                 self.image = image
+                //print("show avatar")
         } else {
             self.usePlaceholderAvatar(with: text!)
             }
@@ -38,8 +40,9 @@ class AvatarView: UIImageView {
     func usePlaceholderAvatar(with text: String){
         let firstCharacter = String((text.first)!) as NSString
         let im = self.drawText(text: firstCharacter)
-        let model = ImageStore.shared.setImage(im, forKey: text, inMemOnly: true)
-        self.image = model.roundedImage
+        let config = ImageConfig(url: text, type: .rounded)
+        let image = ImageStore.shared.setImage(im, forKey: config, inMemOnly: true)
+        self.image = image
     }
     
     func drawText(text: NSString) -> UIImage{

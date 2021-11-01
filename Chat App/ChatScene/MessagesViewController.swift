@@ -13,13 +13,8 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     var actionDelegate : MessageChangedAction?
     
-    var navigationBar  = ChatViewNavigationBar()
-    
-    var conversation : Conversation! {
-        didSet{
-           navigationBar.title = conversation?.title
-        }
-    }
+    var chatTitleLabel : UILabel!
+    var conversation : Conversation!
     
     var tableView : UITableView = {
         let table = UITableView()
@@ -78,12 +73,16 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     func setupNavigationBar(){
         navigationItem.rightBarButtonItem = nil
 
-        navigationItem.titleView = navigationBar
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(
-//            image: UIImage.chat_menu,
-//            style: .plain,
-//            target: self,
-//            action: #selector(menuButtonPressed))
+        chatTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        chatTitleLabel.textColor  = UIColor.white
+        
+        navigationItem.titleView = chatTitleLabel
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage.chat_menu,
+            style: .plain,
+            target: self,
+            action: #selector(menuButtonPressed))
     }
     
     func setupTableView(){
@@ -155,6 +154,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        chatTitleLabel.text = conversation.title
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -200,7 +200,9 @@ extension MessagesViewController : UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: MessageCell.identifier, for: indexPath) as! MessageCell
         let reverseIndex = conversation!.messages.count - indexPath.row - 1
         let message =  conversation!.messages[reverseIndex]
+        
         var isLastContinuous = true
+        
         if reverseIndex + 1 < conversation.messages.count {
             let laterMessage = conversation!.messages[reverseIndex + 1]
             isLastContinuous = laterMessage.sender != message.sender

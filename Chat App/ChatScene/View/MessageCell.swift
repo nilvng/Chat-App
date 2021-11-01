@@ -40,6 +40,23 @@ class MessageCell: UITableViewCell {
         return view
     }()
     
+    var incomingBubbleConfig : BackgroundConfig = {
+        let config = BackgroundConfig()
+        config.color = UIColor.lightGray
+        config.corner = [.allCorners]
+        config.radius = 13
+        return config
+    }()
+    
+    var outgoingBubbleConfig : BackgroundConfig = {
+        let config = BackgroundConfig()
+        config.color = UIColor.babyBlue
+        config.corner = [.allCorners]
+        config.radius = 13
+        return config
+    }()
+
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(bubbleImageView)
@@ -59,34 +76,26 @@ class MessageCell: UITableViewCell {
         
         if model.sender == Friend.me {
             // get bubble
-            let  config = BackgroundConfig()
-            config.color = UIColor.babyBlue
-            config.radius = 13
-            bubbleImageView.image = BackgroundFactory.shared.getBackground(config: config)
+            bubbleImageView.image = BackgroundFactory.shared.getBackground(config: outgoingBubbleConfig)
             // sent message will align to the right
             inboundConstraint?.isActive = false
             outboundConstraint?.isActive = true
             // remove avatar view as message is sent by me
-            avatarView.removeFromSuperview()
+            avatarView.isHidden = true
         } else {
             // get the bubble image
-            let  config = BackgroundConfig()
-            config.color = UIColor.lightGray
-            config.radius = 13
-            bubbleImageView.image = BackgroundFactory.shared.getBackground(config: config)
+            bubbleImageView.image = BackgroundFactory.shared.getBackground(config: incomingBubbleConfig)
             // received message will align to the left
             outboundConstraint?.isActive = false
             inboundConstraint?.isActive = true
             // show avatar view if is the last continuous message a friend sent
+            avatarView.isHidden = !lastContinuousMess
             if lastContinuousMess{
                 avatarView.update(url: model.sender.avatar, text: model.sender.firstName)
-            } else {
-                avatarView.removeFromSuperview()
             }
         }
-        if !lastContinuousMess {
-            continuousConstraint.constant = -bubbleVPadding + 3
-        }
+            // continuous message would be closer to each other
+            continuousConstraint.constant = !lastContinuousMess ? -bubbleVPadding + 4 : -bubbleVPadding
     }
     var bubbleVPadding : CGFloat = 14
     var bubbleHPadding : CGFloat = 18

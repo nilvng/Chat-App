@@ -42,6 +42,15 @@ class ChatViewNavigationBar: UIStackView {
         return spacer
     }()
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        axis  = .horizontal
+        
+        addArrangedSubview(titleLabel)
+        addArrangedSubview(spacer)
+        addArrangedSubview(menuButton)
+    }
+    
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
         axis  = .horizontal

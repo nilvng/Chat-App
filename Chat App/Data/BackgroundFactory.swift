@@ -16,12 +16,25 @@ import Foundation
 
 import UIKit
 
-class BackgroundConfig{
+class BackgroundConfig: NSObject{
     var color : UIColor? = .systemBackground
     var corner : UIRectCorner = [.allCorners]
     var radius : CGFloat = 13.0
     
-}
+    override func isEqual(_ object: Any?) -> Bool {
+           guard let other = object as? BackgroundConfig else {
+               return false
+           }
+           return corner == other.corner
+               && radius == other.radius
+            && color == other.color
+       }
+    
+    override var hash: Int {
+        return Int(radius)
+    }
+
+    }
 
 class BackgroundFactory {
     var caches = NSCache<BackgroundConfig, UIImage>()
@@ -35,7 +48,7 @@ class BackgroundFactory {
         if let existing = caches.object(forKey: config){
             return existing
         }
-        
+                
         // create new background and cache if it hasn't already
         let created =  drawBubble(config: config)
         caches.setObject(created, forKey: config)

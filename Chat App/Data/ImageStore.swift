@@ -7,15 +7,21 @@
 
 import UIKit
 
-class AvatarModel {
-    var roundedImage : UIImage!
-    var fullsizeImage : UIImage
-
-    init(image: UIImage) {
-        self.fullsizeImage = image
+enum ImageType {
+    case rounded
+    case original
+    
+    func getImage(image: UIImage) -> UIImage{
+        switch self {
+        case .rounded:
+            let im = makeRoundedImage(fullsizeImage: image)
+            return im
+        default:
+            return image
+        }
     }
     
-    func makeRoundedImage(){
+    func makeRoundedImage(fullsizeImage: UIImage) -> UIImage{
         // create roundedImage from this fullsize image
         let size = CGSize(width: 70, height: 70) // proposed size
         let aspectWidth = size.width / fullsizeImage.size.width
@@ -28,7 +34,7 @@ class AvatarModel {
         let circleY = aspectWidth > aspectHeight ? sizeIm.height/2 - sizeIm.width/2 : 0
         
         let renderer = UIGraphicsImageRenderer(size: sizeIm)
-        self.roundedImage = renderer.image { _ in
+        return renderer.image { _ in
             UIBezierPath(ovalIn: CGRect(x: circleX,
                                                 y: circleY,
                                                 width: size.width,
@@ -39,9 +45,44 @@ class AvatarModel {
     }
 }
 
+class ImageConfig : NSObject{
+    var urlString : String
+    var type : ImageType
+    
+    
+    init(url: String, type: ImageType) {
+        self.urlString  = url
+        self.type = type
+    }
+    
+    
+    func getFilename() -> String{
+        if let url = URL(string: self.urlString){
+            return url.lastPathComponent
+        } else {
+            return urlString
+        }
+    }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+           guard let other = object as? ImageConfig else {
+               return false
+           }
+           return urlString == other.urlString
+               && type == other.type
+       }
+    
+    override var hash: Int {
+        return urlString.hash ^ type.hashValue
+    }
+
+
+    
+}
+
 class ImageStore {
     
-    let cache = NSCache<NSString, AvatarModel>()
+    let cache = NSCache<ImageConfig, UIImage>()
     let cacheSizeLimit = 4500000
     let photoRequest = PhotoRequest()
     
@@ -50,15 +91,16 @@ class ImageStore {
         cache.totalCostLimit = 20
     }
         
-    func setImage(_ image: UIImage, forKey key: String, inMemOnly: Bool = true) -> AvatarModel{
+    func setImage(_ image: UIImage, forKey key: ImageConfig, inMemOnly: Bool = true) -> UIImage{
         // Save in memory
-        let avatarModel = AvatarModel(image: image)
-        avatarModel.makeRoundedImage()
-        cache.setObject(avatarModel, forKey: key as NSString)
+        let img = key.type.getImage(image: image)
+        
+        cache.setObject(img, forKey: key)
+        
         if !inMemOnly{
             // Save to disk
             /// Create full URL for image
-            let url = imageURL(forKey: key)
+            let url = imageURL(forKey: key.getFilename())
             
             /// Turn image into JPEG data
             if let data = image.jpegData(compressionQuality: 0.5) {
@@ -66,49 +108,32 @@ class ImageStore {
             }
             
         }
-        return avatarModel
+        // return correct image type
+        return img
     }
 
-    func getImage(forKey key: String, isRounded: Bool = true, completion: @escaping (Result<UIImage, Error>) -> Void) {
+    func getImage(forUrl urlKey: String, type: ImageType, completion: @escaping (Result<UIImage, Error>) -> Void) {
         // Case1: Find in memo
-        var targetAvatarModel : AvatarModel? = nil
-        let pKey = processURLforFilename(key: key)
-        if let existingModel = cache.object(forKey: pKey as NSString) {
-            targetAvatarModel = existingModel
-        } else {
-            // Case2: Find on disk
-            let url = imageURL(forKey: pKey)
-            if let imageFromDisk = UIImage(contentsOfFile: url.path) {
-                targetAvatarModel = self.setImage(imageFromDisk, forKey: pKey, inMemOnly: true)
-                print("Found on disk..")
-            } else {
-                print("From server")
-                // Case3: Finally, request to the server
-                getImageFromServer(forKey: key, isRounded: isRounded, completion: completion)
-                
-            }}
-        guard let model = targetAvatarModel else {
-            completion(.failure(PhotoError.imageCreationError))
+        let config = ImageConfig(url: urlKey, type: type)
+        if let existingImage = cache.object(forKey: config) {
+            completion(.success(existingImage))
             return
         }
-        let image = isRounded ? model.roundedImage : model.fullsizeImage
-        completion(.success(image!))
-
-    }
-    
-    private func processURLforFilename(key: String) -> String{
-        if let url = URL(string: key){
-            return url.lastPathComponent
-        } else {
-            return key
+        // Case2: Find on disk
+        let url = imageURL(forKey: config.getFilename())
+        if let imageFromDisk = UIImage(contentsOfFile: url.path) {
+            let image = self.setImage(imageFromDisk, forKey: config, inMemOnly: true)
+            print("Found on disk..")
+            completion(.success(image))
+            return
         }
-    }
+        // Case3: Finally, request to the server
+        print("From server")
+        getImageFromServer(forKey: urlKey, type: type, completion: completion)
     
-    func getImageFromDisk(forKey key: String, isRounded: Bool = true, completion: @escaping (Result<UIImage, Error>) -> Void) {
-        
-    }
-    
-    func getImageFromServer(forKey key: String, isRounded: Bool = true, completion: @escaping (Result<UIImage, Error>) -> Void) {
+        }
+
+    func getImageFromServer(forKey key: String, type: ImageType, completion: @escaping (Result<UIImage, Error>) -> Void) {
         guard let remoteURL = URL(string: key) else {
             completion(.failure(PhotoError.brokenURL))
             return
@@ -116,19 +141,18 @@ class ImageStore {
         
         photoRequest.fetchImage(url: remoteURL){ res in
             if case let .success(im) = res {
-                let pKey = self.processURLforFilename(key: key)
-                let targetAvatarModel = self.setImage(im, forKey: pKey,inMemOnly: false)
-                let image = isRounded ? targetAvatarModel.roundedImage : targetAvatarModel.fullsizeImage
-                completion(.success(image!))
+                let config = ImageConfig(url: key, type: type)
+                let image = self.setImage(im, forKey: config,inMemOnly: false)
+                completion(.success(image))
             }
         }
     }
 
 
-    func deleteImage(forKey key: String) {
-        cache.removeObject(forKey: key as NSString)
+    func deleteImage(forKey key: ImageConfig) {
+        cache.removeObject(forKey: key)
         
-        let url = imageURL(forKey: key)
+        let url = imageURL(forKey: key.getFilename())
         do {
             try FileManager.default.removeItem(at: url)
         } catch {
