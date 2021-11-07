@@ -36,6 +36,9 @@
 		C8D87A152716C13D007BE93D /* PhotoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A142716C13D007BE93D /* PhotoRequest.swift */; };
 		C8D87A192716C40F007BE93D /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A182716C40F007BE93D /* ImageStore.swift */; };
 		C8D87A2227171EA8007BE93D /* ConversationListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A2127171EA8007BE93D /* ConversationListDataSource.swift */; };
+		C8DF20272738165100C0DAAD /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DF20262738165100C0DAAD /* Theme.swift */; };
+		C8ED34EC273232300059AAD4 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8ED34EB273232300059AAD4 /* GradientView.swift */; };
+		C8ED34EF2732C6250059AAD4 /* SampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8ED34EE2732C6250059AAD4 /* SampleViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +73,9 @@
 		C8D87A142716C13D007BE93D /* PhotoRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoRequest.swift; sourceTree = "<group>"; };
 		C8D87A182716C40F007BE93D /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 		C8D87A2127171EA8007BE93D /* ConversationListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListDataSource.swift; sourceTree = "<group>"; };
+		C8DF20262738165100C0DAAD /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		C8ED34EB273232300059AAD4 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
+		C8ED34EE2732C6250059AAD4 /* SampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +125,7 @@
 				C896E71226F9FADF00882298 /* MessageCell.swift */,
 				C8305BC9270457A30070C771 /* ChatbarView.swift */,
 				C82DB721271AB6D2002AE563 /* ChatViewNavigationBar.swift */,
+				C8ED34EB273232300059AAD4 /* GradientView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -158,6 +165,7 @@
 				C8D87A142716C13D007BE93D /* PhotoRequest.swift */,
 				C8D87A182716C40F007BE93D /* ImageStore.swift */,
 				C8D87A042712BD29007BE93D /* BackgroundFactory.swift */,
+				C8DF20262738165100C0DAAD /* Theme.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -228,6 +236,7 @@
 			isa = PBXGroup;
 			children = (
 				C8D879CA27098D40007BE93D /* AvatarView.swift */,
+				C8ED34EE2732C6250059AAD4 /* SampleViewController.swift */,
 			);
 			path = CommonView;
 			sourceTree = "<group>";
@@ -319,13 +328,16 @@
 				C8D87A192716C40F007BE93D /* ImageStore.swift in Sources */,
 				C82DB722271AB6D2002AE563 /* ChatViewNavigationBar.swift in Sources */,
 				C82DB72E271C580A002AE563 /* ConversationConfigViewController.swift in Sources */,
+				C8ED34EC273232300059AAD4 /* GradientView.swift in Sources */,
 				C82DB71C271A4A4A002AE563 /* IndexedContactDataSource.swift in Sources */,
 				C88ED822272119440024781E /* UnorderedSearchDataSource.swift in Sources */,
 				C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */,
+				C8ED34EF2732C6250059AAD4 /* SampleViewController.swift in Sources */,
 				C8D87A052712BD29007BE93D /* BackgroundFactory.swift in Sources */,
 				C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */,
 				C896E70D26F9E07A00882298 /* ConversationCell.swift in Sources */,
 				C8D87A152716C13D007BE93D /* PhotoRequest.swift in Sources */,
+				C8DF20272738165100C0DAAD /* Theme.swift in Sources */,
 				C8D879BE2705A466007BE93D /* Date+Chat.swift in Sources */,
 				C896E71326F9FADF00882298 /* MessageCell.swift in Sources */,
 			);
@@ -467,8 +479,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UBHQB9F5N3;
+				DEVELOPMENT_TEAM = 7Q752636H9;
 				INFOPLIST_FILE = "Chat App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -486,8 +499,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UBHQB9F5N3;
+				DEVELOPMENT_TEAM = 7Q752636H9;
 				INFOPLIST_FILE = "Chat App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

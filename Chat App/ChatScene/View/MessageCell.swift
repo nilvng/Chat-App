@@ -22,6 +22,7 @@ class MessageCell: UITableViewCell {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.sizeToFit()
+        label.backgroundColor = .clear
         return label
     }()
     let timestampLabel : UILabel = {
@@ -50,21 +51,23 @@ class MessageCell: UITableViewCell {
     
     var outgoingBubbleConfig : BackgroundConfig = {
         let config = BackgroundConfig()
-        config.color = UIColor.babyBlue
+        config.color = .none
         config.corner = [.allCorners]
         config.radius = 13
         return config
     }()
-
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         contentView.addSubview(bubbleImageView)
         contentView.addSubview(messageBodyLabel)
-        
+        contentView.addSubview(avatarView)
+
         setupMessageBody()
         setupAvatarView()
         setupBubbleBackground()
+        
         }
     
     
@@ -73,21 +76,25 @@ class MessageCell: UITableViewCell {
         messageBodyLabel.text = model.content
 
         // align bubble based on whether the sender is the user themselves
-        
+    
         if model.sender == Friend.me {
             // get bubble
-            bubbleImageView.image = BackgroundFactory.shared.getBackground(config: outgoingBubbleConfig)
+           bubbleImageView.image = BackgroundFactory.shared.getBackground(config: outgoingBubbleConfig)
             // sent message will align to the right
             inboundConstraint?.isActive = false
             outboundConstraint?.isActive = true
             // remove avatar view as message is sent by me
             avatarView.isHidden = true
+            // bubble will have color so, text color = .white
+            messageBodyLabel.textColor = .white
         } else {
             // get the bubble image
             bubbleImageView.image = BackgroundFactory.shared.getBackground(config: incomingBubbleConfig)
             // received message will align to the left
             outboundConstraint?.isActive = false
             inboundConstraint?.isActive = true
+            messageBodyLabel.textColor = .black
+            bubbleImageView.backgroundColor = .none
             // show avatar view if is the last continuous message a friend sent
             avatarView.isHidden = !lastContinuousMess
             if lastContinuousMess{
@@ -100,6 +107,33 @@ class MessageCell: UITableViewCell {
     var bubbleVPadding : CGFloat = 14
     var bubbleHPadding : CGFloat = 18
 
+    
+    
+    func updateGradient(currentFrame: CGRect, theme: Theme){
+        
+        guard message?.sender == Friend.me else {
+            return
+        }
+        
+        let screenHeight = UIScreen.main.bounds.size.height
+        let currentY = currentFrame.minY
+        
+        let normalize = (currentY) / (screenHeight)
+        let maxNormal = min(1, max(0, normalize))
+
+        let differenceRed : CGFloat = theme.startRgb.red -  theme.endRgb.red
+        let differenceGreen : CGFloat = theme.startRgb.green -  theme.endRgb.green
+        let differenceBlue : CGFloat = theme.startRgb.blue -  theme.endRgb.blue
+
+
+        
+        let color = UIColor(red: (theme.startRgb.red + differenceRed * (1 - maxNormal)) / 255,
+                             green: (theme.startRgb.green - differenceGreen * (1 - maxNormal)) / 255,
+                             blue: (theme.startRgb.blue - differenceBlue * (1 - maxNormal)) / 255,
+                             alpha: 1.0)
+
+        bubbleImageView.backgroundColor = color
+    }
     
     
     func setupMessageBody(){
@@ -134,7 +168,6 @@ class MessageCell: UITableViewCell {
         }
     
     func setupAvatarView(){
-        contentView.addSubview(avatarView)
         avatarView.translatesAutoresizingMaskIntoConstraints = false
         let constraints : [NSLayoutConstraint] = [
             avatarView.bottomAnchor.constraint(equalTo: messageBodyLabel.bottomAnchor),

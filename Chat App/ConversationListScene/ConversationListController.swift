@@ -98,6 +98,14 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
             navigationItem.titleView = searchController.searchBar
             navigationItem.titleView?.layoutSubviews()
         }//
+        
+        // Testing only!
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage.navigation_button_plus, style: .plain, target: self, action: #selector(sample))
+    }
+    
+    @objc func sample(){
+        let s = SampleViewController()
+        navigationController?.pushViewController(s, animated: true)
     }
     
     func setupTableView(){

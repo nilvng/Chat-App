@@ -12,10 +12,11 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     typealias MessageChangedAction = ([Message]) -> Void
     
     var actionDelegate : MessageChangedAction?
+    var conversation : Conversation!
+    var theme : Theme = .basic
     
     var chatTitleLabel : UILabel!
-    var conversation : Conversation!
-    
+
     var tableView : UITableView = {
         let table = UITableView()
         table.separatorStyle = .none
@@ -51,6 +52,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         view.isUserInteractionEnabled = true
         tableView.addGestureRecognizer(tapGesture)
         
+        tableView.showsVerticalScrollIndicator = false
+        tableView.showsHorizontalScrollIndicator = false
+
         setupChatbarView()
         setupObserveKeyboard()
         
@@ -75,6 +79,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
 
         chatTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
         chatTitleLabel.textColor  = UIColor.white
+        chatTitleLabel.font = UIFont.systemFont(ofSize: 19)
         
         navigationItem.titleView = chatTitleLabel
         
@@ -216,6 +221,34 @@ extension MessagesViewController : UITableViewDataSource {
         
     }
     
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        guard let cell = tableView.cellForRow(at: indexPath) as? MessageCell else{
+//            return
+//        }
+//
+//        let pos = tableView.rectForRow(at: indexPath)
+//        let relativePos = tableView.convert(pos, to: tableView.superview)
+//        cell.updateGradient(currentFrame: relativePos)
+//
+//    }
+//
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        DispatchQueue.main.async {
+            guard let indices = self.tableView.indexPathsForVisibleRows else {
+                return
+            }
+            
+            for i in indices{
+                guard let cell = self.tableView.cellForRow(at: i) as? MessageCell else{
+                    return
+                }
+                let pos = self.tableView.rectForRow(at: i)
+                let relativePos = self.tableView.convert(pos, to: self.tableView.superview)
+                
+                cell.updateGradient(currentFrame: relativePos, theme: self.theme)
+            }
+        }
+    }
     
 }
 

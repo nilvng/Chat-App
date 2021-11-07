@@ -21,6 +21,7 @@ class BackgroundConfig: NSObject{
     var corner : UIRectCorner = [.allCorners]
     var radius : CGFloat = 13.0
     
+    
     override func isEqual(_ object: Any?) -> Bool {
            guard let other = object as? BackgroundConfig else {
                return false
@@ -62,8 +63,13 @@ class BackgroundFactory {
         let renderer = UIGraphicsImageRenderer(size: size)
         let im = renderer.image { _ in
             let path = UIBezierPath(roundedRect: .init(origin: .zero, size: size), byRoundingCorners: config.corner, cornerRadii: CGSize(width: rad, height: rad))
-            config.color?.setFill()
-            path.fill()
+            
+            if config.color != .none{
+                config.color?.setFill()
+                path.fill()
+            } else {
+                path.stroke()
+            }
         }
         let resizable_im = im.resizableImage(withCapInsets: UIEdgeInsets(top: rad,
                                                                          left: rad,
