@@ -8,8 +8,8 @@
 import UIKit
 
 extension UIImage {
-    static let btn_send_forboy = UIImage(named: "btn_send_forboy")
-    static let btn_send_forboy_disabled = UIImage(named: "btn_send_forboy_disable")
+    static let btn_send_forboy = UIImage(named: "btn_send_forboy")?.withRenderingMode(.alwaysTemplate)
+    static let btn_send_forboy_disabled = UIImage(named: "btn_send_forboy_disable")?.withRenderingMode(.alwaysTemplate)
     static let chat_menu = UIImage(named: "icHeaderList")
     static let back_button = UIImage(named: "icn_navigation_button_back_white")
 

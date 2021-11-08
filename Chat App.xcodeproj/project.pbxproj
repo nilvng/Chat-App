@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		C82DB71C271A4A4A002AE563 /* IndexedContactDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB71B271A4A4A002AE563 /* IndexedContactDataSource.swift */; };
-		C82DB722271AB6D2002AE563 /* ChatViewNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB721271AB6D2002AE563 /* ChatViewNavigationBar.swift */; };
 		C82DB727271B055B002AE563 /* ChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB726271B055B002AE563 /* ChatManager.swift */; };
 		C82DB72A271C08BE002AE563 /* MessagesMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB729271C08BE002AE563 /* MessagesMenuViewController.swift */; };
 		C82DB72E271C580A002AE563 /* ConversationConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB72D271C580A002AE563 /* ConversationConfigViewController.swift */; };
@@ -27,7 +26,6 @@
 		C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C896E70F26F9F97100882298 /* MessagesViewController.swift */; };
 		C896E71326F9FADF00882298 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C896E71226F9FADF00882298 /* MessageCell.swift */; };
 		C8A5429E26FC7B9800304C19 /* ConversationSearchResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A5429D26FC7B9800304C19 /* ConversationSearchResultController.swift */; };
-		C8AA3E022728FBD40066A837 /* UIView+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA3E012728FBD40066A837 /* UIView+Chat.swift */; };
 		C8D879BE2705A466007BE93D /* Date+Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879BD2705A466007BE93D /* Date+Chat.swift */; };
 		C8D879CB27098D40007BE93D /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879CA27098D40007BE93D /* AvatarView.swift */; };
 		C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D879CE270B00D0007BE93D /* SearchContactCell.swift */; };
@@ -37,13 +35,10 @@
 		C8D87A192716C40F007BE93D /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A182716C40F007BE93D /* ImageStore.swift */; };
 		C8D87A2227171EA8007BE93D /* ConversationListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D87A2127171EA8007BE93D /* ConversationListDataSource.swift */; };
 		C8DF20272738165100C0DAAD /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DF20262738165100C0DAAD /* Theme.swift */; };
-		C8ED34EC273232300059AAD4 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8ED34EB273232300059AAD4 /* GradientView.swift */; };
-		C8ED34EF2732C6250059AAD4 /* SampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8ED34EE2732C6250059AAD4 /* SampleViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C82DB71B271A4A4A002AE563 /* IndexedContactDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedContactDataSource.swift; sourceTree = "<group>"; };
-		C82DB721271AB6D2002AE563 /* ChatViewNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewNavigationBar.swift; sourceTree = "<group>"; };
 		C82DB726271B055B002AE563 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
 		C82DB729271C08BE002AE563 /* MessagesMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesMenuViewController.swift; sourceTree = "<group>"; };
 		C82DB72D271C580A002AE563 /* ConversationConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationConfigViewController.swift; sourceTree = "<group>"; };
@@ -64,7 +59,6 @@
 		C896E70F26F9F97100882298 /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		C896E71226F9FADF00882298 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		C8A5429D26FC7B9800304C19 /* ConversationSearchResultController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSearchResultController.swift; sourceTree = "<group>"; };
-		C8AA3E012728FBD40066A837 /* UIView+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Chat.swift"; sourceTree = "<group>"; };
 		C8D879BD2705A466007BE93D /* Date+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Chat.swift"; sourceTree = "<group>"; };
 		C8D879CA27098D40007BE93D /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		C8D879CE270B00D0007BE93D /* SearchContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactCell.swift; sourceTree = "<group>"; };
@@ -74,8 +68,6 @@
 		C8D87A182716C40F007BE93D /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 		C8D87A2127171EA8007BE93D /* ConversationListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListDataSource.swift; sourceTree = "<group>"; };
 		C8DF20262738165100C0DAAD /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		C8ED34EB273232300059AAD4 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
-		C8ED34EE2732C6250059AAD4 /* SampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,8 +116,6 @@
 			children = (
 				C896E71226F9FADF00882298 /* MessageCell.swift */,
 				C8305BC9270457A30070C771 /* ChatbarView.swift */,
-				C82DB721271AB6D2002AE563 /* ChatViewNavigationBar.swift */,
-				C8ED34EB273232300059AAD4 /* GradientView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -185,7 +175,6 @@
 				C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */,
 				C8305BBC27017AEF0070C771 /* UIColor+Chat.swift */,
 				C8D879BD2705A466007BE93D /* Date+Chat.swift */,
-				C8AA3E012728FBD40066A837 /* UIView+Chat.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -236,7 +225,6 @@
 			isa = PBXGroup;
 			children = (
 				C8D879CA27098D40007BE93D /* AvatarView.swift */,
-				C8ED34EE2732C6250059AAD4 /* SampleViewController.swift */,
 			);
 			path = CommonView;
 			sourceTree = "<group>";
@@ -310,7 +298,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C8AA3E022728FBD40066A837 /* UIView+Chat.swift in Sources */,
 				C82DB727271B055B002AE563 /* ChatManager.swift in Sources */,
 				C846508D26FBF9C5009C5782 /* UIImage+Chat.swift in Sources */,
 				C858DC5126F9D6FF00821E67 /* ConversationListController.swift in Sources */,
@@ -326,13 +313,10 @@
 				C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */,
 				C82DB72A271C08BE002AE563 /* MessagesMenuViewController.swift in Sources */,
 				C8D87A192716C40F007BE93D /* ImageStore.swift in Sources */,
-				C82DB722271AB6D2002AE563 /* ChatViewNavigationBar.swift in Sources */,
 				C82DB72E271C580A002AE563 /* ConversationConfigViewController.swift in Sources */,
-				C8ED34EC273232300059AAD4 /* GradientView.swift in Sources */,
 				C82DB71C271A4A4A002AE563 /* IndexedContactDataSource.swift in Sources */,
 				C88ED822272119440024781E /* UnorderedSearchDataSource.swift in Sources */,
 				C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */,
-				C8ED34EF2732C6250059AAD4 /* SampleViewController.swift in Sources */,
 				C8D87A052712BD29007BE93D /* BackgroundFactory.swift in Sources */,
 				C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */,
 				C896E70D26F9E07A00882298 /* ConversationCell.swift in Sources */,

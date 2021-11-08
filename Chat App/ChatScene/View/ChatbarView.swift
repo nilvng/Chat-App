@@ -24,7 +24,7 @@ class ChatbarView: UIView {
     
     private var submitButton : UIButton = {
         let button = UIButton()
-        button.setImage(.btn_send_forboy, for: .normal)
+        button.setImage(UIImage.btn_send_forboy, for: .normal)
         button.setImage(.btn_send_forboy_disabled, for: .disabled)
 
         return button
@@ -46,6 +46,10 @@ class ChatbarView: UIView {
         
         submitButton.addTarget(self, action: #selector(submitButtonPressed), for: .touchUpInside)
         textView.delegate = self
+    }
+    
+    func configure(accent: UIColor){
+        submitButton.tintColor = accent
     }
     
     func setupTextView(){
@@ -94,8 +98,6 @@ class ChatbarView: UIView {
     
 
     @objc func submitButtonPressed(){
-        print("submit button pressed")
-        
         sendMessage(textView.text)
         
     }
@@ -106,7 +108,6 @@ extension ChatbarView : UITextViewDelegate{
         if  text != ""{
             ///  remove leading and trailing whitespace
             let cleanValue = text.trimmingCharacters(in: .whitespacesAndNewlines)
-            print("about to submit \(cleanValue)")
             
             delegate?.messageSubmitted(message: cleanValue)
             // clear chat bar

@@ -43,7 +43,7 @@ class MessageCell: UITableViewCell {
     
     var incomingBubbleConfig : BackgroundConfig = {
         let config = BackgroundConfig()
-        config.color = UIColor.lightGray
+        config.color = UIColor.trueLightGray
         config.corner = [.allCorners]
         config.radius = 13
         return config
@@ -72,6 +72,10 @@ class MessageCell: UITableViewCell {
     
     
     func configure(with model: Message, lastContinuousMess: Bool = false){
+        
+        backgroundView = .none
+        backgroundColor = .clear
+
         message = model
         messageBodyLabel.text = model.content
 
@@ -114,25 +118,8 @@ class MessageCell: UITableViewCell {
         guard message?.sender == Friend.me else {
             return
         }
-        
-        let screenHeight = UIScreen.main.bounds.size.height
-        let currentY = currentFrame.minY
-        
-        let normalize = (currentY) / (screenHeight)
-        let maxNormal = min(1, max(0, normalize))
-
-        let differenceRed : CGFloat = theme.startRgb.red -  theme.endRgb.red
-        let differenceGreen : CGFloat = theme.startRgb.green -  theme.endRgb.green
-        let differenceBlue : CGFloat = theme.startRgb.blue -  theme.endRgb.blue
-
-
-        
-        let color = UIColor(red: (theme.startRgb.red + differenceRed * (1 - maxNormal)) / 255,
-                             green: (theme.startRgb.green - differenceGreen * (1 - maxNormal)) / 255,
-                             blue: (theme.startRgb.blue - differenceBlue * (1 - maxNormal)) / 255,
-                             alpha: 1.0)
-
-        bubbleImageView.backgroundColor = color
+        let color = theme.gradientImage.getPixelColor(pos: CGPoint(x:0 , y: currentFrame.maxY))
+        self.bubbleImageView.tintColor = color
     }
     
     

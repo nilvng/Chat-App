@@ -64,17 +64,20 @@ class BackgroundFactory {
         let im = renderer.image { _ in
             let path = UIBezierPath(roundedRect: .init(origin: .zero, size: size), byRoundingCorners: config.corner, cornerRadii: CGSize(width: rad, height: rad))
             
-            if config.color != .none{
-                config.color?.setFill()
-                path.fill()
-            } else {
-                path.stroke()
-            }
+            config.color?.setFill()
+            path.fill()
+
         }
         let resizable_im = im.resizableImage(withCapInsets: UIEdgeInsets(top: rad,
                                                                          left: rad,
                                                                          bottom: rad,
                                                                          right: rad), resizingMode: .stretch)
-        return resizable_im
+        if config.color == .none{
+            return resizable_im.withRenderingMode(.alwaysTemplate)
+
+        } else {
+            return resizable_im
+            }
+
     }
 }

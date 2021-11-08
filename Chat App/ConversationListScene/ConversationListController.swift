@@ -98,20 +98,12 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
             navigationItem.titleView = searchController.searchBar
             navigationItem.titleView?.layoutSubviews()
         }//
-        
-        // Testing only!
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage.navigation_button_plus, style: .plain, target: self, action: #selector(sample))
-    }
-    
-    @objc func sample(){
-        let s = SampleViewController()
-        navigationController?.pushViewController(s, animated: true)
     }
     
     func setupTableView(){
         dataSource = ConversationListDataSource()
         dataSource.items = ChatManager.shared.chatList
-        dataSource.sortByLatest()
+        let _ = dataSource.sortByLatest()
         
         view.addSubview(tableView)
         
@@ -155,16 +147,22 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        print("List did appear...")
- 
+         
         navigationController?.navigationBar.barStyle = .black
+
 
         // refresh table if row orders changes due to new messages, etc..
         if dataSource.sortByLatest(){
             tableView.reloadData()
             }
         }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.barTintColor = UIColor.zaloBlue
+
+    }
 
 }
 
