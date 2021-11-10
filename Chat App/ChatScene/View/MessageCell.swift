@@ -98,7 +98,6 @@ class MessageCell: UITableViewCell {
             outboundConstraint?.isActive = false
             inboundConstraint?.isActive = true
             messageBodyLabel.textColor = .black
-            bubbleImageView.backgroundColor = .none
             // show avatar view if is the last continuous message a friend sent
             avatarView.isHidden = !lastContinuousMess
             if lastContinuousMess{
@@ -118,7 +117,13 @@ class MessageCell: UITableViewCell {
         guard message?.sender == Friend.me else {
             return
         }
-        let color = theme.gradientImage.getPixelColor(pos: CGPoint(x:0 , y: currentFrame.maxY))
+        let normalizedY = currentFrame.maxY
+        
+        if normalizedY < 0 {
+            print(normalizedY)
+        }
+
+        let color = theme.gradientImage.getPixelColor(pos: CGPoint(x:100 , y: normalizedY))
         self.bubbleImageView.tintColor = color
     }
     

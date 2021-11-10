@@ -13,7 +13,7 @@ struct Theme{
     var backgroundImage : UIImage?
     
     init(colors: [CGColor], accent: UIColor, background: UIImage? = nil) {
-        let width =  200
+        let width =  UIScreen.main.bounds.size.width
         let height = UIScreen.main.bounds.size.height
 
         gradientImage = UIImage.gradientImageWithBounds(bounds: CGRect(x: 0, y: 0, width: Int(width), height: Int(height)),
@@ -37,16 +37,22 @@ extension Theme {
 extension UIImage {
       func getPixelColor(pos: CGPoint) -> UIColor? {
         
-        
-        guard let pixelData = self.cgImage?.dataProvider?.data else {
+        guard let cgImage = self.cgImage,
+              let pixelData = cgImage.dataProvider?.data,
+              let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData) else {
+            print("Problem in getting gradient image")
             return nil
         }
         
-        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
+        let bytesPerRow = cgImage.bytesPerRow
+        let bytesPerPixel = cgImage.bitsPerPixel / cgImage.bitsPerComponent
 
-        let pixelInfo: Int = (  Int(self.size.width) * Int(pos.y) + Int(pos.x)) * 4
-
-
+        let pixelInfo : Int = Int(pos.y) * bytesPerRow + Int(pos.x) * bytesPerPixel
+        
+        
+        if (pixelInfo < 0){
+            return .black
+        }
           let r = CGFloat(data[pixelInfo]) / CGFloat(255.0)
           let g = CGFloat(data[pixelInfo+1]) / CGFloat(255.0)
           let b = CGFloat(data[pixelInfo+2]) / CGFloat(255.0)

@@ -72,6 +72,8 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
+        tableView.alwaysBounceVertical = false
+
 
         setupChatbarView()
         setupObserveKeyboard()
@@ -80,12 +82,13 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     }
     
     func setupObserveKeyboard(){
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardMoving), name: UIResponder.keyboardDidShowNotification, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardMoving), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-    }
+    
+    NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardMoving), name: UIResponder.keyboardDidShowNotification, object: nil)
+    
+    NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardMoving), name: UIResponder.keyboardWillHideNotification, object: nil)
+    
+}
+    
     var menuButton : UIButton = {
         let button = UIButton()
         button.setImage(UIImage.chat_menu, for: .normal)
@@ -110,8 +113,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     func setupTableView(){
         
-        tableView.dataSource = self
-        tableView.delegate = self
+
         tableView.register(MessageCell.self, forCellReuseIdentifier: MessageCell.identifier)
         tableView.estimatedRowHeight = 30
         tableView.rowHeight = UITableView.automaticDimension
@@ -129,8 +131,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
 
-        tableView.contentInset = UIEdgeInsets(top: 25, left: 0, bottom: 0, right: 0)
-        
+        //tableView.contentInset = UIEdgeInsets(top: 25, left: 0, bottom: 0, right: 0)
+        tableView.dataSource = self
+        tableView.delegate = self
 
     }
     
@@ -178,10 +181,10 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         unobserveKeyboard()
         actionDelegate?(conversation!.messages)
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         chatTitleLabel.text = conversation.title
-        
         navigationController?.navigationBar.barTintColor = .white
 
     }
@@ -190,11 +193,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         super.viewDidAppear(animated)
         navigationController?.navigationBar.barStyle = .default
         navigationController?.navigationBar.tintColor = theme.accentColor
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
+        updatesBubble()
     }
     
     @objc func menuButtonPressed(){
@@ -207,6 +206,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     }
     
     func scrollToLastMessage(animated: Bool = true){
+
         guard conversation!.messages.count > 0 else {
             return
         }
@@ -220,6 +220,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     @objc func handleTap(){
         view.endEditing(true)
     }
+ 
+    var lastPage : Int = 0
+
 }
 
 
@@ -248,25 +251,38 @@ extension MessagesViewController : UITableViewDataSource {
         return cell
         
     }
-    
+        
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.updatesBubble()
+        
+        let lag : CGFloat = scrollView.isTracking ? 23 : 53
+        
+        let currentPage = (Int) (scrollView.contentOffset.y / lag);
+        if (currentPage != lastPage){
+            lastPage = currentPage
+            self.updatesBubble()
+        }
     }
     
     func updatesBubble(){
+        
+        DispatchQueue.main.async {
         guard let indices = self.tableView.indexPathsForVisibleRows else {
+            print("no cell!")
             return
         }
+                    
         for i in indices{
             guard let cell = self.tableView.cellForRow(at: i) as? MessageCell else{
+                print("no cell for that index")
                 return
             }
+
             let pos = self.tableView.rectForRow(at: i)
             let relativePos = self.tableView.convert(pos, to: self.tableView.superview)
             
             cell.updateGradient(currentFrame: relativePos, theme: self.theme)
         }
-
+        }
     }
     
 }
