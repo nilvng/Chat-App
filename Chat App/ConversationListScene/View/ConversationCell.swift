@@ -46,7 +46,7 @@ class ConversationCell : UITableViewCell {
         return line
     }()
 
-    
+    // MARK: Configuration
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -73,7 +73,7 @@ class ConversationCell : UITableViewCell {
         timestampLabel.text = lastMsg.timestamp.toTimestampString()
     }
 
-    // MARK: Design Cell
+    // MARK: AutoLayout setups
     
     private var verticalPadding : CGFloat = 5
     private var horizontalPadding : CGFloat = 10
@@ -119,7 +119,7 @@ class ConversationCell : UITableViewCell {
         let constraints : [NSLayoutConstraint] = [
             lastMessageLabel.centerYAnchor.constraint(equalTo: thumbnail.centerYAnchor,constant:11),
             lastMessageLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            lastMessageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 200)
+            lastMessageLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant:  -15)
         ]
         lastMessageLabel.setContentHuggingPriority(.init(250), for: .vertical)
         lastMessageLabel.setContentCompressionResistancePriority(.init(249), for: .vertical)

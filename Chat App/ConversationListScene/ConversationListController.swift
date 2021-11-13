@@ -8,7 +8,7 @@
 import UIKit
 
 class ConversationListController: UIViewController, UIGestureRecognizerDelegate {
-    
+    // MARK: Properties
     var currentSearchText : String = ""
     
     var dataSource : ConversationListDataSource!
@@ -26,9 +26,9 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         button.sizeToFit()
 
         button.backgroundColor = UIColor.complementZaloBlue
-        button.layer.shadowColor = UIColor.gray.cgColor
-        button.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
-        button.layer.shadowOpacity = 1.0
+//        button.layer.shadowColor = UIColor.gray.cgColor
+//        button.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+//        button.layer.shadowOpacity = 1.0
         return button
     }()
     
@@ -57,32 +57,9 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         setupLongPressGesture()
         
     }
-    
-    func setupLongPressGesture(){
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
-        longPress.minimumPressDuration = 1.0 // 1 second press
-        longPress.delegate = self
-        tableView.addGestureRecognizer(longPress)
 
-    }
-    
-    @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer){
-        if gestureRecognizer.state == .began {
-            let touchPoint = gestureRecognizer.location(in: self.tableView)
-            if let indexPath = tableView.indexPathForRow(at: touchPoint) {
-                print(indexPath.row)
-                let configView = ConversationConfigViewController()
-                configView.configure {
-                    let itemToDelete = self.dataSource.items[indexPath.row]
-                    ChatManager.shared.deleteChat(itemToDelete)
-                }
-                configView.modalPresentationStyle = UIModalPresentationStyle.custom
-                configView.transitioningDelegate = self
-                self.present(configView, animated: true, completion: nil)
-            }
-        }
-    }
 
+    // MARK: AutoLayout setups
     private func setupNavigationBar(){
         navigationItem.title = "Chats"
         navigationItem.backButtonDisplayMode = .minimal
@@ -157,6 +134,32 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
             }
         }
     
+    // MARK: Actions
+    func setupLongPressGesture(){
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        longPress.minimumPressDuration = 1.0 // 1 second press
+        longPress.delegate = self
+        tableView.addGestureRecognizer(longPress)
+
+    }
+    
+    @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer){
+        if gestureRecognizer.state == .began {
+            let touchPoint = gestureRecognizer.location(in: self.tableView)
+            if let indexPath = tableView.indexPathForRow(at: touchPoint) {
+                print(indexPath.row)
+                let configView = ConversationConfigViewController()
+                configView.configure {
+                    let itemToDelete = self.dataSource.items[indexPath.row]
+                    ChatManager.shared.deleteChat(itemToDelete)
+                }
+                configView.modalPresentationStyle = UIModalPresentationStyle.custom
+                configView.transitioningDelegate = self
+                self.present(configView, animated: true, completion: nil)
+            }
+        }
+    }
+    // MARK: ViewCycles
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.tintColor = .white
@@ -166,6 +169,7 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
 
 }
 
+// MARK: ChatManagerDelegate
 extension ConversationListController : ChatManagerDelegate {
     func conversationDeleted(_ item: Conversation) {
         guard let indexToDelete = dataSource.items.firstIndex(where: {$0 == item}) else {
@@ -210,6 +214,7 @@ extension ConversationListController : ChatManagerDelegate {
     
 }
 
+// MARK: Edit Menu Delegate
 extension ConversationListController : UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return HalfSizePresentationController(presentedViewController: presented, presenting: presentingViewController)
@@ -276,6 +281,7 @@ class HalfSizePresentationController: UIPresentationController {
 
 }
 
+// MARK: TableViewDelegate
 extension ConversationListController : UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -302,7 +308,7 @@ extension ConversationListController : UITableViewDelegate{
             ChatManager.shared.updateChat(newItem: selected)
 
         }
-
+        NSLog("Open csc")
         navigationController?.pushViewController(messagesViewController, animated: true)
 
     }

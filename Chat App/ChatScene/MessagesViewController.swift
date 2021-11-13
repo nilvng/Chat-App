@@ -15,18 +15,26 @@ enum accentColorMode {
 class MessagesViewController: UIViewController, UITableViewDelegate {
 
     typealias MessageChangedAction = ([Message]) -> Void
-    
     var actionDelegate : MessageChangedAction?
+    
+    // MARK: Properties
     var conversation : Conversation!
-    var theme : Theme = .earthy
+    var theme : Theme!
     var mode : accentColorMode = .light
     
+    
+    // MARK: View Properties
     var chatTitleLabel : UILabel!
-
+    var menuButton : UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage.chat_menu, for: .normal)
+        return button
+    }()
     var tableView : UITableView = {
         let table = UITableView()
         table.separatorStyle = .none
         table.allowsSelection = false
+        table.alwaysBounceVertical = false
         return table
     }()
     
@@ -35,11 +43,10 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         bg.contentMode = .scaleAspectFill
         return bg
     }()
-    
     var chatBarView : ChatbarView!
-    
     var chatBarBottomConstraint : NSLayoutConstraint?
 
+    // MARK: Configure
     init() {
         super.init(nibName: nil, bundle: nil)
         
@@ -51,6 +58,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     func configure(conversation: Conversation, action : MessageChangedAction? = nil){
         self.conversation = conversation
+        self.theme = conversation.theme
         self.actionDelegate = action
         
         // configure the theme of chat window
@@ -81,6 +89,8 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
  
     }
     
+    // MARK: AutoLayout setups
+    
     func setupObserveKeyboard(){
     
     NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardMoving), name: UIResponder.keyboardDidShowNotification, object: nil)
@@ -88,12 +98,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardMoving), name: UIResponder.keyboardWillHideNotification, object: nil)
     
 }
-    
-    var menuButton : UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.chat_menu, for: .normal)
-        return button
-    }()
     
     func setupNavigationBar(){
         navigationItem.rightBarButtonItem = nil
@@ -175,6 +179,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
 
     }
 
+    // MARK: ViewController methods
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -193,9 +198,11 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         super.viewDidAppear(animated)
         navigationController?.navigationBar.barStyle = .default
         navigationController?.navigationBar.tintColor = theme.accentColor
-        updatesBubble()
+        
+        NSLog("Csc appeared")
     }
     
+    // MARK: Actions
     @objc func menuButtonPressed(){
         let menuViewController = MessagesMenuViewController()
         menuViewController.configure(conversation){
@@ -225,7 +232,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
 
 }
 
-
+// MARK: TableViewController
 extension MessagesViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         self.conversation!.messages.count
@@ -251,11 +258,18 @@ extension MessagesViewController : UITableViewDataSource {
         return cell
         
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        updatesBubble(givenIndices: [indexPath])
+    }
         
+    // MARK: Update bubbles
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        let lag : CGFloat = scrollView.isTracking ? 23 : 53
-        
+        // change bubble gradient as scrolling
+        //let ideaRatio = UIScreen.main.bounds.size.height / 17
+        let ideaRatio : CGFloat = 37
+        let lag : CGFloat = scrollView.isTracking ? 23 : ideaRatio
         let currentPage = (Int) (scrollView.contentOffset.y / lag);
         if (currentPage != lastPage){
             lastPage = currentPage
@@ -263,30 +277,35 @@ extension MessagesViewController : UITableViewDataSource {
         }
     }
     
-    func updatesBubble(){
-        
+    func updatesBubble(givenIndices: [IndexPath]? = nil){
+       var indices = givenIndices
         DispatchQueue.main.async {
-        guard let indices = self.tableView.indexPathsForVisibleRows else {
-            print("no cell!")
-            return
-        }
-                    
-        for i in indices{
-            guard let cell = self.tableView.cellForRow(at: i) as? MessageCell else{
-                print("no cell for that index")
-                return
-            }
+            if indices == nil {
+                indices = self.tableView.indexPathsForVisibleRows
+                guard indices != nil else {
+                    print("no cell!")
+                    return
+                }
 
-            let pos = self.tableView.rectForRow(at: i)
-            let relativePos = self.tableView.convert(pos, to: self.tableView.superview)
+            }
             
-            cell.updateGradient(currentFrame: relativePos, theme: self.theme)
-        }
+            for i in indices!{
+                guard let cell = self.tableView.cellForRow(at: i) as? MessageCell else{
+                    //print("no cell for that index")
+                    continue
+                }
+                
+                let pos = self.tableView.rectForRow(at: i)
+                let relativePos = self.tableView.convert(pos, to: self.tableView.superview)
+                
+                cell.updateGradient(currentFrame: relativePos, theme: self.theme)
+            }
         }
     }
     
 }
 
+// MARK: Chatbar Delegate
 extension MessagesViewController : ChatBarDelegate {
     func keyboardMoved(keyboardFrame: NSValue, moveUp: Bool, animateDuration: Double) {
         print(keyboardFrame.cgRectValue.height)

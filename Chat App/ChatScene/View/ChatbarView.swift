@@ -84,7 +84,7 @@ class ChatbarView: UIView {
         separatorLine.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            separatorLine.topAnchor.constraint(equalTo: topAnchor, constant: -5),
+            separatorLine.topAnchor.constraint(equalTo: topAnchor, constant: 0),
                 separatorLine.leadingAnchor.constraint(equalTo: leadingAnchor),
                 separatorLine.trailingAnchor.constraint(equalTo: trailingAnchor),
             separatorLine.heightAnchor.constraint(equalToConstant: 0.7)

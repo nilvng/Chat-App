@@ -172,9 +172,9 @@
             filePath = "Chat App/ChatScene/MessagesViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "283"
-            endingLineNumber = "283"
-            landmarkName = "updatesBubble()"
+            startingLineNumber = "301"
+            endingLineNumber = "301"
+            landmarkName = "updatesBubble(givenIndices:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
