@@ -18,6 +18,7 @@ class ChatbarView: UIView {
     var textView : UITextView = {
         let tview = UITextView()
         tview.isScrollEnabled = false
+        tview.backgroundColor = .white
         tview.font = UIFont(name: "Arial", size: 16)
         return tview
     }()
