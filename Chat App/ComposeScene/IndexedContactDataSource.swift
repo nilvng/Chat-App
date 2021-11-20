@@ -87,6 +87,7 @@ extension IndexedContactDataSource : SearchItemDataSource {
     }
     
     func clearSearch(){
+        print(filteredItems)
         filteredItems = items
         sortByAlphabet()
     }

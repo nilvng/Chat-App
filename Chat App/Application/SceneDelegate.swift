@@ -25,10 +25,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let homeController = ConversationListController()
         let navController = UINavigationController(rootViewController: homeController)
         // styling nav bar
-        navController.navigationBar.isTranslucent = false
-        let attributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 22), NSAttributedString.Key.foregroundColor: UIColor.white]
-        
-        UINavigationBar.appearance().titleTextAttributes = attributes
+        if #available(iOS 13.0, *) {
+            let navBarAppearance = UINavigationBarAppearance()
+            navBarAppearance.configureWithOpaqueBackground()
+            navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+            navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+            navBarAppearance.backgroundColor = UIColor.white
+                navController.navigationBar.standardAppearance = navBarAppearance
+            navController.navigationBar.scrollEdgeAppearance = navBarAppearance
+        }
+
+
+//        let attributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 22), NSAttributedString.Key.foregroundColor: UIColor.white]
+//
+//        UINavigationBar.appearance().titleTextAttributes = attributes
 
         // finally set up root view
         window?.rootViewController = navController

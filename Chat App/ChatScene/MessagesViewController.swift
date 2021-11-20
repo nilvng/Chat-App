@@ -15,7 +15,7 @@ enum accentColorMode {
 class MessagesViewController: UIViewController, UITableViewDelegate {
 
     typealias MessageChangedAction = ([Message]) -> Void
-    var actionDelegate : MessageChangedAction?
+    var action : MessageChangedAction?
     
     // MARK: Properties
     var conversation : Conversation!
@@ -60,7 +60,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     func configure(conversation: Conversation, action : MessageChangedAction? = nil){
         self.conversation = conversation
         self.theme = conversation.theme
-        self.actionDelegate = action
+        self.action = action
         
         // configure the theme of chat window
         backgroundImageView.image = theme.backgroundImage
@@ -177,12 +177,17 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
 
 
-    // MARK: ViewController methods
+    // MARK: Navigation
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         unobserveKeyboard()
-        actionDelegate?(conversation!.messages)
+        
+        if action != nil {
+            action?(conversation!.messages)
+        } else{
+            ChatManager.shared.updateChat(newItem: conversation)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -200,6 +205,11 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         NSLog("Csc appeared")
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.tintColor = .systemBlue
+    }
+    
     // MARK: Actions
     
     func unobserveKeyboard(){
@@ -208,7 +218,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     }
     
     @objc func menuButtonPressed(){
-        let menuViewController = MessagesMenuViewController()
+        let menuViewController = MsgMenuController()
         menuViewController.configure(conversation){
             ChatManager.shared.deleteChat(self.conversation)
             self.navigationController?.popViewController(animated: true)

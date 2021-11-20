@@ -52,7 +52,11 @@ class ChatManager {
             print("Error: update non exist item")
             return
         }
-
+        
+        // minimum requirement: messages changed
+        guard chatList[itemIndexToUpdate].messages != newItem.messages else { return }
+        
+        print("updated")
         chatList[itemIndexToUpdate] = newItem
         delegate?.conversationUpdated(newItem)
     }

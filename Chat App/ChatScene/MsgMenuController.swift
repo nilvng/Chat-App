@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MessagesMenuViewController : UIViewController{
+class MsgMenuController : UIViewController{
     
     typealias DeleteAction = () -> Void
     

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ConversationConfigViewController : UIViewController {
+class ConvConfigController : UIViewController {
     
     typealias  ConfigAction = () -> Void
     var deleteAction : ConfigAction?
@@ -80,7 +80,7 @@ class ConversationConfigViewController : UIViewController {
 
 }
 
-extension ConversationConfigViewController : UITableViewDataSource, UITableViewDelegate {
+extension ConvConfigController : UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         ConfigDetail.allCases.count
     }

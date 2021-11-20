@@ -144,6 +144,8 @@ class ImageStore {
                 let config = ImageConfig(url: key, type: type)
                 let image = self.setImage(im, forKey: config,inMemOnly: false)
                 completion(.success(image))
+            } else{
+                completion(.failure(PhotoError.brokenURL))
             }
         }
     }

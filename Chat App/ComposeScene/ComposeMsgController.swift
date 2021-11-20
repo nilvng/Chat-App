@@ -14,10 +14,11 @@ protocol SearchItemDataSource : UITableViewDataSource {
     func clearSearch()
 }
 
-class ComposeMessageController : UIViewController {
+class ComposeMsgController : UIViewController {
     
     lazy var searchField : UISearchBar = {
         let bar = UISearchBar()
+        bar.placeholder = "Search..."
         return bar
     }()
         
@@ -57,11 +58,11 @@ class ComposeMessageController : UIViewController {
             searchField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             searchField.heightAnchor.constraint(equalToConstant: 40)
                                         ])
-        searchField.layer.cornerRadius = 15
-        searchField.layer.masksToBounds = true
+        //searchField.layer.cornerRadius = 15
+        //searchField.layer.masksToBounds = true
         searchField.searchTextField.backgroundColor = .white
-        searchField.layer.borderWidth = 1.0
-        searchField.layer.borderColor = UIColor.zaloBlue?.cgColor
+        //searchField.layer.borderWidth = 1.0
+        //searchField.layer.borderColor = UIColor.zaloBlue?.cgColor
     }
     
     func setupTableView(){
@@ -91,7 +92,9 @@ class ComposeMessageController : UIViewController {
     
 }
 
-extension ComposeMessageController : UITableViewDelegate{
+// MARK: TableViewDelegate
+
+extension ComposeMsgController : UITableViewDelegate{
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -114,14 +117,7 @@ extension ComposeMessageController : UITableViewDelegate{
         })
         // conversation exist
         if let selected = currentConversation {
-            msgVC.configure(conversation: selected){ messages in
-                if messages != selected.messages{
-                    var updatedItem = selected
-                    updatedItem.messages = messages
-                    print("Update conversation callback: \(selected.id)")
-                    ChatManager.shared.updateChat(newItem: updatedItem)
-                }
-            }
+            msgVC.configure(conversation: selected)
         } else {
         // brand new conversation
             let selected = Conversation(friend: selectedContact)
@@ -140,18 +136,13 @@ extension ComposeMessageController : UITableViewDelegate{
     }
 }
 
-extension ComposeMessageController: UISearchBarDelegate {
+extension ComposeMsgController: UISearchBarDelegate {
     
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        
-//        self.dataSource = UnorderedSearchDataSource()
-        guard let text = searchBar.searchTextField.text, text != "" else {
-            return
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == ""{
+            dataSource.clearSearch()
+            tableView.reloadData()
         }
-        let trimText = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        filterItemForSearchKey(trimText)
-
     }
     
     func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -161,16 +152,15 @@ extension ComposeMessageController: UISearchBarDelegate {
             //  remove leading and trailing whitespace
             let cleanText = title.trimmingCharacters(in: .whitespacesAndNewlines)
             
+            print("search \(cleanText)")
             // only update when it truly changes
             if cleanText != currentSearchText{
-                
-                print("search \(cleanText)")
-                
                 filterItemForSearchKey(cleanText)
             }
         }
         return true
     }
+    
     
     func filterItemForSearchKey(_ key: String){
         self.currentSearchText = key

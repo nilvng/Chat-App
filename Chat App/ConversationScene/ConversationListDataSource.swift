@@ -7,7 +7,7 @@
 
 import UIKit
 class ConversationListDataSource :NSObject {
-    var items : [Conversation]! = ChatManager.shared.chatList{
+    var items : [Conversation]! {
         didSet {
             filteredItems = items
         }

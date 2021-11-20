@@ -32,6 +32,7 @@ class AvatarView: UIImageView {
                 self.image = image
                 //print("show avatar")
         } else {
+            print("why")
             self.usePlaceholderAvatar(with: text!)
             }
         }

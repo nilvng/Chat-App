@@ -26,25 +26,11 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         button.sizeToFit()
 
         button.backgroundColor = UIColor.complementZaloBlue
-//        button.layer.shadowColor = UIColor.gray.cgColor
-//        button.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
-//        button.layer.shadowOpacity = 1.0
         return button
     }()
     
     lazy var blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     
-    private lazy var searchController: UISearchController = {
-        let resultController =  ConversationSearchResultController()
-        let sc = UISearchController(searchResultsController:resultController)
-        sc.searchResultsUpdater = resultController
-        sc.delegate = self
-        sc.searchBar.searchTextField.delegate = self
-        sc.definesPresentationContext = true
-        sc.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Searching...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.trueLightGray!])
-        return sc
-    }()
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,21 +46,20 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
 
 
     // MARK: AutoLayout setups
-    private func setupNavigationBar(){
-        navigationItem.title = "Chats"
+    private func setupTitle(){
+        navigationItem.title = "Let's chat"
         navigationItem.backButtonDisplayMode = .minimal
-
-        if #available(iOS 11.0, *) {
-
-            self.navigationItem.searchController = searchController
-            navigationItem.hidesSearchBarWhenScrolling = false
-   
-
-        } else {
-            // Fallback on earlier versions
-            navigationItem.titleView = searchController.searchBar
-            navigationItem.titleView?.layoutSubviews()
-        }//
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    func setupNavigationBar(){
+        // two navigation icon: search, user preference menu
+        let buttons = [
+            UIBarButtonItem(title: "M", style: .plain, target: self, action: nil),
+                       UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
+                                       style: .plain, target: self, action: #selector(searchButtonPressed)),
+                       ]
+        navigationItem.rightBarButtonItems = buttons
     }
     
     func setupTableView(){
@@ -118,7 +103,7 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         
     @objc func composeButtonPressed(){
         print("Compose message...")
-        let cmc = ComposeMessageController()
+        let cmc = ComposeMsgController()
         self.present(cmc, animated: true, completion: nil)
     }
 
@@ -135,6 +120,12 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         }
     
     // MARK: Actions
+    
+    @objc func searchButtonPressed(){
+        let searchvc = SearchViewController()
+        navigationController?.pushViewController(searchvc, animated: true)
+    }
+    
     func setupLongPressGesture(){
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         longPress.minimumPressDuration = 1.0 // 1 second press
@@ -148,7 +139,7 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
             let touchPoint = gestureRecognizer.location(in: self.tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
                 print(indexPath.row)
-                let configView = ConversationConfigViewController()
+                let configView = ConvConfigController()
                 configView.configure {
                     let itemToDelete = self.dataSource.items[indexPath.row]
                     ChatManager.shared.deleteChat(itemToDelete)
@@ -159,14 +150,16 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
             }
         }
     }
-    // MARK: ViewCycles
+    
+    // MARK: Navigation
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.barTintColor = UIColor.zaloBlue
-
-    }
-
+        setupTitle()
+        }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
+}
 }
 
 // MARK: ChatManagerDelegate
@@ -215,6 +208,7 @@ extension ConversationListController : ChatManagerDelegate {
 }
 
 // MARK: Edit Menu Delegate
+
 extension ConversationListController : UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return HalfSizePresentationController(presentedViewController: presented, presenting: presentingViewController)
@@ -313,33 +307,4 @@ extension ConversationListController : UITableViewDelegate{
 
     }
 
-}
-// MARK: - UISearchResult Updating and UISearchControllerDelegate  Extension
-  extension ConversationListController: UISearchControllerDelegate, UISearchTextFieldDelegate {
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("text field editing..")
-        searchController.searchBar.placeholder = ""
-        searchController.searchBar.searchTextField.backgroundColor = .white
-        searchController.searchBar.searchTextField.textColor = .black
-        searchController.searchBar.searchTextField.tintColor = .black
-        searchController.searchBar.setLeftIcon(UIImage.navigation_search_selected!.withTintColor(UIColor.darkGray))
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        searchController.searchBar.placeholder = "Searching..."
-        searchController.searchBar.searchTextField.backgroundColor = UIColor.zaloBlue
-        searchController.searchBar.setLeftIcon(UIImage.navigation_search_selected!.withTintColor(.white))
-    }
- }
-
-extension UISearchBar {
-    func setLeftIcon(_ image : UIImage){
-        let imageView = UIImageView()
-        imageView.image = image
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.widthAnchor.constraint(equalToConstant: 35).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        searchTextField.leftView = imageView
-    }
 }
