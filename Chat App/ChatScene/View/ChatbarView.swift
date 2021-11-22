@@ -10,6 +10,7 @@ import UIKit
 protocol ChatBarDelegate {
     func keyboardMoved(keyboardFrame: NSValue, moveUp: Bool, animateDuration: Double)
     func messageSubmitted(message: String)
+    func adjustHeight(amount : CGFloat)
 }
 class ChatbarView: UIView {
 
@@ -17,7 +18,8 @@ class ChatbarView: UIView {
     
     var textView : UITextView = {
         let tview = UITextView()
-        tview.isScrollEnabled = false
+        tview.isScrollEnabled = true
+        tview.contentInsetAdjustmentBehavior = .never
         tview.backgroundColor = .white
         tview.font = UIFont(name: "Arial", size: 16)
         return tview
@@ -125,11 +127,27 @@ extension ChatbarView : UITextViewDelegate{
                 // Usual edit message
                 let title = (originalText as NSString).replacingCharacters(in: range, with: text)
                 sendMessage(title)
+                
+                // shrink text view if needed
+                textView.isScrollEnabled = false
                 return false
             }
         }
+        
+        // Enter message
+        /// check if text window's size is increasing
+        if textView.frame.height >= 75{
+            textView.textContainer.maximumNumberOfLines = 0
+            textView.isScrollEnabled = true
+        } else {
+            textView.isScrollEnabled = false
+
+        }
+        delegate?.adjustHeight(amount: textView.frame.height)
         return true
 
+    }
+    func textViewDidBeginEditing(_ textView: UITextView) {
     }
 
 }
