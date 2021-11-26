@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E553F412750B0B500C1E109 /* BubbleContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E553F402750B0B500C1E109 /* BubbleContainer.swift */; };
 		0EAB9E412749381800685E5D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAB9E402749381800685E5D /* SearchViewController.swift */; };
 		C82DB71C271A4A4A002AE563 /* IndexedContactDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB71B271A4A4A002AE563 /* IndexedContactDataSource.swift */; };
 		C82DB727271B055B002AE563 /* ChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB726271B055B002AE563 /* ChatManager.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0E553F402750B0B500C1E109 /* BubbleContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleContainer.swift; sourceTree = "<group>"; };
 		0EAB9E402749381800685E5D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		C82DB71B271A4A4A002AE563 /* IndexedContactDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedContactDataSource.swift; sourceTree = "<group>"; };
 		C82DB726271B055B002AE563 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			children = (
 				C896E71226F9FADF00882298 /* MessageCell.swift */,
 				C8305BC9270457A30070C771 /* ChatbarView.swift */,
+				0E553F402750B0B500C1E109 /* BubbleContainer.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C82DB727271B055B002AE563 /* ChatManager.swift in Sources */,
+				0E553F412750B0B500C1E109 /* BubbleContainer.swift in Sources */,
 				C846508D26FBF9C5009C5782 /* UIImage+Chat.swift in Sources */,
 				C858DC5126F9D6FF00821E67 /* ConversationListController.swift in Sources */,
 				0EAB9E412749381800685E5D /* SearchViewController.swift in Sources */,

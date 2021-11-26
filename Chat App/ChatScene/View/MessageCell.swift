@@ -70,7 +70,7 @@ class MessageCell: UITableViewCell {
         
         }
     
-    
+    // MARK: Configuration
     func configure(with model: Message, lastContinuousMess: Bool = false){
         
         backgroundView = .none
@@ -121,6 +121,7 @@ class MessageCell: UITableViewCell {
         
         if normalizedY < 0 {
             print(normalizedY)
+            return
         }
 
         let color = theme.gradientImage.getPixelColor(pos: CGPoint(x:100 , y: normalizedY))

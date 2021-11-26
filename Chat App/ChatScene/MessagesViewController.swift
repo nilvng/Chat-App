@@ -50,9 +50,24 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         return ChatbarView()
     }()
     var chatBarBottomConstraint : NSLayoutConstraint!
-
     
-    // MARK: Configure
+    // Float bubble
+    var floatBubble : UILabel = {
+        let view = UILabel(frame: CGRect(x: 160, y: 531, width: 100, height: 30))
+        view.backgroundColor = .clear
+        view.numberOfLines = 0
+        view.lineBreakMode = .byWordWrapping
+        view.sizeToFit()
+        view.font = UIFont.systemFont(ofSize: 16)
+        view.textColor = .white
+        return view
+    }()
+    
+    var bbBgView : UIImageView = {
+        let v = UIImageView()
+        return v
+    }()
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         
@@ -62,6 +77,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Configure
     func configure(conversation: Conversation, action : MessageChangedAction? = nil){
         self.conversation = conversation
         self.theme = conversation.theme
@@ -94,7 +110,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         setupObserveKeyboard()
 
         edgesForExtendedLayout = []
-        tableView.contentSize = CGSize(width: tableView.frame.width, height: tableView.frame.height)
         }
     
     override func loadView() {
@@ -102,6 +117,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
 
         setupTableView()
         setupChatbarView()
+        setupFloatBb()
     }
     
 
@@ -144,7 +160,43 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     
-        tableView.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 49, left: 0, bottom: 0, right: 0)
+
+    }
+    // MARK: setup float bb
+    var bbFlyConstraint : NSLayoutConstraint!
+    var bbSnapConstraint : NSLayoutConstraint!
+    var bbStretchConstraint : NSLayoutConstraint!
+    
+    func setupFloatBb(){
+        view.addSubview(bbBgView)
+        view.addSubview(floatBubble)
+        floatBubble.isHidden = true
+        floatBubble.translatesAutoresizingMaskIntoConstraints = false
+        bbFlyConstraint = floatBubble.bottomAnchor.constraint(equalTo: chatBarView.bottomAnchor, constant: -7)
+        self.bbSnapConstraint = floatBubble.widthAnchor.constraint(lessThanOrEqualToConstant: 210)
+        self.bbStretchConstraint = floatBubble.widthAnchor.constraint(equalToConstant: 230)
+        
+        let cs : [NSLayoutConstraint] = [
+            bbFlyConstraint,
+            bbStretchConstraint,
+            floatBubble.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
+            floatBubble.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
+
+        ]
+        
+        bbBgView.translatesAutoresizingMaskIntoConstraints = false
+
+        let constraints : [NSLayoutConstraint] = [
+            bbBgView.topAnchor.constraint(equalTo: floatBubble.topAnchor, constant:-6),
+            bbBgView.leadingAnchor.constraint(equalTo: floatBubble.leadingAnchor,constant: -9),
+            bbBgView.bottomAnchor.constraint(equalTo:  floatBubble.bottomAnchor, constant: 6),
+            bbBgView.trailingAnchor.constraint(equalTo: floatBubble.trailingAnchor, constant: 9),
+        ]
+        NSLayoutConstraint.activate(cs)
+        NSLayoutConstraint.activate(constraints)
+        
+        bbBgView.isHidden = true
 
     }
     
@@ -167,7 +219,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
 
     }
     
-    
+    // MARK: Handle keyboard
     @objc func handleKeyboardMoving(notification: NSNotification){
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue? else {
             return
@@ -175,8 +227,8 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         let moveUp = notification.name == UIResponder.keyboardWillShowNotification
         let animateDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
         let scalingValue =  moveUp ? keyboardFrame.cgRectValue.height : 0
-        self.chatBarBottomConstraint.constant = moveUp ? -keyboardFrame.cgRectValue.height : 0
-        let inset = tableInset > 0 ? tableInset : 0
+        self.chatBarBottomConstraint.constant = moveUp ? -keyboardFrame.cgRectValue.height : 5
+        let inset = tableInset > 0 ? tableInset + 0 : 0
         UIView.animate(withDuration: animateDuration, animations: { [weak self] in
             self?.tableView.contentInset.top = moveUp ? scalingValue + inset : inset
             self?.view.layoutIfNeeded()
@@ -269,7 +321,14 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     }
  
     var lastPage : Int = 0
-
+    var newMessAnimation : Bool = false
+    var outgoingBubbleConfig : BackgroundConfig = {
+        let config = BackgroundConfig()
+        config.color = .none
+        config.corner = [.allCorners]
+        config.radius = 13
+        return config
+    }()
 }
 
 // MARK: TableViewController
@@ -300,8 +359,14 @@ extension MessagesViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        // update gradient color of visible bubbles
         updatesBubble(givenIndices: [indexPath])
         
+        // sent message? -> animate bubble
+        guard newMessAnimation else {return;}
+        animateFloatBb()
+        newMessAnimation = false
     }
     
     // MARK: Update bubbles
@@ -344,27 +409,61 @@ extension MessagesViewController : UITableViewDataSource {
         }
     }
     
-    // MARK: Animate bubbles
+    // MARK: Animate Bubble
+    
+    fileprivate func animateFloatBb() {
+        // show float bubble
+        self.bbBgView.isHidden = false
+        self.floatBubble.isHidden = false
+
+        self.view.layoutIfNeeded()
+
+        // animate float bubble
+        
+        let bbRect = tableView.convert(tableView.rectForRow(at: IndexPath(row: 0, section: 0)), to: self.view)
+        // get gradient color
+        self.bbBgView.tintColor = theme.gradientImage.getPixelColor(pos: CGPoint(x:100 , y: bbRect.maxY))
+                                                      
+        UIView.animate(withDuration: 0.26, delay: 0.02, options: .curveEaseOut, animations: { [weak self] in
+            // move to cell
+            self?.bbFlyConstraint.constant = bbRect.maxY - (self?.floatBubble.frame.maxY ?? 0) - 13
+            // shrink
+            self?.bbStretchConstraint.isActive = false
+            self?.bbSnapConstraint.isActive = true
+            self?.view.layoutIfNeeded()
+        }, completion: { c in
+            print("done animation")
+            
+            self.floatBubble.isHidden = true
+            self.bbBgView.isHidden = true
+            self.bbSnapConstraint.isActive = false
+            self.bbStretchConstraint.isActive = true
+
+            self.bbFlyConstraint.constant = -7
+        })
+    }
 }
 
 // MARK: Chatbar Delegate
 extension MessagesViewController : ChatbarDelegate {
     func adjustHeight(amount: CGFloat) {
-        print("everyday \(tableView.contentOffset.y) - \(tableInset)")
         
         if (-tableInset != tableView.contentOffset.y){
             DispatchQueue.main.async {
-                print(self.tableInset)
                 self.tableView.setContentOffset(CGPoint(x: 0, y: -self.tableInset), animated: false)
             }
         }
     }
     
     func messageSubmitted(message: String) {
+        
+        newMessAnimation = true
+        
         conversation?.messages.insert((Message.newMessage(content: message)), at: 0)
-
+        floatBubble.text = message
+        bbBgView.image =  BackgroundFactory.shared.getBackground(config: outgoingBubbleConfig)
         tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
         
-        updatesBubble()
+        //updatesBubble()
     }
 }
