@@ -7,14 +7,13 @@
 
 import UIKit
 
-protocol ChatBarDelegate {
-    func keyboardMoved(keyboardFrame: NSValue, moveUp: Bool, animateDuration: Double)
+protocol ChatbarDelegate {
     func messageSubmitted(message: String)
     func adjustHeight(amount : CGFloat)
 }
 class ChatbarView: UIView {
 
-    var delegate : ChatBarDelegate?
+    var delegate : ChatbarDelegate?
     
     var textView : UITextView = {
         let tview = UITextView()

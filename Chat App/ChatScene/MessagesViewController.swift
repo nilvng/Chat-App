@@ -35,6 +35,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         table.separatorStyle = .none
         table.allowsSelection = false
         table.alwaysBounceVertical = false
+        
+        table.showsVerticalScrollIndicator = false
+        table.contentInsetAdjustmentBehavior = .never
         return table
     }()
     
@@ -73,34 +76,35 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        setupNavigationBar()
-//        setupTableView()
-//        setupChatbarView()
-//        setupObserveKeyboard()
-        setupObserveKeyboard()
-
+        setupNavigationBar()
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.isUserInteractionEnabled = true
         tableView.addGestureRecognizer(tapGesture)
-        
-        tableView.showsVerticalScrollIndicator = false
-        tableView.showsHorizontalScrollIndicator = false
-        tableView.alwaysBounceVertical = false
+
+        tableView.register(MessageCell.self, forCellReuseIdentifier: MessageCell.identifier)
+        tableView.estimatedRowHeight = 60
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
 
         chatBarView.delegate = self
 
+        setupObserveKeyboard()
+
+        edgesForExtendedLayout = []
+        tableView.contentSize = CGSize(width: tableView.frame.width, height: tableView.frame.height)
         }
     
     override func loadView() {
         super.loadView()
-        setupNavigationBar()
+
         setupTableView()
         setupChatbarView()
     }
     
 
-    
     // MARK: AutoLayout setups
     
     func setupObserveKeyboard(){
@@ -130,38 +134,22 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     var tableInset : CGFloat = 100
     
     func setupTableView(){
-
-        tableView.register(MessageCell.self, forCellReuseIdentifier: MessageCell.identifier)
-        tableView.estimatedRowHeight = 30
-        tableView.rowHeight = UITableView.automaticDimension
         
         view.addSubview(tableView)
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let margin = view.safeAreaLayoutGuide
-        
+                
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: margin.topAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     
-        tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
+        tableView.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
 
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.insetsContentViewsToSafeArea = true
-        
-        if #available(iOS 11.0, *) {
-            tableView.contentInsetAdjustmentBehavior = .never
-        } else {
-            automaticallyAdjustsScrollViewInsets = false
-        }
     }
     
     func setupChatbarView(){
 
-        
         view.addSubview(chatBarView)
         chatBarView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -172,12 +160,10 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
             chatBarView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             chatBarView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             chatBarBottomConstraint!,
-            chatBarView.heightAnchor.constraint(lessThanOrEqualToConstant: 140),
+            //chatBarView.heightAnchor.constraint(lessThanOrEqualToConstant: 140),
             chatBarView.heightAnchor.constraint(greaterThanOrEqualToConstant: 44),
             ])
-        
         chatBarView.configure(accent: theme.accentColor)
-
 
     }
     
@@ -188,7 +174,19 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         }
         let moveUp = notification.name == UIResponder.keyboardWillShowNotification
         let animateDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
-        self.keyboardMoved(keyboardFrame: keyboardFrame, moveUp: moveUp, animateDuration: animateDuration)
+        let scalingValue =  moveUp ? keyboardFrame.cgRectValue.height : 0
+        self.chatBarBottomConstraint.constant = moveUp ? -keyboardFrame.cgRectValue.height : 0
+        let inset = tableInset > 0 ? tableInset : 0
+        UIView.animate(withDuration: animateDuration, animations: { [weak self] in
+            self?.tableView.contentInset.top = moveUp ? scalingValue + inset : inset
+            self?.view.layoutIfNeeded()
+        }, completion: {  [self]_ in
+            if (self.conversation.messages.count) > 0 {
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                           at: .bottom, animated: true)
+            }
+        })
+
         
     }
     
@@ -203,12 +201,14 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         if action != nil {
             action?(conversation!.messages)
         } else{
+            // default action: update chat
             ChatManager.shared.updateChat(newItem: conversation)
         }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
         tableInset = chatBarView.frame.height
     }
     
@@ -216,11 +216,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         super.viewWillAppear(animated)
         chatTitleLabel.text = conversation.title
         navigationController?.navigationBar.barTintColor = .white
-        //tableInset = chatBarView.bounds.size.height
-        DispatchQueue.main.async {
-            print(self.tableInset)
-            self.tableView.setContentOffset(CGPoint(x: 0, y: -self.tableInset), animated: false)
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -229,6 +224,10 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         navigationController?.navigationBar.tintColor = theme.accentColor
         
         NSLog("Csc appeared")
+
+        
+        guard conversation.messages.count > 0 else {return}
+        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .bottom, animated: true)
 
     }
     
@@ -282,7 +281,7 @@ extension MessagesViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: MessageCell.identifier, for: indexPath) as! MessageCell
-        let reverseIndex = conversation!.messages.count - indexPath.row - 1
+        let reverseIndex = indexPath.row
         let message =  conversation!.messages[reverseIndex]
         
         var isLastContinuous = true
@@ -309,12 +308,10 @@ extension MessagesViewController : UITableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         // change bubble gradient as scrolling
-        //let ideaRatio = UIScreen.main.bounds.size.height / 17
-        let ideaRatio : CGFloat = 37
-        let lag : CGFloat = scrollView.isTracking ? 23 : ideaRatio
+        let ideaRatio = UIScreen.main.bounds.size.height / 17
+        let lag : CGFloat = scrollView.isTracking ? 18 : ideaRatio
         let currentPage = (Int) (scrollView.contentOffset.y / lag)
         
-        print( "table offset \(scrollView.contentOffset.y)")
         if (currentPage != lastPage){
             lastPage = currentPage
             self.updatesBubble()
@@ -351,9 +348,9 @@ extension MessagesViewController : UITableViewDataSource {
 }
 
 // MARK: Chatbar Delegate
-extension MessagesViewController : ChatBarDelegate {
+extension MessagesViewController : ChatbarDelegate {
     func adjustHeight(amount: CGFloat) {
-        print("everyday \(chatBarView.frame.height) - \(tableInset)")
+        print("everyday \(tableView.contentOffset.y) - \(tableInset)")
         
         if (-tableInset != tableView.contentOffset.y){
             DispatchQueue.main.async {
@@ -363,27 +360,10 @@ extension MessagesViewController : ChatBarDelegate {
         }
     }
     
-    func keyboardMoved(keyboardFrame: NSValue, moveUp: Bool, animateDuration: Double) {
-        print("keyboard height:\(keyboardFrame.cgRectValue.height)")
-        let scalingValue =  moveUp ? keyboardFrame.cgRectValue.height : 0
-
-        chatBarBottomConstraint?.constant = -scalingValue
-        
-        let inset : CGFloat = self.tableInset
-        
-        UIView.animate(withDuration: animateDuration, delay: 0, options: .curveEaseOut, animations: { [weak self] in
-            self?.tableView.contentInset.top = moveUp ? scalingValue + inset : inset
-            self?.view.layoutIfNeeded()
-        }, completion: { (completed) in
-            self.scrollToLastMessage()
-        })
-
-    }
-    
     func messageSubmitted(message: String) {
-        conversation?.messages.append(Message.newMessage(content: message))
+        conversation?.messages.insert((Message.newMessage(content: message)), at: 0)
 
-        tableView.reloadData()
+        tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
         
         updatesBubble()
     }
