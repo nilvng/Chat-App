@@ -24,13 +24,19 @@ class ChatbarView: UIView {
         return tview
     }()
     
-    private var submitButton : UIButton = {
+    var submitButton : UIButton = {
         let button = UIButton()
         button.setImage(UIImage.btn_send_forboy, for: .normal)
         button.setImage(.btn_send_forboy_disabled, for: .disabled)
 
         return button
     }()
+    private var emojiButton : UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+        return button
+    }()
+    
     var separatorLine : UIView = {
         let line = UIView()
         line.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
@@ -42,11 +48,14 @@ class ChatbarView: UIView {
         
         backgroundColor = .white
         
+        setupEmojiButton()
         setupSubmitButton()
         setupTextView()
         setupSeparatorLine()
         
         submitButton.addTarget(self, action: #selector(submitButtonPressed), for: .touchUpInside)
+        emojiButton.addTarget(self, action: #selector(selectEmoji), for: .touchUpInside)
+        
         textView.delegate = self
     }
     
@@ -61,7 +70,7 @@ class ChatbarView: UIView {
         NSLayoutConstraint.activate([
             textView.bottomAnchor.constraint(equalTo: bottomAnchor),
             textView.topAnchor.constraint(equalTo: topAnchor, constant:  5),
-            textView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            textView.leadingAnchor.constraint(equalTo: emojiButton.trailingAnchor, constant: 5),
             textView.trailingAnchor.constraint(equalTo: submitButton.leadingAnchor, constant:  -5),
 
         ])
@@ -77,6 +86,18 @@ class ChatbarView: UIView {
             submitButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
             submitButton.widthAnchor.constraint(equalToConstant: 50),
             submitButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
+    }
+    func setupEmojiButton(){
+        addSubview(emojiButton)
+        emojiButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            emojiButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            emojiButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -5),
+            emojiButton.widthAnchor.constraint(equalToConstant: 50),
+            emojiButton.heightAnchor.constraint(equalToConstant: 50)
         ])
         
     }
@@ -101,8 +122,12 @@ class ChatbarView: UIView {
 
     @objc func submitButtonPressed(){
         sendMessage(textView.text)
-        
     }
+    
+    @objc func selectEmoji(){
+        print("emoji")
+    }
+    
 }
 
 extension ChatbarView : UITextViewDelegate{

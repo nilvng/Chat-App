@@ -47,15 +47,20 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
 
     // MARK: AutoLayout setups
     private func setupTitle(){
-        navigationItem.title = "Let's chat"
+        let chatTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        chatTitleLabel.textColor  = .black
+        chatTitleLabel.font = UIFont.systemFont(ofSize: 25)
+        chatTitleLabel.text = "Let's chat"
+        navigationItem.titleView = chatTitleLabel
         navigationItem.backButtonDisplayMode = .minimal
-        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.backgroundColor = UIColor.zaloBlue
+        //navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     func setupNavigationBar(){
         // two navigation icon: search, user preference menu
         let buttons = [
-            UIBarButtonItem(title: "M", style: .plain, target: self, action: nil),
                        UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
                                        style: .plain, target: self, action: #selector(searchButtonPressed)),
                        ]

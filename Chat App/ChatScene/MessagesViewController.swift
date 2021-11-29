@@ -169,19 +169,25 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     var bbStretchConstraint : NSLayoutConstraint!
     
     func setupFloatBb(){
+        
         view.addSubview(bbBgView)
         view.addSubview(floatBubble)
+        
+        chatBarView.layoutIfNeeded() // layout chat bar so that we can align text field frame with float bb
+        
         floatBubble.isHidden = true
         floatBubble.translatesAutoresizingMaskIntoConstraints = false
         bbFlyConstraint = floatBubble.bottomAnchor.constraint(equalTo: chatBarView.bottomAnchor, constant: -7)
+        
         self.bbSnapConstraint = floatBubble.widthAnchor.constraint(lessThanOrEqualToConstant: 210)
-        self.bbStretchConstraint = floatBubble.widthAnchor.constraint(equalToConstant: 230)
+        self.bbStretchConstraint = floatBubble.widthAnchor.constraint(
+            equalToConstant: (chatBarView.textView.frame.size.width + chatBarView.submitButton.frame.width))
         
         let cs : [NSLayoutConstraint] = [
             bbFlyConstraint,
             bbStretchConstraint,
             floatBubble.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
-            floatBubble.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
+            floatBubble.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
 
         ]
         
@@ -464,6 +470,6 @@ extension MessagesViewController : ChatbarDelegate {
         bbBgView.image =  BackgroundFactory.shared.getBackground(config: outgoingBubbleConfig)
         tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
         
-        //updatesBubble()
+        updatesBubble()
     }
 }
