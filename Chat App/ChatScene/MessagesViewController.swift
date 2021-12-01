@@ -108,16 +108,16 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         chatBarView.delegate = self
 
         setupObserveKeyboard()
-
+        setupTableView()
+        setupChatbarView()
+        setupFloatBb()
         edgesForExtendedLayout = []
         }
     
     override func loadView() {
         super.loadView()
 
-        setupTableView()
-        setupChatbarView()
-        setupFloatBb()
+        
     }
     
 
@@ -158,9 +158,9 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     
-        tableView.contentInset = UIEdgeInsets(top: 49, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0)
 
     }
     // MARK: setup float bb
@@ -177,16 +177,18 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         
         floatBubble.isHidden = true
         floatBubble.translatesAutoresizingMaskIntoConstraints = false
-        bbFlyConstraint = floatBubble.bottomAnchor.constraint(equalTo: chatBarView.bottomAnchor, constant: -7)
+        bbFlyConstraint = floatBubble.bottomAnchor.constraint(equalTo: chatBarView.bottomAnchor,
+                                                              constant: -BubbleConstant.vPadding)
         
-        self.bbSnapConstraint = floatBubble.widthAnchor.constraint(lessThanOrEqualToConstant: 210)
+        self.bbSnapConstraint = floatBubble.widthAnchor.constraint(lessThanOrEqualToConstant: BubbleConstant.maxWidth)
         self.bbStretchConstraint = floatBubble.widthAnchor.constraint(
             equalToConstant: (chatBarView.textView.frame.size.width + chatBarView.submitButton.frame.width))
         
         let cs : [NSLayoutConstraint] = [
             bbFlyConstraint,
             bbStretchConstraint,
-            floatBubble.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
+            floatBubble.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                  constant: -BubbleConstant.hPadding),
             floatBubble.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
 
         ]
@@ -194,11 +196,15 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         bbBgView.translatesAutoresizingMaskIntoConstraints = false
 
         let constraints : [NSLayoutConstraint] = [
-            bbBgView.topAnchor.constraint(equalTo: floatBubble.topAnchor, constant:-6),
-            bbBgView.leadingAnchor.constraint(equalTo: floatBubble.leadingAnchor,constant: -9),
-            bbBgView.bottomAnchor.constraint(equalTo:  floatBubble.bottomAnchor, constant: 6),
-            bbBgView.trailingAnchor.constraint(equalTo: floatBubble.trailingAnchor, constant: 9),
-        ]
+            bbBgView.topAnchor.constraint(equalTo: floatBubble.topAnchor,
+                                          constant: -BubbleConstant.vPadding + BubbleConstant.contentVPadding + 2),
+            bbBgView.leadingAnchor.constraint(equalTo: floatBubble.leadingAnchor,
+                                              constant: -BubbleConstant.hPadding + BubbleConstant.contentHPadding),
+            bbBgView.bottomAnchor.constraint(equalTo:  floatBubble.bottomAnchor,
+                                             constant: BubbleConstant.vPadding - BubbleConstant.contentVPadding - 2),
+            bbBgView.trailingAnchor.constraint(equalTo: floatBubble.trailingAnchor,
+                                               constant: BubbleConstant.hPadding - BubbleConstant.contentHPadding),
+        ] // WEIRD
         NSLayoutConstraint.activate(cs)
         NSLayoutConstraint.activate(constraints)
         
@@ -212,14 +218,14 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         chatBarView.translatesAutoresizingMaskIntoConstraints = false
 
         let margin = view.safeAreaLayoutGuide
-        chatBarBottomConstraint = chatBarView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        chatBarBottomConstraint = chatBarView.bottomAnchor.constraint(equalTo: margin.bottomAnchor)
 
         NSLayoutConstraint.activate([
             chatBarView.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             chatBarView.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             chatBarBottomConstraint!,
-            //chatBarView.heightAnchor.constraint(lessThanOrEqualToConstant: 140),
-            chatBarView.heightAnchor.constraint(greaterThanOrEqualToConstant: 44),
+            chatBarView.heightAnchor.constraint(lessThanOrEqualToConstant: 140),
+            chatBarView.heightAnchor.constraint(greaterThanOrEqualToConstant: 35),
             ])
         chatBarView.configure(accent: theme.accentColor)
 
@@ -232,9 +238,11 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         }
         let moveUp = notification.name == UIResponder.keyboardWillShowNotification
         let animateDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+        print("\(keyboardFrame.cgRectValue.height) height - \(tableInset)")
         let scalingValue =  moveUp ? keyboardFrame.cgRectValue.height : 0
-        self.chatBarBottomConstraint.constant = moveUp ? -keyboardFrame.cgRectValue.height : 5
-        let inset = tableInset > 0 ? tableInset + 0 : 0
+        self.chatBarBottomConstraint.constant = moveUp ? -keyboardFrame.cgRectValue.height : 0
+        let inset = tableInset
+
         UIView.animate(withDuration: animateDuration, animations: { [weak self] in
             self?.tableView.contentInset.top = moveUp ? scalingValue + inset : inset
             self?.view.layoutIfNeeded()
@@ -267,13 +275,12 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        tableInset = chatBarView.frame.height
+        tableInset = chatBarView.frame.height + 5
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         chatTitleLabel.text = conversation.title
-        navigationController?.navigationBar.barTintColor = .white
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -349,12 +356,14 @@ extension MessagesViewController : UITableViewDataSource {
         let reverseIndex = indexPath.row
         let message =  conversation!.messages[reverseIndex]
         
-        var isLastContinuous = true
+        var isLastContinuous = false
         
-        if reverseIndex + 1 < conversation.messages.count {
-            let laterMessage = conversation!.messages[reverseIndex + 1]
+        if reverseIndex - 1 >= 0 {
+            let laterMessage = conversation!.messages[reverseIndex - 1]
             isLastContinuous = laterMessage.sender != message.sender
         }
+        
+        if (isLastContinuous){ print("last continuous \(message.content) - \(reverseIndex)")}
         
         cell.configure(with: message, lastContinuousMess: isLastContinuous)
         
@@ -445,7 +454,7 @@ extension MessagesViewController : UITableViewDataSource {
             self.bbSnapConstraint.isActive = false
             self.bbStretchConstraint.isActive = true
 
-            self.bbFlyConstraint.constant = -7
+            self.bbFlyConstraint.constant = -BubbleConstant.contentVPadding
         })
     }
 }
@@ -453,16 +462,17 @@ extension MessagesViewController : UITableViewDataSource {
 // MARK: Chatbar Delegate
 extension MessagesViewController : ChatbarDelegate {
     func adjustHeight(amount: CGFloat) {
-        
+        print("adjust height")
         if (-tableInset != tableView.contentOffset.y){
+            print("scroll table as user typing text")
             DispatchQueue.main.async {
-                self.tableView.setContentOffset(CGPoint(x: 0, y: -self.tableInset), animated: false)
+                self.tableView.setContentOffset(CGPoint(x: 0, y: -self.tableInset), animated: true)
             }
         }
     }
     
     func messageSubmitted(message: String) {
-        
+        print("msg submit")
         newMessAnimation = true
         
         conversation?.messages.insert((Message.newMessage(content: message)), at: 0)

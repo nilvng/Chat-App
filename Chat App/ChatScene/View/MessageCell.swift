@@ -61,11 +61,11 @@ class MessageCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         contentView.addSubview(bubbleImageView)
-        contentView.addSubview(messageBodyLabel)
         contentView.addSubview(avatarView)
+        contentView.addSubview(messageBodyLabel)
 
-        setupMessageBody()
         setupAvatarView()
+        setupMessageBody()
         setupBubbleBackground()
         
         }
@@ -100,6 +100,7 @@ class MessageCell: UITableViewCell {
             messageBodyLabel.textColor = .black
             // show avatar view if is the last continuous message a friend sent
             avatarView.isHidden = !lastContinuousMess
+            print("Show avatar")
             if lastContinuousMess{
                 avatarView.update(url: model.sender.avatar, text: model.sender.firstName)
             }
@@ -107,8 +108,8 @@ class MessageCell: UITableViewCell {
             // continuous message would be closer to each other
             continuousConstraint.constant = !lastContinuousMess ? -bubbleVPadding + 4 : -bubbleVPadding
     }
-    var bubbleVPadding : CGFloat = 14
-    var bubbleHPadding : CGFloat = 18
+    var bubbleVPadding : CGFloat = BubbleConstant.vPadding
+    var bubbleHPadding : CGFloat = BubbleConstant.hPadding
 
     
     
@@ -132,7 +133,7 @@ class MessageCell: UITableViewCell {
     func setupMessageBody(){
         messageBodyLabel.translatesAutoresizingMaskIntoConstraints = false
         self.outboundConstraint =  messageBodyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -bubbleHPadding)
-        self.inboundConstraint = messageBodyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: bubbleHPadding + 40)
+        self.inboundConstraint = messageBodyLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: bubbleHPadding)
         self.continuousConstraint = messageBodyLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -bubbleVPadding)
 
         let constraints : [NSLayoutConstraint] = [
@@ -140,7 +141,7 @@ class MessageCell: UITableViewCell {
             continuousConstraint,
             outboundConstraint,
             inboundConstraint,
-            messageBodyLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 220),
+            messageBodyLabel.widthAnchor.constraint(lessThanOrEqualToConstant: BubbleConstant.maxWidth),
         ]
         messageBodyLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         NSLayoutConstraint.activate(constraints)
@@ -151,10 +152,10 @@ class MessageCell: UITableViewCell {
         
         bubbleImageView.translatesAutoresizingMaskIntoConstraints = false
         let constraints : [NSLayoutConstraint] = [
-            bubbleImageView.topAnchor.constraint(equalTo: messageBodyLabel.topAnchor, constant: -bubbleVPadding * 3/4),
-            bubbleImageView.leadingAnchor.constraint(equalTo: messageBodyLabel.leadingAnchor, constant: -bubbleHPadding * 2/3),
-            bubbleImageView.bottomAnchor.constraint(equalTo:  messageBodyLabel.bottomAnchor, constant: bubbleVPadding * 3/4),
-            bubbleImageView.trailingAnchor.constraint(equalTo: messageBodyLabel.trailingAnchor, constant: bubbleHPadding * 2/3),
+            bubbleImageView.topAnchor.constraint(equalTo: messageBodyLabel.topAnchor, constant: -bubbleVPadding + BubbleConstant.contentVPadding),
+            bubbleImageView.leadingAnchor.constraint(equalTo: messageBodyLabel.leadingAnchor, constant: -bubbleHPadding + BubbleConstant.contentHPadding),
+            bubbleImageView.bottomAnchor.constraint(equalTo:  messageBodyLabel.bottomAnchor, constant: bubbleVPadding - BubbleConstant.contentVPadding),
+            bubbleImageView.trailingAnchor.constraint(equalTo: messageBodyLabel.trailingAnchor, constant: bubbleHPadding - BubbleConstant.contentHPadding),
         ]
         
         NSLayoutConstraint.activate(constraints)
@@ -163,10 +164,10 @@ class MessageCell: UITableViewCell {
     func setupAvatarView(){
         avatarView.translatesAutoresizingMaskIntoConstraints = false
         let constraints : [NSLayoutConstraint] = [
-            avatarView.bottomAnchor.constraint(equalTo: messageBodyLabel.bottomAnchor),
-            avatarView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 7),
-            avatarView.widthAnchor.constraint(equalToConstant: 33),
-            avatarView.heightAnchor.constraint(equalToConstant: 33)
+            avatarView.bottomAnchor.constraint(equalTo: bubbleImageView.bottomAnchor),
+            avatarView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: BubbleConstant.contentHPadding),
+            avatarView.widthAnchor.constraint(equalToConstant: BubbleConstant.avatarSize),
+            avatarView.heightAnchor.constraint(equalToConstant: BubbleConstant.avatarSize)
         ]
         NSLayoutConstraint.activate(constraints)
     }

@@ -69,12 +69,11 @@ class ChatbarView: UIView {
         
         NSLayoutConstraint.activate([
             textView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            textView.topAnchor.constraint(equalTo: topAnchor, constant:  5),
+            textView.topAnchor.constraint(equalTo: topAnchor),
             textView.leadingAnchor.constraint(equalTo: emojiButton.trailingAnchor, constant: 5),
             textView.trailingAnchor.constraint(equalTo: submitButton.leadingAnchor, constant:  -5),
 
         ])
-        textView.setContentHuggingPriority(.defaultLow, for: .horizontal)
     }
     
     func setupSubmitButton(){

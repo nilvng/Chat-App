@@ -48,13 +48,20 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
     // MARK: AutoLayout setups
     private func setupTitle(){
         let chatTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
-        chatTitleLabel.textColor  = .black
+        chatTitleLabel.textColor  = .white
         chatTitleLabel.font = UIFont.systemFont(ofSize: 25)
         chatTitleLabel.text = "Let's chat"
         navigationItem.titleView = chatTitleLabel
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .zaloBlue
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
         navigationItem.backButtonDisplayMode = .minimal
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.backgroundColor = UIColor.zaloBlue
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
         //navigationController?.navigationBar.prefersLargeTitles = true
     }
     
@@ -143,7 +150,7 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         if gestureRecognizer.state == .began {
             let touchPoint = gestureRecognizer.location(in: self.tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
-                print(indexPath.row)
+                print("Long press row: \(indexPath.row)")
                 let configView = ConvConfigController()
                 configView.configure {
                     let itemToDelete = self.dataSource.items[indexPath.row]
@@ -163,7 +170,11 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = false
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .white
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
 }
 }
 
