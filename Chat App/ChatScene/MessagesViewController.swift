@@ -209,6 +209,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
         NSLayoutConstraint.activate(constraints)
         
         bbBgView.isHidden = true
+        bbBgView.image =  BackgroundFactory.shared.getBackground(config: outgoingBubbleConfig)
 
     }
     
@@ -380,7 +381,9 @@ extension MessagesViewController : UITableViewDataSource {
         
         // sent message? -> animate bubble
         guard newMessAnimation else {return;}
-        animateFloatBb()
+        DispatchQueue.main.async {
+            self.animateFloatBb()
+        }
         newMessAnimation = false
     }
     
@@ -448,7 +451,7 @@ extension MessagesViewController : UITableViewDataSource {
             self?.view.layoutIfNeeded()
         }, completion: { c in
             print("done animation")
-            
+
             self.floatBubble.isHidden = true
             self.bbBgView.isHidden = true
             self.bbSnapConstraint.isActive = false
@@ -473,11 +476,13 @@ extension MessagesViewController : ChatbarDelegate {
     
     func messageSubmitted(message: String) {
         print("msg submit")
+        
         newMessAnimation = true
         
         conversation?.messages.insert((Message.newMessage(content: message)), at: 0)
+        
         floatBubble.text = message
-        bbBgView.image =  BackgroundFactory.shared.getBackground(config: outgoingBubbleConfig)
+
         tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
         
         updatesBubble()

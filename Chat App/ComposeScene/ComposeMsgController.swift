@@ -114,13 +114,15 @@ extension ComposeMsgController : UITableViewDelegate{
         
         let selectedContact = dataSource.getItem(at: indexPath)
         // Check if the user has chat with the selected friend before
-        let currentConversation = Conversation.stubList.first(where: { conv in
+        let currentConversation = ChatManager.shared.chatList.first(where: { conv in
             return conv.members.contains(selectedContact)
         })
         // conversation exist
         if let selected = currentConversation {
+            print("former chat")
             msgVC.configure(conversation: selected)
         } else {
+            print("new chat with user: \(selectedContact.fullName)")
         // brand new conversation
             let selected = Conversation(friend: selectedContact)
             msgVC.configure(conversation: selected){ messages in
