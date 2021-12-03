@@ -66,7 +66,7 @@ class ConversationCell : UITableViewCell {
         thumbnail.update(url: model.thumbnail, text: model.title)
         
         // don't have any message in this conversation -> shouldn't become a cell
-        guard let lastMsg = model.messages.last else {
+        guard let lastMsg = model.messages.first else {
             return
         }
         lastMessageLabel.text = lastMsg.content

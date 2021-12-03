@@ -7,12 +7,7 @@
 
 import UIKit
 class ConversationListDataSource :NSObject {
-    var items : [Conversation]! {
-        didSet {
-            filteredItems = items
-        }
-    }
-    var filteredItems : [Conversation] = []
+    var items : [Conversation]!
 
     // sorting conversation from the latest to oldest
     func sortByLatest() -> Bool{
@@ -28,14 +23,14 @@ class ConversationListDataSource :NSObject {
 
 extension ConversationListDataSource : UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.filteredItems.count
+        self.items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ConversationCell.identifier, for: indexPath) as! ConversationCell
         
-        cell.configure(model: filteredItems[indexPath.row])
+        cell.configure(model: items[indexPath.row])
         return cell
         
     }
