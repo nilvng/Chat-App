@@ -106,6 +106,13 @@ extension ComposeMsgController : UITableViewDelegate{
         // first row when user have not searched for any friend : add new contact
         if indexPath.section == 0 && !isFiltering{
             print("Navigate to Add Contact view")
+            let addView = FriendDetailViewController()
+            addView.configure(with: FriendContact(), isNew: true, changeAction: { friend in
+                PhonebookManager.shared.add(friend)
+            })
+            let presentingVC = self.presentingViewController as? UINavigationController
+            presentingVC?.pushViewController(addView, animated: true)
+            self.dismiss(animated: false, completion: nil)
             return
         }
         

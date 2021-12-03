@@ -39,7 +39,7 @@ extension Conversation : Equatable {
     }
     static func > (lhs: Conversation, rhs: Conversation) -> Bool{
         // Assume Conversation always has at least 1 message
-        return lhs.messages.last!.timestamp > rhs.messages.last!.timestamp
+        return lhs.messages.first!.timestamp > rhs.messages.first!.timestamp
     }
 }
 

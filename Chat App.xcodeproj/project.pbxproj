@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		0E1425EF27559BDC004E06DD /* BubbleConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1425EE27559BDC004E06DD /* BubbleConstant.swift */; };
 		0E553F412750B0B500C1E109 /* BubbleContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E553F402750B0B500C1E109 /* BubbleContainer.swift */; };
+		0EAADCED275A0934009DC595 /* FriendDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAADCEC275A0934009DC595 /* FriendDetailController.swift */; };
+		0EAADCEF275A094C009DC595 /* FriendEditDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAADCEE275A094C009DC595 /* FriendEditDataSource.swift */; };
+		0EAADCF1275A095D009DC595 /* FriendDetailDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAADCF0275A095D009DC595 /* FriendDetailDataSource.swift */; };
+		0EAADCF3275A0B5D009DC595 /* FriendTextEditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAADCF2275A0B5D009DC595 /* FriendTextEditCell.swift */; };
+		0EAADCF5275A0B7A009DC595 /* FriendAvatarEditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAADCF4275A0B7A009DC595 /* FriendAvatarEditCell.swift */; };
+		0EAADCF7275A0B91009DC595 /* FriendDeleteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAADCF6275A0B91009DC595 /* FriendDeleteCell.swift */; };
+		0EAADCF9275A0BB9009DC595 /* FriendDetailAvatarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAADCF8275A0BB9009DC595 /* FriendDetailAvatarCell.swift */; };
+		0EAADCFB275A0BE8009DC595 /* UIView+anchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAADCFA275A0BE8009DC595 /* UIView+anchor.swift */; };
 		0EAB9E412749381800685E5D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAB9E402749381800685E5D /* SearchViewController.swift */; };
 		0ECF8D462759019200351CEE /* Phonebook.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0ECF8D442759019200351CEE /* Phonebook.xcdatamodeld */; };
 		0ECF8D482759028A00351CEE /* FriendContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECF8D472759028A00351CEE /* FriendContact.swift */; };
@@ -47,6 +55,14 @@
 /* Begin PBXFileReference section */
 		0E1425EE27559BDC004E06DD /* BubbleConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleConstant.swift; sourceTree = "<group>"; };
 		0E553F402750B0B500C1E109 /* BubbleContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleContainer.swift; sourceTree = "<group>"; };
+		0EAADCEC275A0934009DC595 /* FriendDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailController.swift; sourceTree = "<group>"; };
+		0EAADCEE275A094C009DC595 /* FriendEditDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendEditDataSource.swift; sourceTree = "<group>"; };
+		0EAADCF0275A095D009DC595 /* FriendDetailDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailDataSource.swift; sourceTree = "<group>"; };
+		0EAADCF2275A0B5D009DC595 /* FriendTextEditCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendTextEditCell.swift; sourceTree = "<group>"; };
+		0EAADCF4275A0B7A009DC595 /* FriendAvatarEditCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendAvatarEditCell.swift; sourceTree = "<group>"; };
+		0EAADCF6275A0B91009DC595 /* FriendDeleteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDeleteCell.swift; sourceTree = "<group>"; };
+		0EAADCF8275A0BB9009DC595 /* FriendDetailAvatarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailAvatarCell.swift; sourceTree = "<group>"; };
+		0EAADCFA275A0BE8009DC595 /* UIView+anchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+anchor.swift"; sourceTree = "<group>"; };
 		0EAB9E402749381800685E5D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		0ECF8D452759019200351CEE /* Phonebook.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Phonebook.xcdatamodel; sourceTree = "<group>"; };
 		0ECF8D472759028A00351CEE /* FriendContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendContact.swift; sourceTree = "<group>"; };
@@ -95,6 +111,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0EAADCEB275A0903009DC595 /* NewContact */ = {
+			isa = PBXGroup;
+			children = (
+				0EAADCEC275A0934009DC595 /* FriendDetailController.swift */,
+				0EAADCEE275A094C009DC595 /* FriendEditDataSource.swift */,
+				0EAADCF0275A095D009DC595 /* FriendDetailDataSource.swift */,
+				0EAADCF2275A0B5D009DC595 /* FriendTextEditCell.swift */,
+				0EAADCF4275A0B7A009DC595 /* FriendAvatarEditCell.swift */,
+				0EAADCF6275A0B91009DC595 /* FriendDeleteCell.swift */,
+				0EAADCF8275A0BB9009DC595 /* FriendDetailAvatarCell.swift */,
+			);
+			path = NewContact;
+			sourceTree = "<group>";
+		};
 		0EAB9E3F2749330900685E5D /* SearchScene */ = {
 			isa = PBXGroup;
 			children = (
@@ -200,6 +230,7 @@
 				C846508C26FBF9C5009C5782 /* UIImage+Chat.swift */,
 				C8305BBC27017AEF0070C771 /* UIColor+Chat.swift */,
 				C8D879BD2705A466007BE93D /* Date+Chat.swift */,
+				0EAADCFA275A0BE8009DC595 /* UIView+anchor.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -224,6 +255,7 @@
 		C858DC4B26F9D6FF00821E67 /* Chat App */ = {
 			isa = PBXGroup;
 			children = (
+				0EAADCEB275A0903009DC595 /* NewContact */,
 				0EAB9E3F2749330900685E5D /* SearchScene */,
 				C858DC5A26F9D70200821E67 /* Info.plist */,
 				C82DB73C271FB410002AE563 /* Data */,
@@ -332,9 +364,11 @@
 				C846508D26FBF9C5009C5782 /* UIImage+Chat.swift in Sources */,
 				C858DC5126F9D6FF00821E67 /* ConversationListController.swift in Sources */,
 				0E1425EF27559BDC004E06DD /* BubbleConstant.swift in Sources */,
+				0EAADCEF275A094C009DC595 /* FriendEditDataSource.swift in Sources */,
 				0EAB9E412749381800685E5D /* SearchViewController.swift in Sources */,
 				C858DC6226F9D75E00821E67 /* Message.swift in Sources */,
 				C858DC4D26F9D6FF00821E67 /* AppDelegate.swift in Sources */,
+				0EAADCF9275A0BB9009DC595 /* FriendDetailAvatarCell.swift in Sources */,
 				C8D879CB27098D40007BE93D /* AvatarView.swift in Sources */,
 				C8305BCA270457A30070C771 /* ChatbarView.swift in Sources */,
 				C858DC6626F9D7E600821E67 /* Conversation.swift in Sources */,
@@ -350,14 +384,20 @@
 				0ECF8D462759019200351CEE /* Phonebook.xcdatamodeld in Sources */,
 				C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */,
 				C8D87A052712BD29007BE93D /* BackgroundFactory.swift in Sources */,
+				0EAADCF5275A0B7A009DC595 /* FriendAvatarEditCell.swift in Sources */,
 				0ECF8D50275915A200351CEE /* CoreDataFriendStore.swift in Sources */,
 				C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */,
 				C896E70D26F9E07A00882298 /* ConversationCell.swift in Sources */,
+				0EAADCF3275A0B5D009DC595 /* FriendTextEditCell.swift in Sources */,
 				C8D87A152716C13D007BE93D /* PhotoRequest.swift in Sources */,
+				0EAADCF7275A0B91009DC595 /* FriendDeleteCell.swift in Sources */,
 				C8DF20272738165100C0DAAD /* Theme.swift in Sources */,
+				0EAADCED275A0934009DC595 /* FriendDetailController.swift in Sources */,
 				C8D879BE2705A466007BE93D /* Date+Chat.swift in Sources */,
 				0ECF8D4A275907DF00351CEE /* Friend.swift in Sources */,
 				C896E71326F9FADF00882298 /* MessageCell.swift in Sources */,
+				0EAADCF1275A095D009DC595 /* FriendDetailDataSource.swift in Sources */,
+				0EAADCFB275A0BE8009DC595 /* UIView+anchor.swift in Sources */,
 				0ECF8D4C2759154700351CEE /* PhonebookManager.swift in Sources */,
 				0ECF8D482759028A00351CEE /* FriendContact.swift in Sources */,
 			);

@@ -72,7 +72,6 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
                                        style: .plain, target: self, action: #selector(searchButtonPressed)),
                        ]
         navigationItem.rightBarButtonItems = buttons
-        //navigationController?.hidesBarsOnSwipe = true
     }
     
     func setupTableView(){
@@ -324,30 +323,4 @@ extension ConversationListController : UITableViewDelegate{
 
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        navigationController?.hidesBarsOnSwipe = false
-    }
-    
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        navigationController?.setNavigationBarHidden(false, animated: true)
-    }
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        navigationController?.setNavigationBarHidden(true, animated: true)
-    }
-    
-    
-//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-//
-//        let draggDelta = scrollView.contentOffset.y - targetContentOffset.pointee.y
-//
-//        let hiddenContentHeight = tableView.contentSize.height - tableView.frame.height - 1
-//
-//        if 0 < draggDelta && targetContentOffset.pointee.y < hiddenContentHeight || (targetContentOffset.pointee.y == 0 && scrollView.contentOffset.y < 0) {
-//
-//            // Shows Navigation Bar
-//            navigationController?.setNavigationBarHidden(false, animated: true)
-//        }
-//    }
-
 }
