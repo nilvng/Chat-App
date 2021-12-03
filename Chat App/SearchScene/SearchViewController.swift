@@ -93,7 +93,7 @@ extension SearchViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
 
         let conv = filteredItems[indexPath.row]
-        cell.thumbnail.update(url: conv.thumbnail, text: conv.title)
+        cell.avatarView.update(url: conv.thumbnail, text: conv.title)
         cell.titleLabel.text = conv.title
         return cell
     }

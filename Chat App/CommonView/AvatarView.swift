@@ -22,6 +22,7 @@ class AvatarView: UIImageView {
         let theKey = url != nil ? url! : text
 
         guard theKey != nil else {
+            print("using hulk avatar")
             self.image = UIImage(named: "default")
             return
         }
@@ -47,7 +48,7 @@ class AvatarView: UIImageView {
     }
     
     func drawText(text: NSString) -> UIImage{
-        let size = CGSize(width: 70, height: 70)
+        let size = CGSize(width: 55, height: 55)
         let renderer = UIGraphicsImageRenderer(size: size)
         let colorImage = UIImage(named: "bg_color")!
         let im = renderer.image { _ in

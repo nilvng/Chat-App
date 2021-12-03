@@ -9,6 +9,7 @@ import UIKit
 
 protocol SearchItemDataSource : UITableViewDataSource {
     func setupData(friends: [Friend])
+    func setupData(friendContacts: [FriendContact])
     func getItem(at index: IndexPath) -> Friend
     func filterItemBy(key: String)
     func clearSearch()
@@ -29,8 +30,7 @@ class ComposeMsgController : UIViewController {
         return tv
     }()
         
-    var dataSource : SearchItemDataSource!
-    var friendList : [Friend] = ChatManager.shared.friendList
+    var dataSource : IndexedContactDataSource!
     var currentSearchText : String = ""
     
     var isFiltering: Bool {
@@ -44,6 +44,8 @@ class ComposeMsgController : UIViewController {
         view.backgroundColor = .white
         setupSearchField()
         setupTableView()
+        
+        PhonebookManager.shared.delegate = self
         
     }
     func setupSearchField(){
@@ -83,7 +85,7 @@ class ComposeMsgController : UIViewController {
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         self.dataSource = IndexedContactDataSource()
-        self.dataSource.setupData(friends: friendList)
+        self.dataSource.setupData(friendContacts: Array(PhonebookManager.shared.getContactList().values))
         tableView.dataSource = dataSource
         tableView.delegate = self
         tableView.reloadData()
@@ -173,4 +175,52 @@ extension ComposeMsgController: UISearchBarDelegate {
   }
 }
 
+//MARK: Phonebook Delegate
 
+extension ComposeMsgController: PhonebookManagerDelegate{
+    func refreshViewWith(data: [String: FriendContact]){
+        // refreshing view only when data has been changed
+        if self.dataSource.items.count == 0 {
+            DispatchQueue.main.async {
+                print("Refresh table.")
+                //self.dataSource.items = data.compactMap { $0.value }
+                self.tableView.reloadData()
+            }
+            return
+
+        }
+        for e in self.dataSource.items {
+            if data[e.uid] == nil {
+                
+                DispatchQueue.main.async {
+                    print("Refresh table.")
+                    //self.dataSource.items = data.compactMap { $0.value }
+                    self.tableView.reloadData()
+                }
+                return
+
+                }
+            }
+        }
+    func contactListRefreshed(contacts: [String : FriendContact]) {
+        // update with the refreshed contact list
+        refreshViewWith(data: contacts)
+    }
+    func newContactAdded(contact: FriendContact){
+ 
+        DispatchQueue.main.async {
+            // update data source
+//            self.dataSource.items.append(contact)
+//            let index = self.dataSource.items.count - 1 // add new contact to the end of list
+//            let indexPath = IndexPath(row: index, section: 0)
+//            // refresh table
+//            self.tableView.insertRows(at: [indexPath], with: .automatic)
+        }
+    }
+    func contactDeleted(_ contact: FriendContact){
+
+    }
+    func contactUpdated(_ contact: FriendContact){
+
+    }
+}

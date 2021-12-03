@@ -10,6 +10,12 @@
 		0E1425EF27559BDC004E06DD /* BubbleConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1425EE27559BDC004E06DD /* BubbleConstant.swift */; };
 		0E553F412750B0B500C1E109 /* BubbleContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E553F402750B0B500C1E109 /* BubbleContainer.swift */; };
 		0EAB9E412749381800685E5D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAB9E402749381800685E5D /* SearchViewController.swift */; };
+		0ECF8D462759019200351CEE /* Phonebook.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0ECF8D442759019200351CEE /* Phonebook.xcdatamodeld */; };
+		0ECF8D482759028A00351CEE /* FriendContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECF8D472759028A00351CEE /* FriendContact.swift */; };
+		0ECF8D4A275907DF00351CEE /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECF8D49275907DF00351CEE /* Friend.swift */; };
+		0ECF8D4C2759154700351CEE /* PhonebookManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECF8D4B2759154700351CEE /* PhonebookManager.swift */; };
+		0ECF8D4E2759158000351CEE /* FriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECF8D4D2759158000351CEE /* FriendStore.swift */; };
+		0ECF8D50275915A200351CEE /* CoreDataFriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECF8D4F275915A200351CEE /* CoreDataFriendStore.swift */; };
 		C82DB71C271A4A4A002AE563 /* IndexedContactDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB71B271A4A4A002AE563 /* IndexedContactDataSource.swift */; };
 		C82DB727271B055B002AE563 /* ChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB726271B055B002AE563 /* ChatManager.swift */; };
 		C82DB72A271C08BE002AE563 /* MsgMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82DB729271C08BE002AE563 /* MsgMenuController.swift */; };
@@ -42,6 +48,12 @@
 		0E1425EE27559BDC004E06DD /* BubbleConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleConstant.swift; sourceTree = "<group>"; };
 		0E553F402750B0B500C1E109 /* BubbleContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleContainer.swift; sourceTree = "<group>"; };
 		0EAB9E402749381800685E5D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		0ECF8D452759019200351CEE /* Phonebook.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Phonebook.xcdatamodel; sourceTree = "<group>"; };
+		0ECF8D472759028A00351CEE /* FriendContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendContact.swift; sourceTree = "<group>"; };
+		0ECF8D49275907DF00351CEE /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
+		0ECF8D4B2759154700351CEE /* PhonebookManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonebookManager.swift; sourceTree = "<group>"; };
+		0ECF8D4D2759158000351CEE /* FriendStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendStore.swift; sourceTree = "<group>"; };
+		0ECF8D4F275915A200351CEE /* CoreDataFriendStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFriendStore.swift; sourceTree = "<group>"; };
 		C82DB71B271A4A4A002AE563 /* IndexedContactDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedContactDataSource.swift; sourceTree = "<group>"; };
 		C82DB726271B055B002AE563 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
 		C82DB729271C08BE002AE563 /* MsgMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsgMenuController.swift; sourceTree = "<group>"; };
@@ -155,6 +167,9 @@
 				C858DC4E26F9D6FF00821E67 /* SceneDelegate.swift */,
 				C858DC4C26F9D6FF00821E67 /* AppDelegate.swift */,
 				C82DB726271B055B002AE563 /* ChatManager.swift */,
+				0ECF8D4B2759154700351CEE /* PhonebookManager.swift */,
+				0ECF8D4D2759158000351CEE /* FriendStore.swift */,
+				0ECF8D4F275915A200351CEE /* CoreDataFriendStore.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -192,6 +207,7 @@
 		C858DC4026F9D6FF00821E67 = {
 			isa = PBXGroup;
 			children = (
+				0ECF8D442759019200351CEE /* Phonebook.xcdatamodeld */,
 				C858DC4B26F9D6FF00821E67 /* Chat App */,
 				C858DC4A26F9D6FF00821E67 /* Products */,
 			);
@@ -228,6 +244,8 @@
 			children = (
 				C858DC6126F9D75E00821E67 /* Message.swift */,
 				C858DC6526F9D7E600821E67 /* Conversation.swift */,
+				0ECF8D472759028A00351CEE /* FriendContact.swift */,
+				0ECF8D49275907DF00351CEE /* Friend.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -326,16 +344,22 @@
 				C896E71026F9F97100882298 /* MessagesViewController.swift in Sources */,
 				C82DB72A271C08BE002AE563 /* MsgMenuController.swift in Sources */,
 				C8D87A192716C40F007BE93D /* ImageStore.swift in Sources */,
+				0ECF8D4E2759158000351CEE /* FriendStore.swift in Sources */,
 				C82DB72E271C580A002AE563 /* ConvConfigController.swift in Sources */,
 				C82DB71C271A4A4A002AE563 /* IndexedContactDataSource.swift in Sources */,
+				0ECF8D462759019200351CEE /* Phonebook.xcdatamodeld in Sources */,
 				C8D879CF270B00D0007BE93D /* SearchContactCell.swift in Sources */,
 				C8D87A052712BD29007BE93D /* BackgroundFactory.swift in Sources */,
+				0ECF8D50275915A200351CEE /* CoreDataFriendStore.swift in Sources */,
 				C8305BBD27017AEF0070C771 /* UIColor+Chat.swift in Sources */,
 				C896E70D26F9E07A00882298 /* ConversationCell.swift in Sources */,
 				C8D87A152716C13D007BE93D /* PhotoRequest.swift in Sources */,
 				C8DF20272738165100C0DAAD /* Theme.swift in Sources */,
 				C8D879BE2705A466007BE93D /* Date+Chat.swift in Sources */,
+				0ECF8D4A275907DF00351CEE /* Friend.swift in Sources */,
 				C896E71326F9FADF00882298 /* MessageCell.swift in Sources */,
+				0ECF8D4C2759154700351CEE /* PhonebookManager.swift in Sources */,
+				0ECF8D482759028A00351CEE /* FriendContact.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,6 +555,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		0ECF8D442759019200351CEE /* Phonebook.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				0ECF8D452759019200351CEE /* Phonebook.xcdatamodel */,
+			);
+			currentVersion = 0ECF8D452759019200351CEE /* Phonebook.xcdatamodel */;
+			path = Phonebook.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = C858DC4126F9D6FF00821E67 /* Project object */;
 }

@@ -73,6 +73,10 @@ extension IndexedContactDataSource : SearchItemDataSource {
         self.items = friends
         self.sortByAlphabet()
     }
+    func setupData(friendContacts: [FriendContact]){
+        self.items = friendContacts.compactMap { Friend(friendContact: $0)}
+        self.sortByAlphabet()
+    }
     func filterItemBy(key: String){
         guard key != "" else {
             self.clearSearch()
@@ -129,15 +133,13 @@ extension IndexedContactDataSource : UITableViewDataSource{
             let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
             
             let option = item as! OtherOptions
-            cell.titleLabel.text = item.getKeyword()
-            cell.thumbnail.backgroundColor = UIColor.babyBlue
-            cell.thumbnail.image = option.image?.resizedImage(size: CGSize(width: 33, height: 33))
-            cell.thumbnail.contentMode = .center
+            cell.configure(option: option)
             return cell
         }
         
         // usual contact list sorted by alphabet
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchContactCell.identifier, for: indexPath) as! SearchContactCell
+        cell.avatarView.backgroundColor = UIColor.clear
         cell.configure(friend: item as! Friend)
         
         return cell

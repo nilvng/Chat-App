@@ -19,8 +19,8 @@ class SearchContactCell : UITableViewCell {
         label.textAlignment = .left
         return label
     }()
-    let thumbnail : AvatarView = {
-        let image = AvatarView(frame: CGRect(x: 0, y: 0, width: 72, height: 72))
+    let avatarView : AvatarView = {
+        let image = AvatarView(frame: CGRect(x: 0, y: 0, width: 55, height: 55))
         image.contentMode = .scaleAspectFill
         return image
     }()
@@ -29,14 +29,20 @@ class SearchContactCell : UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         contentView.addSubview(titleLabel)
-        contentView.addSubview(thumbnail)
+        contentView.addSubview(avatarView)
         setupThumbnail()
         setupTitleLabel()
     }
     
     func configure (friend : Friend){
         titleLabel.text = friend.fullName
-        thumbnail.update(url: friend.avatar, text: friend.firstName)
+        avatarView.backgroundColor = .clear
+        avatarView.update(url: friend.avatar, text: friend.firstName)
+    }
+    func configure (option : OtherOptions ){
+        titleLabel.text = option.title
+        avatarView.backgroundColor = .babyBlue
+        avatarView.image = option.image
     }
     
     // MARK: Design Cell
@@ -45,16 +51,16 @@ class SearchContactCell : UITableViewCell {
     private var horizontalPadding : CGFloat = 10
     
     func setupThumbnail() {
-        thumbnail.translatesAutoresizingMaskIntoConstraints = false
+        avatarView.translatesAutoresizingMaskIntoConstraints = false
         
         let width : CGFloat = 55
         let height : CGFloat = 55
         
         let constraints : [NSLayoutConstraint] = [
-            thumbnail.centerYAnchor.constraint(equalTo: centerYAnchor),
-            thumbnail.leadingAnchor.constraint(equalTo: leadingAnchor, constant: horizontalPadding),
-            thumbnail.widthAnchor.constraint(equalToConstant: width),
-            thumbnail.heightAnchor.constraint(equalToConstant: height)
+            avatarView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            avatarView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: horizontalPadding),
+            avatarView.widthAnchor.constraint(equalToConstant: width),
+            avatarView.heightAnchor.constraint(equalToConstant: height)
         ]
         NSLayoutConstraint.activate(constraints)
     }
@@ -63,8 +69,8 @@ class SearchContactCell : UITableViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
                 
         let constraints : [NSLayoutConstraint] = [
-            titleLabel.centerYAnchor.constraint(equalTo: thumbnail.centerYAnchor,constant: 0),
-            titleLabel.leadingAnchor.constraint(equalTo: thumbnail.trailingAnchor, constant: 14)
+            titleLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor,constant: 0),
+            titleLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 14)
         ]
         NSLayoutConstraint.activate(constraints)
     }
