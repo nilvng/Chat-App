@@ -120,11 +120,11 @@ class FriendDetailViewController: UIViewController {
         
         navigationItem.title = isNew ? NSLocalizedString("New Contact", comment: "new contact nav title") : NSLocalizedString("Edit Contact", comment: "edit contact nav title")
         
-        dataSource = FriendEditDataSource(friend: friend, deleteAction: { friend in
+        dataSource = FriendEditDataSource(friend: friend, deleteAction: { [weak self] friend in
             PhonebookManager.shared.delete(friend)
-            self.navigationController?.popViewController(animated: true)
-        }, changeAction: { friend in
-            self.tempFriend = friend
+            self?.navigationController?.popViewController(animated: true)
+        }, changeAction: { [weak self] friend in
+            self?.tempFriend = friend
         })
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTrigger))
         

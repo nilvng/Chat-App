@@ -178,6 +178,14 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
 }
 }
 
+// MARK: Compose button Animation
+extension ConversationListController{
+    
+    // scroll down disapear
+    
+    // scroll up appear
+}
+
 // MARK: ChatManagerDelegate
 extension ConversationListController : ChatManagerDelegate {
     func conversationDeleted(_ item: Conversation) {
@@ -323,4 +331,55 @@ extension ConversationListController : UITableViewDelegate{
 
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
+//        let translation = scrollView.panGestureRecognizer.translation(in: scrollView.superview)
+//        if translation.y > 0 {
+//            // swipes from top to bottom of screen -> down
+//            print("up")
+//        } else {
+//            // swipes from bottom to top of screen -> up
+//            print("down")
+//        }
+        
+        var goingUp: Bool
+        let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView).y
+        /// `Velocity` is 0 when user is not dragging.
+        if (velocity == 0){
+            goingUp = scrollView.panGestureRecognizer.translation(in: scrollView).y < 0
+        } else {
+            goingUp = velocity < 0
+        }
+        
+        if goingUp && composeButton.alpha > 0 {
+            composeButton.fadeOut(duration: 0.2, delay: 0)
+        } else {
+            composeButton.fadeIn(duration: 0.2, delay: 0)
+        }
+    }
+    
+}
+extension UIView {
+
+  func fadeIn(duration: TimeInterval = 0.5,
+              delay: TimeInterval = 0.0,
+              completion: @escaping ((Bool) -> Void) = {(finished: Bool) -> Void in }) {
+    UIView.animate(withDuration: duration,
+                   delay: delay,
+                   options: UIView.AnimationOptions.curveEaseOut,
+                   animations: {
+      self.alpha = 1.0
+    }, completion: completion)
+  }
+
+  func fadeOut(duration: TimeInterval = 0.5,
+               delay: TimeInterval = 0.0,
+               completion: @escaping (Bool) -> Void = {(finished: Bool) -> Void in }) {
+    UIView.animate(withDuration: duration,
+                   delay: delay,
+                   options: UIView.AnimationOptions.curveEaseOut,
+                   animations: {
+      self.alpha = 0.0
+    }, completion: completion)
+  }
 }
