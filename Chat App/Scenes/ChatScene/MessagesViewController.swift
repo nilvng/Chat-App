@@ -147,7 +147,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
             action: #selector(menuButtonPressed))
     }
     
-    var tableInset : CGFloat = 100
+    var tableInset : CGFloat = 30
     
     func setupTableView(){
         
@@ -234,7 +234,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
     
     // MARK: Handle keyboard
     @objc func handleKeyboardMoving(notification: NSNotification){
-        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue? else {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue?, keyboardFrame.cgRectValue.height > 0 else {
             return
         }
         let moveUp = notification.name == UIResponder.keyboardWillShowNotification

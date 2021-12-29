@@ -56,7 +56,7 @@ class ChatManager {
         // minimum requirement: messages changed
         guard chatList[itemIndexToUpdate].messages != newItem.messages else { return }
         
-        print("updated")
+        print("Manager: updated")
         chatList[itemIndexToUpdate] = newItem
         delegate?.conversationUpdated(newItem)
     }

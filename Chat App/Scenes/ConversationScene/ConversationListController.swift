@@ -29,6 +29,16 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         return button
     }()
     
+    var searchField : UITextField = {
+        let textfield = UITextField(frame: CGRect(x: 0, y: 0, width: 400, height: 50))
+        textfield.placeholder = "search..."
+        textfield.textColor = .white
+
+        return textfield
+    }()
+    
+    var xbutton : UIBarButtonItem?
+    
     lazy var blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     
 
@@ -47,11 +57,8 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
 
     // MARK: AutoLayout setups
     private func setupTitle(){
-        let chatTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
-        chatTitleLabel.textColor  = .white
-        chatTitleLabel.font = UIFont.systemFont(ofSize: 25)
-        chatTitleLabel.text = "Let's chat"
-        navigationItem.titleView = chatTitleLabel
+        searchField.delegate = self
+        navigationItem.titleView = searchField
         
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .zaloBlue
@@ -62,21 +69,21 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        //navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     func setupNavigationBar(){
         // two navigation icon: search, user preference menu
-        let buttons = [
-                       UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
-                                       style: .plain, target: self, action: #selector(searchButtonPressed)),
-                       ]
-        navigationItem.rightBarButtonItems = buttons
+        let button = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
+                                       style: .plain, target: self, action: #selector(searchButtonPressed))
+        let xbtn = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: (#selector(cancelSearchPressed)))
+        navigationItem.leftBarButtonItem = button
+        xbutton = xbtn
+
     }
-    
+    // MARK: Setup Data source
     func setupTableView(){
         dataSource = ConversationListDataSource()
-        dataSource.items = ChatManager.shared.chatList
+        dataSource.configure(conversations: ChatManager.shared.chatList)
         let _ = dataSource.sortByLatest()
         
         view.addSubview(tableView)
@@ -132,7 +139,17 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         }
     
     // MARK: Actions
+    fileprivate func clearSearchField() {
+        searchField.text = ""
+        dataSource.clearSearch()
+        tableView.reloadData()
+        navigationItem.rightBarButtonItem = nil
+    }
     
+    @objc func cancelSearchPressed(){
+        print("cancel")
+        clearSearchField()
+    }
     @objc func searchButtonPressed(){
         let searchvc = SearchViewController()
         navigationController?.pushViewController(searchvc, animated: true)
@@ -170,20 +187,43 @@ class ConversationListController: UIViewController, UIGestureRecognizerDelegate 
         }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        searchField.resignFirstResponder()
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .white
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-}
+    }
 }
 
-// MARK: Compose button Animation
-extension ConversationListController{
+// MARK: Searching
+extension ConversationListController : UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let originalText = textField.text {
+            let title = (originalText as NSString).replacingCharacters(in: range, with: string)
+            
+            //  remove leading and trailing whitespace
+            let cleanText = title.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            print("search \(cleanText)")
+            // only update when it truly changes
+            if cleanText != currentSearchText{
+                filterItemForSearchKey(cleanText)
+            }
+        }
+        return true
+    }
     
-    // scroll down disapear
-    
-    // scroll up appear
+    func filterItemForSearchKey(_ key: String){
+        self.currentSearchText = key
+        if key == ""{
+            clearSearchField()
+        } else{
+            dataSource.filterItemBy(key: key)
+            navigationItem.rightBarButtonItem = xbutton
+        }
+        tableView.reloadData()
+  }
 }
 
 // MARK: ChatManagerDelegate
@@ -202,7 +242,7 @@ extension ConversationListController : ChatManagerDelegate {
     
     func conversationAdded(_ item: Conversation) {
         // update data source
-        dataSource.items.insert(item, at: 0)
+        dataSource.insertNewItem(item)
         // animate
         let path = IndexPath(row: 0, section: 0)
         tableView.insertRows(at: [path], with: .automatic)
@@ -210,22 +250,23 @@ extension ConversationListController : ChatManagerDelegate {
     }
     
     func conversationUpdated(_ item: Conversation) {
-        guard let indexToUpdate = dataSource.items.firstIndex(where: {$0 == item}) else {
+        guard let indexToUpdate = dataSource.getIndexOfItem(item) else {
             print("Warning: cannot find conversation to update")
             return
         }
+        dataSource.updateItem(item, at: indexToUpdate)
+        
         // if the conversation has already on top -> don't animate row
-        if indexToUpdate == 0 {
-            // update data source
-            dataSource.items[indexToUpdate] = item
-        } else {
-            let indexPath = IndexPath(row: indexToUpdate, section: 0)
-            self.dataSource.items.remove(at: indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: .none)
-
+        if indexToUpdate > 0 {
             
-            self.dataSource.items.insert(item, at: 0)
-            self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
+            let indexPath = IndexPath(row: indexToUpdate, section: 0)
+            
+            tableView.performBatchUpdates({
+                self.dataSource.moveToRecentFrom(index: indexToUpdate)
+                self.tableView.deleteRows(at: [indexPath], with: .none)
+                self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
+            }, completion: nil)
+
         }
     }
     
@@ -307,7 +348,7 @@ extension ConversationListController : UITableViewDelegate{
         // navigate to conversation detail view
         let messagesViewController = MessagesViewController()
         
-        var selected = dataSource.items[indexPath.row]
+        var selected = dataSource.getItem(at: indexPath)
         
         messagesViewController.configure(conversation: selected){ messages in
             
@@ -315,14 +356,6 @@ extension ConversationListController : UITableViewDelegate{
             print("yes, new message")
             selected.messages = messages
 
-            
-            self.dataSource.items.remove(at: indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: .none)
-
-            
-            self.dataSource.items.insert(selected, at: 0)
-            self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
-            
             ChatManager.shared.updateChat(newItem: selected)
 
         }
@@ -331,16 +364,8 @@ extension ConversationListController : UITableViewDelegate{
 
     }
     
+    // MARK: Animate Compose btn
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        
-//        let translation = scrollView.panGestureRecognizer.translation(in: scrollView.superview)
-//        if translation.y > 0 {
-//            // swipes from top to bottom of screen -> down
-//            print("up")
-//        } else {
-//            // swipes from bottom to top of screen -> up
-//            print("down")
-//        }
         
         var goingUp: Bool
         let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView).y

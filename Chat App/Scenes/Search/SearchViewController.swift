@@ -17,7 +17,6 @@ class SearchViewController: UITableViewController{
     
     var items : [Conversation]! {
         didSet{
-            print("wy not call me")
             filteredItems = items
         }
     }
